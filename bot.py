@@ -7,7 +7,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 import discord
-import dictreader
+import dictreader, acronym
 
 bot = commands.Bot(command_prefix="/")
 
@@ -19,6 +19,13 @@ async def on_ready():
 @bot.command()
 async def mu(ctx, arg):
     await ctx.send(dictreader.get_word_entry(arg))
+
+@bot.command()
+async def acro(ctx, *args):
+    if len(args) == 1:
+        await ctx.send(acronym.respond(args[0]))
+    else:
+        await ctx.send(acronym.respond(args[0], args[1]))
 
 @bot.command()
 async def reload_source(ctx):
