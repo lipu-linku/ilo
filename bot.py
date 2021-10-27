@@ -18,18 +18,29 @@ async def on_ready():
         print("* {}".format(guild.name))
 
 @slash.slash(name="nimi")
-async def nimi(ctx, word):
-    print(word)
+async def slash_nimi(ctx, word):
     await ctx.send(dictreader.get_word_entry(word))
 
-@bot.command(name="acro")
+@bot.command(name="nimi")
+async def command_nimi(ctx, word):
+    await ctx.send(dictreader.get_word_entry(word))
+
+@slash.slash(name="n")
+async def slash_n(ctx, word):
+    await ctx.send(dictreader.get_word_entry(word))
+
+@bot.command(name="n")
+async def command_n(ctx, word):
+    await ctx.send(dictreader.get_word_entry(word))
+
+@bot.command()
 async def acro(ctx, *args):
     if len(args) == 1:
         await ctx.send(acronym.respond(args[0]))
     else:
         await ctx.send(acronym.respond(args[0], args[1]))
 
-@bot.command(name="reload")
+@bot.command()
 async def reload(ctx):
     dictreader.build_json()
     dictreader.upload_json_to_github()

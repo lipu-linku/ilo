@@ -9,7 +9,7 @@ APPLICATION = os.getenv('DISCORD_APPLICATION')
 url = "https://discord.com/api/v8/applications/" + APPLICATION + "/commands"
 
 json = {
-    "name": "nimi",
+    "name": "n",
     "type": 1,
     "description": "Get the translation of a toki pona word",
     "options": [
@@ -27,3 +27,7 @@ headers = {
 }
 
 r = requests.post(url, headers=headers, json=json)
+
+def delete_all_slash_commands():
+    for command in requests.get(url, headers=headers).json():
+        requests.remove(url + "/" + command.id, headers=headers)
