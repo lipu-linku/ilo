@@ -25,7 +25,7 @@ def get_site(link):
 
 def build_json():
     entries = get_site(DATA_LINK).split("\n")
-    keys = entries.pop(0).split("\t")
+    keys = entries.pop(0)[:-1].split("\t")
     entries = [entry[:-1].split("\t") for entry in entries]
     entries_converted = []
     for entry in entries:
