@@ -14,7 +14,7 @@ GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 
 JSON_PATH = "../jasima/data.json"
 
-template = "***{}*** *~{}~* – {}\nSee more info on https://lipu-linku.github.io#{}"
+template = "***{}*** *~{}~* – {}\nSee more info on https://lipu-linku.github.io?q={}"
 help_message = "The word you requested, ***{}***, is not in the database I use. Make sure you didn't misspell it, or talk to kala Asi if this word really is missing."
 sheets_fail = "Something's wrong, I think I failed to reach Google Sheets. Please tell kala Asi."
 exception_nonspecific = "Something failed and I'm not sure what. Please tell kala Asi."
