@@ -14,7 +14,6 @@ GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 
 JSON_PATH = "../jasima/data.json"
 
-template = "***{}*** *~{}~* – {}\nSee more info on https://lipu-linku.github.io?q={}"
 help_message = "The word you requested, ***{}***, is not in the database I use. Make sure you didn't misspell it, or talk to kala Asi if this word really is missing."
 sheets_fail = "Something's wrong, I think I failed to reach Google Sheets. Please tell kala Asi."
 exception_nonspecific = "Something failed and I'm not sure what. Please tell kala Asi."
@@ -53,10 +52,8 @@ def get_word_entry(word):
         entries = read_json()
         response = []
         for entry in entries:
-            if entry["word"] == word:
-                response.append(template.format(entry["word"], entry["book"], entry["def_english"], entry["id"]))
-        if response:
-            return "\n".join(response)
+            if entry["id"] == word:
+                return entry
         else:
             return help_message.format(word)
     except:
