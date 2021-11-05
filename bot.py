@@ -63,16 +63,22 @@ async def ss(ctx, word):
             embed.description = "no sitelen sitelen available"
         await ctx.send(embed=embed)
 
+@slash.slash(name="sp")
+async def slash_sp(ctx, text):
+    await sp(ctx, text)
+@bot.command(name="sp")
+async def command_sp(ctx, *text):
+    await sp(ctx, " ".join(text))
+
+async def sp(ctx, text):
+    await ctx.send(file=discord.File(io.BytesIO(sp_renderer.display(text)), filename="a.png"))
+
 @bot.command()
 async def acro(ctx, *args):
     if len(args) == 1:
         await ctx.send(acronym.respond(args[0]))
     else:
         await ctx.send(acronym.respond(args[0], args[1]))
-
-@bot.command()
-async def sp(ctx, *args):
-    await ctx.send(file=discord.File(io.BytesIO(sp_renderer.display(" ".join(args))), filename="a.png"))
 
 @bot.command()
 async def reload(ctx):

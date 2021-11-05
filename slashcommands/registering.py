@@ -16,10 +16,12 @@ with open("commands.json") as f:
 
 # Remove currently registered commands
 for command in requests.get(url, headers=headers).json():
+    print("Deleted", command)
     requests.delete(url + "/" + command["id"], headers=headers)
 
 # Register commands
 for command in json_commands:
+    print("Registered", command)
     requests.post(url, headers=headers, json=command)
 
 # Print current commands

@@ -36,4 +36,17 @@
             "required": true
         }
     ]
+},
+{
+    "name": "sp",
+    "type": 1,
+    "description": "Get sitelen pona of a toki pona phrase",
+    "options": [
+        {
+            "name": "text",
+            "description": "The phrase you want to convert to sitelen pona.",
+            "type": 3,
+            "required": true
+        }
+    ]
 }]
