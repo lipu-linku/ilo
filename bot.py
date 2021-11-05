@@ -2,12 +2,12 @@ import discord
 from discord.ext import commands
 from discord_slash import SlashCommand
 
-import os
+import os, io
 from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-import dictreader, acronym
+import dictreader, acronym, sp_renderer
 
 bot = commands.Bot(command_prefix="/")
 slash = SlashCommand(bot)
@@ -71,10 +71,13 @@ async def acro(ctx, *args):
         await ctx.send(acronym.respond(args[0], args[1]))
 
 @bot.command()
+async def sp(ctx, *args):
+    await ctx.send(file=discord.File(io.BytesIO(sp_renderer.display(" ".join(args))), filename="a.png"))
+
+@bot.command()
 async def reload(ctx):
     dictreader.build_json()
     dictreader.upload_json_to_github()
-
 
 def from_hex(value):
     return int(value, base=16)//256//256, int(value, base=16)//256%256, int(value, base=16)%256
@@ -83,6 +86,5 @@ colours = {"pu": discord.Colour.from_rgb(*from_hex("fff882")),
            "ku lili": discord.Colour.from_rgb(*from_hex("1f5666")),
            "none": discord.Colour.from_rgb(*from_hex("0d092a"))
            }
-
 
 bot.run(TOKEN, reconnect=True)
