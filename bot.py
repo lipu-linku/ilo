@@ -67,8 +67,8 @@ async def ss(ctx, word):
 async def slash_sp(ctx, text):
     await sp(ctx, text)
 @bot.command(name="sp")
-async def command_sp(ctx, *text):
-    await sp(ctx, " ".join(text))
+async def command_sp(ctx, *, text):
+    await sp(ctx, text)
 
 async def sp(ctx, text):
     await ctx.send(file=discord.File(io.BytesIO(sp_renderer.display(text)), filename="a.png"))
