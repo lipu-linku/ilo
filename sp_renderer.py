@@ -1,5 +1,6 @@
 import wand.image
 from wand.color import Color
+from xml.sax.saxutils import escape
 template = """pango:<span size="{}" color="#{}" font_family="{}" font_features="liga">{}</span>"""
 def display(text, resolution=4):
     NUM_LINES = len(text.split("\n"))
@@ -7,6 +8,7 @@ def display(text, resolution=4):
     HEIGHT = resolution*50*(NUM_LINES+1)
     DISK_SIZE = resolution*1.4
     FONT_SIZE = resolution*25600
+    text = escape(escape(text)) # yes you have to escape twice. blame pango
     with wand.image.Image() as image_text:
         with wand.image.Image() as image_shadow:
             with wand.image.Image(width=WIDTH, height=HEIGHT, background=Color("#36393f")) as image_colour:
