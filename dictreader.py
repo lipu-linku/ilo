@@ -7,7 +7,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-DATA_LINK = os.getenv('GOOGLE_SHEETS_LINK')
+DATA_LINK = os.getenv('GOOGLE_SHEETS_DATA_LINK')
+LANGUAGES_LINK = os.getenv('GOOGLE_SHEETS_LANGUAGES_LINK')
 GITHUB_ACCOUNT = "lipu-linku"
 GITHUB_REPO = "jasima"
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
@@ -23,20 +24,42 @@ def get_site(link):
 
 
 def build_json():
-    entries = get_site(DATA_LINK).split("\n")
-    keys = entries.pop(0)[:-1].split("\t")
-    entries = [entry[:-1].split("\t") for entry in entries]
-    entries_converted = []
-    for entry in entries:
-        entry_converted = {}
-        entries_converted.append(entry_converted)
-        for index, value in enumerate(entry):
-            if value:
-                entry_converted[keys[index]] = value
-    with open(JSON_PATH, 'w') as f:
-        # f.write("a = ") # to remove later!
-        json.dump(entries_converted, f, separators=(',\n', ':'))
+    languages = build_dict_from_sheet(LANGUAGES_LINK)
+    data = build_dict_from_sheet(DATA_LINK)
 
+    bundle = {"languages": languages, "data": data}
+    with open(JSON_PATH, 'w') as f:
+        json.dump(bundle, f, indent=2)
+
+
+def build_dict_from_sheet(link):
+    datasheet = get_site(link).split("\n")
+
+    keys = datasheet.pop(0)[:-1].split("\t")
+    entries = [line[:-1].split("\t") for line in datasheet]
+
+    ID_COLUMN = keys.index("id")
+    keys.pop(ID_COLUMN)
+
+    data = {}
+    for line in entries:
+        entry = {}
+        entry_id = line.pop(ID_COLUMN)
+        for index, value in enumerate(line):
+            if value:
+                if "/" not in keys[index]:
+                    entry[keys[index]] = value
+                else:
+                    # e.g. 'def/en':
+                    # outer = 'def'
+                    # inner = 'en'
+                    outer, inner = keys[index].split("/")
+                    if outer not in entry:
+                        entry[outer] = {}
+                    entry[outer][inner] = value
+        data[entry_id] = entry
+    return data
+    
 
 def read_json():
     with open(JSON_PATH) as f:
@@ -48,19 +71,15 @@ def upload_json_to_github():
 
 
 def get_word_entry(word):
-    try:
-        entries = read_json()
-        response = []
-        for entry in entries:
-            if entry["id"] == word:
-                return entry
+        bundle = read_json()
+        entries = bundle["data"]
+        if word in entries:
+            return entries[word]
         else:
             return help_message.format(word)
-    except:
-        return exception_nonspecific
 
 
 if __name__ == "__main__":
     build_json()
-    print(get_word_entry("alasa"))
-    upload_json_to_github()
+    #print(get_word_entry("alasa"))
+    #upload_json_to_github()

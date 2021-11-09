@@ -36,10 +36,10 @@ async def nimi(ctx, word):
         await ctx.send(response)
     else:
         embed = discord.Embed(title=response["word"],
-                              url="https://lipu-linku.github.io/?q={}".format(response["id"]),
+                              url="https://lipu-linku.github.io/?q={}".format(word),
                               colour=colours[response["book"]])
         embed.add_field(name="book", value=response["book"])
-        embed.add_field(name="description", value=response["def_english"])
+        embed.add_field(name="description", value=response["def"]["en"])
         await ctx.send(embed=embed)
 
 @slash.slash(name="ss")
@@ -55,7 +55,7 @@ async def ss(ctx, word):
         await ctx.send(response)
     else:
         embed = discord.Embed(title=response["word"],
-                              url="https://lipu-linku.github.io/?q={}".format(response["id"]),
+                              url="https://lipu-linku.github.io/?q={}".format(word),
                               colour=colours[response["book"]])
         if "sitelen_sitelen" in response:
             embed.set_image(url=response["sitelen_sitelen"])
