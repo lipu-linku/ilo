@@ -53,6 +53,8 @@ async def command_sp(ctx, *, text):
 
 
 async def nimi(ctx, word):
+    lang = preferences.get_preference(str(ctx.author.id), "language", "en")
+
     response = dictreader.get_word_entry(word)
     if isinstance(response, str):
         await ctx.send(response)
@@ -61,7 +63,10 @@ async def nimi(ctx, word):
                               url="https://lipu-linku.github.io/?q={}".format(word),
                               colour=colours[response["book"]])
         embed.add_field(name="book", value=response["book"])
-        embed.add_field(name="description", value=response["def"]["en"])
+        if lang in response["def"]:
+            embed.add_field(name="description", value=response["def"][lang])
+        else:
+            embed.add_field(name="description", value="(en) {}".format(response["def"]["en"]))
         await ctx.send(embed=embed)
 
 
