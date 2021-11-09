@@ -80,6 +80,11 @@
 					"required": true
                 }
             ]
+        },
+        {
+            "name": "reset",
+            "description": "Reset all preferences to their default values.",
+            "type": 1
         }
     ]
 }]

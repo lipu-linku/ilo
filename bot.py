@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-import dictreader, acronym, sp_renderer
+import dictreader, acronym, sp_renderer, preferences
 
 bot = commands.Bot(command_prefix="/")
 slash = SlashCommand(bot)
@@ -86,7 +86,21 @@ async def sp(ctx, text):
 
 @slash.subcommand(base="preferences", name="language")
 async def preferences_language(ctx, lang):
-    await ctx.send("Hi! You tried to set your lang preference to **{}**. Unfortunately, kala Asi has not implemented that part yet. But as you can see, it does get correctly recognised!".format(lang))
+    preferences.set_preference(str(ctx.author.id), "language", lang)
+    await ctx.send("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
+
+@slash.subcommand(base="preferences", name="fontsize")
+async def preferences_fontsize(ctx, size):
+    if not (size < 500 and size > 0):
+        await ctx.send("Font size is limited to the range from 1 to 500.")
+    else:
+        preferences.set_preference(str(ctx.author.id), "fontsize", size)
+        await ctx.send("Set fontsize preference for **{}** to **{}**.".format(ctx.author.display_name, size))
+
+@slash.subcommand(base="preferences", name="reset")
+async def preferences_reset(ctx):
+    preferences.reset_preferences(str(ctx.author.id))
+    await ctx.send("Reset preferences for **{}**.".format(ctx.author.display_name))
 
 
 @bot.command()
