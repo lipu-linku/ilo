@@ -22,12 +22,16 @@ async def slash_nimi(ctx, word):
     await nimi(ctx, word)
 @bot.command(name="nimi")
 async def command_nimi(ctx, word):
+    if word.startswith("word:"):
+        word = word.replace("word:", "", 1)
     await nimi(ctx, word)
 @slash.slash(name="n")
 async def slash_n(ctx, word):
     await nimi(ctx, word)
 @bot.command(name="n")
 async def command_n(ctx, word):
+    if word.startswith("word:"):
+        word = word.replace("word:", "", 1)
     await nimi(ctx, word)
 
 async def nimi(ctx, word):
@@ -47,6 +51,8 @@ async def slash_ss(ctx, word):
     await ss(ctx, word)
 @bot.command(name="ss")
 async def command_ss(ctx, word):
+    if word.startswith("word:"):
+        word = word.replace("word:", "", 1)
     await ss(ctx, word)
 
 async def ss(ctx, word):
@@ -68,10 +74,16 @@ async def slash_sp(ctx, text):
     await sp(ctx, text)
 @bot.command(name="sp")
 async def command_sp(ctx, *, text):
+    if text.startswith("text:"):
+        text = text.replace("text:", "", 1)
     await sp(ctx, text)
 
 async def sp(ctx, text):
     await ctx.send(file=discord.File(io.BytesIO(sp_renderer.display(text)), filename="a.png"))
+
+@slash.subcommand(base="preferences", name="language")
+async def preferences_language(ctx, lang):
+    await ctx.send("Hi! You tried to set your lang preference to **{}**. Unfortunately, kala Asi has not implemented that part yet. But as you can see, it does get correctly recognised!".format(lang))
 
 @bot.command()
 async def acro(ctx, *args):
@@ -82,8 +94,7 @@ async def acro(ctx, *args):
 
 @bot.command()
 async def reload(ctx):
-    dictreader.build_json()
-    dictreader.upload_json_to_github()
+    dictreader.routine()
 
 def from_hex(value):
     return int(value, base=16)//256//256, int(value, base=16)//256%256, int(value, base=16)%256

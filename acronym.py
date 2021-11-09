@@ -16,8 +16,8 @@ books_allowed = {"pu": ["pu"],
 def respond(word, include="ale"):
     if include not in books_allowed:
         include = "ale"
-    data = dictreader.read_json()
-    data = sorted(data, key=lambda x: books_order[x["book"]])
+    data = dictreader.read_json()["data"]
+    data = sorted(data.values(), key=lambda x: books_order[x["book"]])
     responses = {}
     for entry in data:
         if entry["book"] in books_allowed[include]:

@@ -49,4 +49,37 @@
             "required": true
         }
     ]
+},
+{
+    "name": "preferences",
+    "description": "Set various user preferences determining how the bot should answer your requests",
+    "options": [
+        {
+            "name": "language",
+            "description": "Set the language that dictionary definitions will use.",
+            "type": 1,
+            "options": [
+                {
+                    "name": "lang",
+                    "description": "The language you want to use.",
+					"type": 3,
+					"required": true,
+					"choices": "LANGUAGE_OPTIONS"
+                }
+            ]
+        },
+        {
+            "name": "fontsize",
+            "description": "Set the font size that sitelen pona will be displayed as.",
+            "type": 1,
+            "options": [
+                {
+                    "name": "size",
+                    "description": "The font size you want to use.",
+                    "type": 4,
+					"required": true
+                }
+            ]
+        }
+    ]
 }]

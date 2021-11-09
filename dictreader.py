@@ -14,8 +14,10 @@ GITHUB_REPO = "jasima"
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 
 JSON_PATH = "../jasima/data.json"
+LANGUAGE_OPTIONS_PATH = "slashcommands/language_options.json"
 
 help_message = "The word you requested, ***{}***, is not in the database I use. Make sure you didn't misspell it, or talk to kala Asi if this word really is missing."
+multiple_words_message = "The phrase you requested, ***{}***, contains multiple words. I am but a simple dictionary and can only do words one at a time."
 sheets_fail = "Something's wrong, I think I failed to reach Google Sheets. Please tell kala Asi."
 exception_nonspecific = "Something failed and I'm not sure what. Please tell kala Asi."
 
@@ -30,13 +32,14 @@ def build_json():
     bundle = {"languages": languages, "data": data}
     with open(JSON_PATH, 'w') as f:
         json.dump(bundle, f, indent=2)
+    return bundle
 
 
 def build_dict_from_sheet(link):
-    datasheet = get_site(link).split("\n")
+    datasheet = get_site(link).split("\r\n")
 
-    keys = datasheet.pop(0)[:-1].split("\t")
-    entries = [line[:-1].split("\t") for line in datasheet]
+    keys = datasheet.pop(0).split("\t")
+    entries = [line.split("\t") for line in datasheet]
 
     ID_COLUMN = keys.index("id")
     keys.pop(ID_COLUMN)
@@ -73,13 +76,26 @@ def upload_json_to_github():
 def get_word_entry(word):
         bundle = read_json()
         entries = bundle["data"]
-        if word in entries:
-            return entries[word]
-        else:
+        if len(word.split()) > 1:
+            return multiple_words_message.format(word)
+        if word not in entries:
             return help_message.format(word)
+        return entries[word]
+
+
+def build_languages_for_slash_commands(languages):
+    options = []
+    for lang_id, language in languages.items():
+        options.append({"name": language["name_endonym"], "value": lang_id})
+    with open(LANGUAGE_OPTIONS_PATH, 'w') as f:
+        json.dump(options, f, indent=4)
+    
+
+def routine():
+    bundle = build_json()
+    build_languages_for_slash_commands(bundle["languages"])
+    upload_json_to_github()
 
 
 if __name__ == "__main__":
-    build_json()
-    #print(get_word_entry("alasa"))
-    #upload_json_to_github()
+    routine()
