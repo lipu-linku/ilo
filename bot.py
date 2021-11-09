@@ -97,7 +97,7 @@ async def preferences_language(ctx, lang):
 
 @slash.subcommand(base="preferences", name="fontsize")
 async def preferences_fontsize(ctx, size):
-    if not (size < 500 and size > 0):
+    if not (size <= 500 and size >= 1):
         await ctx.send("Font size is limited to the range from 1 to 500.")
     else:
         preferences.set_preference(str(ctx.author.id), "fontsize", size)
