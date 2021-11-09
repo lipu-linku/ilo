@@ -86,7 +86,8 @@ async def ss(ctx, word):
 
 
 async def sp(ctx, text):
-    await ctx.send(file=discord.File(io.BytesIO(sp_renderer.display(text)), filename="a.png"))
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 133)
+    await ctx.send(file=discord.File(io.BytesIO(sp_renderer.display(text, fontsize)), filename="a.png"))
 
 
 @slash.subcommand(base="preferences", name="language")
