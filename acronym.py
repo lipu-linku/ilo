@@ -8,19 +8,15 @@ books_order = {"none": 3,
                "ku suli": 1,
                "pu": 0}
 books_allowed = {"pu": ["pu"],
-                 "kusuli": ["pu", "ku suli"],
-                 "ku": ["pu", "ku suli", "ku lili"],
-                 "kulili": ["pu", "ku suli", "ku lili"],
-                 "ale": ["pu", "ku suli", "ku lili", "none"],
-                 "nap": ["pu", "ku suli", "ku lili", "none"]}
-def respond(word, include="ale"):
-    if include not in books_allowed:
-        include = "ale"
+                 "ku suli": ["pu", "ku suli"],
+                 "ku lili": ["pu", "ku suli", "ku lili"],
+                 "all": ["pu", "ku suli", "ku lili", "none"]}
+def respond(word, book_label):
     data = jasima.read_json()["data"]
     data = sorted(data.values(), key=lambda x: books_order[x["book"]])
     responses = {}
     for entry in data:
-        if entry["book"] in books_allowed[include]:
+        if entry["book"] in books_allowed[book_label]:
             w = entry["word"]
             if w[0].lower() not in responses:
                 responses[w[0].lower()] = []
