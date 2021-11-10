@@ -1,4 +1,4 @@
-import dictreader
+import jasima
 templates_books = {"none": "{}",
                    "ku lili": "*{}*",
                    "ku suli": "**{}**",
@@ -16,7 +16,7 @@ books_allowed = {"pu": ["pu"],
 def respond(word, include="ale"):
     if include not in books_allowed:
         include = "ale"
-    data = dictreader.read_json()["data"]
+    data = jasima.read_json()["data"]
     data = sorted(data.values(), key=lambda x: books_order[x["book"]])
     responses = {}
     for entry in data:

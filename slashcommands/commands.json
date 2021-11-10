@@ -1,90 +1,134 @@
 [{
-    "name": "nimi",
-    "type": 1,
-    "description": "Get the translation of a toki pona word",
-    "options": [
-        {
-            "name": "word",
-            "description": "The word you want to get the translation of.",
-            "type": 3,
-            "required": true
-        }
-    ]
+	"name": "nimi",
+	"type": 1,
+	"description": "Get the translation of a toki pona word",
+	"options": [
+		{
+			"name": "word",
+			"description": "The word you want to get the translation of.",
+			"type": 3,
+			"required": true
+		}
+	]
 },
 {
-    "name": "n",
-    "type": 1,
-    "description": "Get the translation of a toki pona word",
-    "options": [
-        {
-            "name": "word",
-            "description": "The word you want to get the translation of.",
-            "type": 3,
-            "required": true
-        }
-    ]
+	"name": "n",
+	"type": 1,
+	"description": "Get the translation of a toki pona word",
+	"options": [
+		{
+			"name": "word",
+			"description": "The word you want to get the translation of.",
+			"type": 3,
+			"required": true
+		}
+	]
 },
 {
-    "name": "ss",
-    "type": 1,
-    "description": "Get the sitelen sitelen glyph of a toki pona word",
-    "options": [
-        {
-            "name": "word",
-            "description": "The word you want to get the sitelen sitelen glyph of.",
-            "type": 3,
-            "required": true
-        }
-    ]
+	"name": "ss",
+	"type": 1,
+	"description": "Get the sitelen sitelen glyph of a toki pona word",
+	"options": [
+		{
+			"name": "word",
+			"description": "The word you want to get the sitelen sitelen glyph of.",
+			"type": 3,
+			"required": true
+		}
+	]
 },
 {
-    "name": "sp",
-    "type": 1,
-    "description": "Get sitelen pona of a toki pona phrase",
-    "options": [
-        {
-            "name": "text",
-            "description": "The phrase you want to convert to sitelen pona.",
-            "type": 3,
-            "required": true
-        }
-    ]
+	"name": "sp",
+	"type": 1,
+	"description": "Get sitelen pona of a toki pona phrase",
+	"options": [
+		{
+			"name": "text",
+			"description": "The phrase you want to convert to sitelen pona.",
+			"type": 3,
+			"required": true
+		}
+	]
 },
 {
-    "name": "preferences",
-    "description": "Set various user preferences determining how the bot should answer your requests",
-    "options": [
-        {
-            "name": "language",
-            "description": "Set the language that dictionary definitions will use.",
-            "type": 1,
-            "options": [
-                {
-                    "name": "lang",
-                    "description": "The language you want to use.",
+	"name": "acro",
+	"type": 1,
+	"description": "Get help coming up with acronyms consisting of toki pona words",
+	"options": [
+		{
+			"name": "text",
+			"description": "Letters you want to make an acronym for.",
+			"type": 3,
+			"required": true
+		}
+	]
+},
+{
+	"name": "preferences",
+	"description": "Set various user preferences determining how the bot should answer your requests",
+	"options": [
+		{
+			"name": "language",
+			"description": "Set the language that dictionary definitions will use.",
+			"type": 1,
+			"options": [
+				{
+					"name": "lang",
+					"description": "The language you want to use.",
 					"type": 3,
 					"required": true,
 					"choices": "LANGUAGE_OPTIONS"
-                }
-            ]
-        },
-        {
-            "name": "fontsize",
-            "description": "Set the font size that sitelen pona will be displayed as.",
-            "type": 1,
-            "options": [
-                {
-                    "name": "size",
-                    "description": "The font size you want to use.",
-                    "type": 4,
+				}
+			]
+		},
+		{
+			"name": "fontsize",
+			"description": "Set the font size that sitelen pona will be displayed as.",
+			"type": 1,
+			"options": [
+				{
+					"name": "size",
+					"description": "The font size you want to use.",
+					"type": 4,
 					"required": true
-                }
-            ]
-        },
-        {
-            "name": "reset",
-            "description": "Reset all preferences to their default values.",
-            "type": 1
-        }
-    ]
+				}
+			]
+		},
+		{
+			"name": "acro",
+			"description": "Choose the book set of words that will be included in /acro.",
+			"type": 1,
+			"options": [
+				{
+					"name": "book",
+					"description": "The book you want to use.",
+					"type": 3,
+					"required": true,
+					"choices": [
+						{
+							"name": "only pu words",
+							"value": "pu"
+						},
+						{
+							"name": "pu and ku suli words",
+							"value": "ku suli"
+						},
+						{
+							"name": "all pu, ku suli and ku lili words",
+							"value": "ku lili"
+						},
+						{
+							"name": "all words",
+							"value": "all"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "reset",
+			"description": "Reset all preferences to their default values.",
+			"type": 1
+		}
+	]
 }]

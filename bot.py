@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-import dictreader, acronym, sp_renderer, preferences
+import jasima, acronym, sitelenpona, preferences
 
 bot = commands.Bot(command_prefix="/")
 slash = SlashCommand(bot)
@@ -29,6 +29,9 @@ async def slash_ss(ctx, word):
 @slash.slash(name="sp")
 async def slash_sp(ctx, text):
     await sp(ctx, text)
+@slash.slash(name="acro")
+async def slash_acro(ctx, text):
+    await acro(ctx, text)
 
 @bot.command(name="nimi")
 async def command_nimi(ctx, word):
@@ -50,12 +53,17 @@ async def command_sp(ctx, *, text):
     if text.startswith("text:"):
         text = text.replace("text:", "", 1)
     await sp(ctx, text)
+@bot.command(name="acro")
+async def command_acro(ctx, *, text):
+    if text.startswith("text:"):
+        text = text.replace("text:", "", 1)
+    await acro(ctx, text)
 
 
 async def nimi(ctx, word):
     lang = preferences.get_preference(str(ctx.author.id), "language", "en")
 
-    response = dictreader.get_word_entry(word)
+    response = jasima.get_word_entry(word)
     if isinstance(response, str):
         await ctx.send(response)
     else:
@@ -71,7 +79,7 @@ async def nimi(ctx, word):
 
 
 async def ss(ctx, word):
-    response = dictreader.get_word_entry(word)
+    response = jasima.get_word_entry(word)
     if isinstance(response, str):
         await ctx.send(response)
     else:
@@ -87,13 +95,23 @@ async def ss(ctx, word):
 
 async def sp(ctx, text):
     fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 133)
-    await ctx.send(file=discord.File(io.BytesIO(sp_renderer.display(text, fontsize)), filename="a.png"))
+    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fontsize)), filename="a.png"))
+
+
+async def acro(ctx, text):
+    book = preferences.get_preference(str(ctx.author.id), "acro", "ku suli")
+    await ctx.send(acronym.respond(text, book))
 
 
 @slash.subcommand(base="preferences", name="language")
 async def preferences_language(ctx, lang):
     preferences.set_preference(str(ctx.author.id), "language", lang)
     await ctx.send("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
+
+@slash.subcommand(base="preferences", name="acro")
+async def preferences_acro(ctx, book):
+    preferences.set_preference(str(ctx.author.id), "acro", book)
+    await ctx.send("Set acronym book preference for **{}** to **{}**.".format(ctx.author.display_name, book))
 
 @slash.subcommand(base="preferences", name="fontsize")
 async def preferences_fontsize(ctx, size):
@@ -110,16 +128,8 @@ async def preferences_reset(ctx):
 
 
 @bot.command()
-async def acro(ctx, *args):
-    if len(args) == 1:
-        await ctx.send(acronym.respond(args[0]))
-    else:
-        await ctx.send(acronym.respond(args[0], args[1]))
-
-
-@bot.command()
 async def reload(ctx):
-    dictreader.routine()
+    jasima.routine()
 
 
 def from_hex(value):
