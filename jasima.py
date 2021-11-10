@@ -61,6 +61,8 @@ def build_dict_from_sheet(link):
                         entry[outer] = {}
                     entry[outer][inner] = value
         data[entry_id] = entry
+    # Sort by id, case insensitive
+    data = {k: v for k, v in sorted(data.items(), key=lambda x: x[0].lower())}
     return data
     
 
