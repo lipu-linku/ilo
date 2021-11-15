@@ -23,6 +23,9 @@ async def slash_nimi(ctx, word):
 @slash.slash(name="n")
 async def slash_n(ctx, word):
     await nimi(ctx, word)
+@slash.slash(name="mu")
+async def slash_mu(ctx, word):
+    await mu(ctx, word)
 @slash.slash(name="ss")
 async def slash_ss(ctx, word):
     await ss(ctx, word)
@@ -43,6 +46,11 @@ async def command_n(ctx, word):
     if word.startswith("word:"):
         word = word.replace("word:", "", 1)
     await nimi(ctx, word)
+@bot.command(name="mu")
+async def command_mu(ctx, word):
+    if word.startswith("word:"):
+        word = word.replace("word:", "", 1)
+    await mu(ctx, word)
 @bot.command(name="ss")
 async def command_ss(ctx, word):
     if word.startswith("word:"):
@@ -66,31 +74,68 @@ async def nimi(ctx, word):
     response = jasima.get_word_entry(word)
     if isinstance(response, str):
         await ctx.send(response)
-    else:
-        embed = discord.Embed(title=response["word"],
-                              url="https://lipu-linku.github.io/?q={}".format(word),
-                              colour=colours[response["book"]])
-        embed.add_field(name="book", value=response["book"])
-        if lang in response["def"]:
-            embed.add_field(name="description", value=response["def"][lang])
-        else:
-            embed.add_field(name="description", value="(en) {}".format(response["def"]["en"]))
-        await ctx.send(embed=embed)
+        return
 
+    embed = discord.Embed()
+    embed.title = response["word"]
+    embed.url = "https://lipu-linku.github.io/?q={}".format(word)
+    embed.colour = colours[response["book"]]
 
-async def ss(ctx, word):
+    description = response["def"][lang] if lang in response["def"] else "(en) {}".format(response["def"]["en"])
+    embed.add_field(name="book", value=response["book"])
+    embed.add_field(name="description", value=description)
+    embed.set_footer(text=f'for more info, click [link]({embed.url}), or use "/mu {word}" in #jaki')
+
+    await ctx.send(embed=embed)
+
+async def mu(ctx, word):
+    lang = preferences.get_preference(str(ctx.author.id), "language", "en")
+
     response = jasima.get_word_entry(word)
     if isinstance(response, str):
         await ctx.send(response)
+        return
+
+    embed = discord.Embed()
+    embed.title = response["word"]
+    embed.url = "https://lipu-linku.github.io/?q={}".format(word)
+    embed.colour = colours[response["book"]]
+
+    description = response["def"][lang] if lang in response["def"] else "(en) {}".format(response["def"]["en"])
+    embed.add_field(name="book", value=response["book"], inline=False)
+    embed.add_field(name="description", value=description, inline=False)
+
+    if "etymology" in response or "source_language" in response:
+        embed.add_field(name="etymology", value=build_etymology(response), inline=False)
+    if "ku_data" in response:
+        embed.add_field(name="ku data", value=response["ku_data"], inline=False)
+    if "commentary" in response:
+        embed.add_field(name="commentary", value=response["commentary"], inline=False)
+
+    embed.set_footer(text=f'for less info, use "/nimi {word}"')
+
+    await ctx.send(embed=embed)
+
+
+async def ss(ctx, word):
+    lang = preferences.get_preference(str(ctx.author.id), "language", "en")
+
+    response = jasima.get_word_entry(word)
+    if isinstance(response, str):
+        await ctx.send(response)
+        return
+
+    embed = discord.Embed()
+    embed.title = response["word"]
+    embed.url = "https://lipu-linku.github.io/?q={}".format(word)
+    embed.colour = colours[response["book"]]
+
+    if "sitelen_sitelen" in response:
+        embed.set_image(url=response["sitelen_sitelen"])
     else:
-        embed = discord.Embed(title=response["word"],
-                              url="https://lipu-linku.github.io/?q={}".format(word),
-                              colour=colours[response["book"]])
-        if "sitelen_sitelen" in response:
-            embed.set_image(url=response["sitelen_sitelen"])
-        else:
-            embed.description = "no sitelen sitelen available"
-        await ctx.send(embed=embed)
+        embed.description = "no sitelen sitelen available"
+
+    await ctx.send(embed=embed)
 
 
 async def sp(ctx, text):
@@ -130,6 +175,15 @@ async def preferences_reset(ctx):
 @bot.command()
 async def reload(ctx):
     jasima.routine()
+
+
+def build_etymology(response):
+    etymology = "←"
+    if "source_language" in response:
+        etymology += " " + response["source_language"]
+    if "etymology" in response:
+        etymology += " " + response["etymology"]
+    return etymology
 
 
 def from_hex(value):

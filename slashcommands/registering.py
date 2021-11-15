@@ -1,5 +1,6 @@
 import requests
 import json
+from time import sleep
 
 import os
 from dotenv import load_dotenv
@@ -20,16 +21,18 @@ with open("language_options.json") as f:
 
 commands_complete = commands.replace("\"LANGUAGE_OPTIONS\"", language_options)
 json_commands = json.loads(commands_complete)
-"""
+
 # Remove currently registered commands
 for command in requests.get(url, headers=headers).json():
     print("Deleting", command)
     print(requests.delete(url + "/" + command["id"], headers=headers))
-"""
+    sleep(3)
+
 # Register commands
 for command in json_commands:
     print("Registering", command)
     print(requests.post(url, headers=headers, json=command))
+    sleep(3)
 
 # Print current commands
 for command in requests.get(url, headers=headers).json():
