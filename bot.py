@@ -84,7 +84,7 @@ async def nimi(ctx, word):
     description = response["def"][lang] if lang in response["def"] else "(en) {}".format(response["def"]["en"])
     embed.add_field(name="book", value=response["book"])
     embed.add_field(name="description", value=description)
-    embed.set_footer(text=f'for more info, click [link]({embed.url}), or use "/mu {word}" in #jaki')
+    embed.set_footer(text=f'for more info, click the link, or use "/mu {word}" in #jaki')
 
     await ctx.send(embed=embed)
 
