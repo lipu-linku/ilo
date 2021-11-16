@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 from discord_slash import SlashCommand
+from discord_slash.utils.manage_components import create_button, create_actionrow
+from discord_slash.model import ButtonStyle
 
 import os, io
 from dotenv import load_dotenv
@@ -23,9 +25,6 @@ async def slash_nimi(ctx, word):
 @slash.slash(name="n")
 async def slash_n(ctx, word):
     await nimi(ctx, word)
-@slash.slash(name="mu")
-async def slash_mu(ctx, word):
-    await mu(ctx, word)
 @slash.slash(name="ss")
 async def slash_ss(ctx, word):
     await ss(ctx, word)
@@ -46,11 +45,6 @@ async def command_n(ctx, word):
     if word.startswith("word:"):
         word = word.replace("word:", "", 1)
     await nimi(ctx, word)
-@bot.command(name="mu")
-async def command_mu(ctx, word):
-    if word.startswith("word:"):
-        word = word.replace("word:", "", 1)
-    await mu(ctx, word)
 @bot.command(name="ss")
 async def command_ss(ctx, word):
     if word.startswith("word:"):
@@ -75,46 +69,9 @@ async def nimi(ctx, word):
     if isinstance(response, str):
         await ctx.send(response)
         return
-
-    embed = discord.Embed()
-    embed.title = response["word"]
-    embed.url = "https://lipu-linku.github.io/?q={}".format(word)
-    embed.colour = colours[response["book"]]
-
-    description = response["def"][lang] if lang in response["def"] else "(en) {}".format(response["def"]["en"])
-    embed.add_field(name="book", value=response["book"])
-    embed.add_field(name="description", value=description)
-    embed.set_footer(text=f'for more info, click the link, or use "/mu {word}" in #jaki')
-
-    await ctx.send(embed=embed)
-
-async def mu(ctx, word):
-    lang = preferences.get_preference(str(ctx.author.id), "language", "en")
-
-    response = jasima.get_word_entry(word)
-    if isinstance(response, str):
-        await ctx.send(response)
-        return
-
-    embed = discord.Embed()
-    embed.title = response["word"]
-    embed.url = "https://lipu-linku.github.io/?q={}".format(word)
-    embed.colour = colours[response["book"]]
-
-    description = response["def"][lang] if lang in response["def"] else "(en) {}".format(response["def"]["en"])
-    embed.add_field(name="book", value=response["book"], inline=False)
-    embed.add_field(name="description", value=description, inline=False)
-
-    if "etymology" in response or "source_language" in response:
-        embed.add_field(name="etymology", value=build_etymology(response), inline=False)
-    if "ku_data" in response:
-        embed.add_field(name="ku data", value=response["ku_data"], inline=False)
-    if "commentary" in response:
-        embed.add_field(name="commentary", value=response["commentary"], inline=False)
-
-    embed.set_footer(text=f'for less info, use "/nimi {word}"')
-
-    await ctx.send(embed=embed)
+    embed = embed_response(word, lang, response, "concise")
+    components = build_action_row(word, lang, "expand")
+    await ctx.send(embed=embed, components=components)
 
 
 async def ss(ctx, word):
@@ -124,17 +81,7 @@ async def ss(ctx, word):
     if isinstance(response, str):
         await ctx.send(response)
         return
-
-    embed = discord.Embed()
-    embed.title = response["word"]
-    embed.url = "https://lipu-linku.github.io/?q={}".format(word)
-    embed.colour = colours[response["book"]]
-
-    if "sitelen_sitelen" in response:
-        embed.set_image(url=response["sitelen_sitelen"])
-    else:
-        embed.description = "no sitelen sitelen available"
-
+    embed = embed_response(word, lang, response, "image")
     await ctx.send(embed=embed)
 
 
@@ -176,6 +123,50 @@ async def preferences_reset(ctx):
 async def reload(ctx):
     jasima.routine()
 
+
+@bot.event
+async def on_component(ctx):
+    # you may want to filter or change behaviour based on custom_id or message
+    buttontype, word, lang = ctx.custom_id.split(";")
+    if buttontype == "expand":
+        embed = embed_response(word, lang, jasima.get_word_entry(word), "verbose")
+        components = build_action_row(word, lang, "minimise")
+    if buttontype == "minimise":
+        embed = embed_response(word, lang, jasima.get_word_entry(word), "concise")
+        components = build_action_row(word, lang, "expand")
+    await ctx.edit_origin(embed=embed, components=components)
+
+def embed_response(word, lang, response, embedtype):
+    embed = discord.Embed()
+    embed.title = response["word"]
+    embed.colour = colours[response["book"]]
+    description = response["def"][lang] if lang in response["def"] else "(en) {}".format(response["def"]["en"])
+    embed.add_field(name="book", value=response["book"])
+
+    if embedtype == "concise":
+        embed.add_field(name="description", value=description)
+
+    if embedtype == "verbose":
+        embed.add_field(name="description", value=description, inline=False)
+        if "etymology" in response or "source_language" in response:
+            embed.add_field(name="etymology", value=build_etymology(response), inline=False)
+        if "ku_data" in response:
+            embed.add_field(name="ku data", value=response["ku_data"], inline=False)
+        if "commentary" in response:
+            embed.add_field(name="commentary", value=response["commentary"], inline=False)
+
+    if embedtype == "image":
+        if "sitelen_sitelen" in response:
+            embed.set_image(url=response["sitelen_sitelen"])
+        else:
+            embed.description = "no sitelen sitelen available"
+    return embed
+
+def build_action_row(word, lang, buttontype):
+    url = "https://lipu-linku.github.io/?q={}".format(word)
+    buttons = [create_button(style=ButtonStyle.blue, label=f"{buttontype}", custom_id=f"{buttontype};{word};{lang}"),
+               create_button(style=ButtonStyle.URL, label="more info", url=url)]
+    return [create_actionrow(*buttons)]
 
 def build_etymology(response):
     etymology = "←"

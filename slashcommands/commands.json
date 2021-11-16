@@ -25,19 +25,6 @@
 	]
 },
 {
-	"name": "mu",
-	"type": 1,
-	"description": "Get complete available information about a toki pona word",
-	"options": [
-		{
-			"name": "word",
-			"description": "The word you want to get all the information about.",
-			"type": 3,
-			"required": true
-		}
-	]
-},
-{
 	"name": "ss",
 	"type": 1,
 	"description": "Get the sitelen sitelen glyph of a toki pona word",

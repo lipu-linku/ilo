@@ -26,13 +26,13 @@ json_commands = json.loads(commands_complete)
 for command in requests.get(url, headers=headers).json():
     print("Deleting", command)
     print(requests.delete(url + "/" + command["id"], headers=headers))
-    sleep(3)
+    sleep(5)
 
 # Register commands
 for command in json_commands:
     print("Registering", command)
     print(requests.post(url, headers=headers, json=command))
-    sleep(3)
+    sleep(5)
 
 # Print current commands
 for command in requests.get(url, headers=headers).json():
