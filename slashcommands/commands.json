@@ -51,6 +51,19 @@
 	]
 },
 {
+	"name": "lp",
+	"type": 1,
+	"description": "Get the luka pona sign of a toki pona word",
+	"options": [
+		{
+			"name": "word",
+			"description": "The word you want to get the luka pona sign of.",
+			"type": 3,
+			"required": true
+		}
+	]
+},
+{
 	"name": "acro",
 	"type": 1,
 	"description": "Get help coming up with acronyms consisting of toki pona words",

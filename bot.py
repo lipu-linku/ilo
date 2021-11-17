@@ -28,6 +28,9 @@ async def slash_n(ctx, word):
 @slash.slash(name="ss")
 async def slash_ss(ctx, word):
     await ss(ctx, word)
+@slash.slash(name="lp")
+async def slash_lp(ctx, word):
+    await lp(ctx, word)
 @slash.slash(name="sp")
 async def slash_sp(ctx, text):
     await sp(ctx, text)
@@ -50,6 +53,11 @@ async def command_ss(ctx, word):
     if word.startswith("word:"):
         word = word.replace("word:", "", 1)
     await ss(ctx, word)
+@bot.command(name="lp")
+async def command_lp(ctx, word):
+    if word.startswith("word:"):
+        word = word.replace("word:", "", 1)
+    await lp(ctx, word)
 @bot.command(name="sp")
 async def command_sp(ctx, *, text):
     if text.startswith("text:"):
@@ -83,6 +91,18 @@ async def ss(ctx, word):
         return
     embed = embed_response(word, lang, response, "image")
     await ctx.send(embed=embed)
+
+
+async def lp(ctx, word):
+    response = jasima.get_word_entry(word)
+    if isinstance(response, str):
+        await ctx.send(response)
+        return
+    if "luka_pona" in response:
+        if "gif" in response["luka_pona"]:
+            await ctx.send(response["luka_pona"]["gif"])
+            return
+    await ctx.send(f"No luka pona available for **{word}**")
 
 
 async def sp(ctx, text):
