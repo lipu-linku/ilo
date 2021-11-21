@@ -106,7 +106,7 @@ async def lp(ctx, word):
 
 
 async def sp(ctx, text):
-    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 133)
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
     await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fontsize)), filename="a.png"))
 
 
