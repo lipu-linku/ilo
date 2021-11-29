@@ -9,6 +9,7 @@ load_dotenv()
 
 DATA_LINK = os.getenv('GOOGLE_SHEETS_DATA_LINK')
 LANGUAGES_LINK = os.getenv('GOOGLE_SHEETS_LANGUAGES_LINK')
+CREDITS_LINK = os.getenv('GOOGLE_SHEETS_CREDITS_LINK')
 GITHUB_ACCOUNT = "lipu-linku"
 GITHUB_REPO = "jasima"
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
@@ -26,10 +27,11 @@ def get_site(link):
 
 
 def build_json():
-    languages = build_dict_from_sheet(LANGUAGES_LINK)
-    data = build_dict_from_sheet(DATA_LINK)
-
-    bundle = {"languages": languages, "data": data}
+    bundle = {
+        "languages": build_dict_from_sheet(LANGUAGES_LINK),
+        "credits": build_dict_from_sheet(CREDITS_LINK),
+        "data": build_dict_from_sheet(DATA_LINK),
+    }
     with open(JSON_PATH, 'w') as f:
         json.dump(bundle, f, indent=2)
     return bundle

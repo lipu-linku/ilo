@@ -171,7 +171,7 @@ def embed_response(word, lang, response, embedtype):
         if "etymology" in response or "source_language" in response:
             embed.add_field(name="etymology", value=build_etymology(response), inline=False)
         if "ku_data" in response:
-            embed.add_field(name="ku data", value=response["ku_data"], inline=False)
+            embed.add_field(name="ku data", value="{} [(source)](http://tokipona.org/nimi_pu.txt)".format(response["ku_data"]), inline=False)
         if "commentary" in response:
             embed.add_field(name="commentary", value=response["commentary"], inline=False)
 

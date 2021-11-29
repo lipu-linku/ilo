@@ -24,7 +24,7 @@
         "value": "hi"
     },
     {
-        "name": "bahasa Indonesia",
+        "name": "Bahasa Indonesia",
         "value": "id"
     },
     {
@@ -36,7 +36,11 @@
         "value": "isv_l"
     },
     {
-        "name": "lingua Latina",
+        "name": "Italiano",
+        "value": "it"
+    },
+    {
+        "name": "Latina",
         "value": "la"
     },
     {
