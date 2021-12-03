@@ -19,6 +19,12 @@ async def on_ready():
     for guild in bot.guilds:
         print("* {}".format(guild.name))
 
+@bot.event
+async def on_reaction_add(reaction, user):
+    if reaction.message.author == bot.user:
+        if reaction.emoji == "❌":
+            await reaction.message.delete()
+
 @slash.slash(name="nimi")
 async def slash_nimi(ctx, word):
     await nimi(ctx, word)
