@@ -9,7 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-import jasima, acronym, sitelenpona, preferences
+import jasima
+import acronym
+import sitelenpona
+import preferences
 
 bot = commands.Bot(command_prefix="/")
 slash = SlashCommand(bot)
@@ -133,8 +136,8 @@ async def preferences_acro(ctx, book):
 
 @slash.subcommand(base="preferences", name="fontsize")
 async def preferences_fontsize(ctx, size):
-    if not (size <= 500 and size >= 1):
-        await ctx.send("Font size is limited to the range from 1 to 500.")
+    if not (size <= 500 and size >= 14):
+        await ctx.send("Font size is limited to the range from 14 to 500.")
     else:
         preferences.set_preference(str(ctx.author.id), "fontsize", size)
         await ctx.send("Set fontsize preference for **{}** to **{}**.".format(ctx.author.display_name, size))
