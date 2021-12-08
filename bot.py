@@ -4,7 +4,7 @@ from discord_slash import SlashCommand
 from discord_slash.utils.manage_components import create_button, create_actionrow
 from discord_slash.model import ButtonStyle
 
-import os, io
+import os, io, json
 from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -34,15 +34,15 @@ async def slash_nimi(ctx, word):
 @slash.slash(name="n")
 async def slash_n(ctx, word):
     await nimi(ctx, word)
-@slash.slash(name="ss")
-async def slash_ss(ctx, word):
-    await ss(ctx, word)
 @slash.slash(name="lp")
 async def slash_lp(ctx, word):
     await lp(ctx, word)
 @slash.slash(name="sp")
 async def slash_sp(ctx, text):
     await sp(ctx, text)
+@slash.slash(name="ss")
+async def slash_ss(ctx, text):
+    await ss(ctx, text)
 @slash.slash(name="acro")
 async def slash_acro(ctx, text):
     await acro(ctx, text)
@@ -57,11 +57,6 @@ async def command_n(ctx, word):
     if word.startswith("word:"):
         word = word.replace("word:", "", 1)
     await nimi(ctx, word)
-@bot.command(name="ss")
-async def command_ss(ctx, word):
-    if word.startswith("word:"):
-        word = word.replace("word:", "", 1)
-    await ss(ctx, word)
 @bot.command(name="lp")
 async def command_lp(ctx, word):
     if word.startswith("word:"):
@@ -72,6 +67,11 @@ async def command_sp(ctx, *, text):
     if text.startswith("text:"):
         text = text.replace("text:", "", 1)
     await sp(ctx, text)
+@bot.command(name="ss")
+async def command_ss(ctx, *, text):
+    if text.startswith("text:"):
+        text = text.replace("text:", "", 1)
+    await ss(ctx, text)
 @bot.command(name="acro")
 async def command_acro(ctx, *, text):
     if text.startswith("text:"):
@@ -91,7 +91,7 @@ async def nimi(ctx, word):
     await ctx.send(embed=embed, components=components)
 
 
-async def ss(ctx, word):
+"""async def ss(ctx, word):
     lang = preferences.get_preference(str(ctx.author.id), "language", "en")
 
     response = jasima.get_word_entry(word)
@@ -100,7 +100,7 @@ async def ss(ctx, word):
         return
     embed = embed_response(word, lang, response, "image")
     await ctx.send(embed=embed)
-
+"""
 
 async def lp(ctx, word):
     response = jasima.get_word_entry(word)
@@ -116,7 +116,14 @@ async def lp(ctx, word):
 
 async def sp(ctx, text):
     fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
-    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fontsize)), filename="a.png"))
+    font = preferences.get_preference(str(ctx.author.id), "font", "linja sike")
+    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
+
+
+async def ss(ctx, word):
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
+    font = "sitelen Latin (ss)"
+    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(word, fonts[font], fontsize)), filename="a.png"))
 
 
 async def acro(ctx, text):
@@ -133,6 +140,11 @@ async def preferences_language(ctx, lang):
 async def preferences_acro(ctx, book):
     preferences.set_preference(str(ctx.author.id), "acro", book)
     await ctx.send("Set acronym book preference for **{}** to **{}**.".format(ctx.author.display_name, book))
+
+@slash.subcommand(base="preferences", name="font")
+async def preferences_font(ctx, font):
+    preferences.set_preference(str(ctx.author.id), "font", font)
+    await ctx.send("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
 
 @slash.subcommand(base="preferences", name="fontsize")
 async def preferences_fontsize(ctx, size):
@@ -214,4 +226,7 @@ colours = {"pu": discord.Colour.from_rgb(*from_hex("fff882")),
            "none": discord.Colour.from_rgb(*from_hex("0d092a"))
            }
 
-bot.run(TOKEN, reconnect=True)
+if __name__ == "__main__":
+    with open("fonts.json") as f:
+        fonts = json.load(f)
+    bot.run(TOKEN, reconnect=True)

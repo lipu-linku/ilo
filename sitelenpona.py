@@ -2,9 +2,9 @@ from PIL import Image, ImageDraw, ImageFont
 import io
 
 # by jan Tepo
-def display(text, font_size):
+def display(text, font_path, font_size):
     STROKE_WIDTH = round(font_size / 133 * 5)
-    font = ImageFont.truetype('fonts/linja-sike-5.otf', font_size)
+    font = ImageFont.truetype(font_path, font_size)
     d = ImageDraw.Draw(Image.new("RGBA", (0, 0), (0,0,0,0)))
     x, y, w, h = d.multiline_textbbox((0, 0), text, stroke_width=STROKE_WIDTH, font=font)
     image = Image.new("RGBA", (x+w+STROKE_WIDTH*2, y+h+STROKE_WIDTH*2), (0,0,0,0))

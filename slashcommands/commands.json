@@ -25,19 +25,6 @@
 	]
 },
 {
-	"name": "ss",
-	"type": 1,
-	"description": "Get the sitelen sitelen glyph of a toki pona word",
-	"options": [
-		{
-			"name": "word",
-			"description": "The word you want to get the sitelen sitelen glyph of.",
-			"type": 3,
-			"required": true
-		}
-	]
-},
-{
 	"name": "sp",
 	"type": 1,
 	"description": "Get sitelen pona of a toki pona phrase",
@@ -45,6 +32,19 @@
 		{
 			"name": "text",
 			"description": "The phrase you want to convert to sitelen pona.",
+			"type": 3,
+			"required": true
+		}
+	]
+},
+{
+	"name": "ss",
+	"type": 1,
+	"description": "Get the sitelen sitelen of a toki pona phrase",
+	"options": [
+		{
+			"name": "text",
+			"description": "The phrase you want to convert to sitelen sitelen.",
 			"type": 3,
 			"required": true
 		}
@@ -104,6 +104,81 @@
 					"description": "The font size you want to use.",
 					"type": 4,
 					"required": true
+				}
+			]
+		},
+		{
+			"name": "font",
+			"description": "Choose the font that sitelen pona will be displayed as.",
+			"type": 1,
+			"options": [
+				{
+					"name": "font",
+					"description": "The font you want to use.",
+					"type": 3,
+					"required": true,
+					"choices": [
+						{
+							"name": "insa pi supa lape",
+							"value": "insa pi supa lape"
+						},
+						{
+							"name": "linja pi pu lukin",
+							"value": "linja pi pu lukin"
+						},
+						{
+							"name": "linja pi tomo lipu",
+							"value": "linja pi tomo lipu"
+						},
+						{
+							"name": "linja pimeja pona",
+							"value": "linja pimeja pona"
+						},
+						{
+							"name": "linja pimeja",
+							"value": "linja pimeja"
+						},
+						{
+							"name": "linja pona",
+							"value": "linja pona"
+						},
+						{
+							"name": "linja sike",
+							"value": "linja sike"
+						},
+						{
+							"name": "linja suwi",
+							"value": "linja suwi"
+						},
+						{
+							"name": "linja wawa",
+							"value": "linja wawa"
+						},
+						{
+							"name": "seta sans",
+							"value": "seta sans"
+						},
+						{
+							"name": "sitelen Latin (ss)",
+							"value": "sitelen Latin (ss)"
+						},
+						{
+							"name": "sitelen pona pona",
+							"value": "sitelen pona pona"
+						},
+						{
+							"name": "sitelen Sans",
+							"value": "sitelen Sans"
+						},
+						{
+							"name": "sitelen telo",
+							"value": "sitelen telo"
+						},
+						{
+							"name": "toki pona OTF",
+							"value": "toki pona OTF"
+						}
+					]
 				}
 			]
 		},
