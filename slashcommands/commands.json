@@ -117,68 +117,7 @@
 					"description": "The font you want to use.",
 					"type": 3,
 					"required": true,
-					"choices": [
-						{
-							"name": "insa pi supa lape",
-							"value": "insa pi supa lape"
-						},
-						{
-							"name": "linja pi pu lukin",
-							"value": "linja pi pu lukin"
-						},
-						{
-							"name": "linja pi tomo lipu",
-							"value": "linja pi tomo lipu"
-						},
-						{
-							"name": "linja pimeja pona",
-							"value": "linja pimeja pona"
-						},
-						{
-							"name": "linja pimeja",
-							"value": "linja pimeja"
-						},
-						{
-							"name": "linja pona",
-							"value": "linja pona"
-						},
-						{
-							"name": "linja sike",
-							"value": "linja sike"
-						},
-						{
-							"name": "linja suwi",
-							"value": "linja suwi"
-						},
-						{
-							"name": "linja wawa",
-							"value": "linja wawa"
-						},
-						{
-							"name": "seta sans",
-							"value": "seta sans"
-						},
-						{
-							"name": "sitelen Latin (ss)",
-							"value": "sitelen Latin (ss)"
-						},
-						{
-							"name": "sitelen pona pona",
-							"value": "sitelen pona pona"
-						},
-						{
-							"name": "sitelen Sans",
-							"value": "sitelen Sans"
-						},
-						{
-							"name": "sitelen telo",
-							"value": "sitelen telo"
-						},
-						{
-							"name": "toki pona OTF",
-							"value": "toki pona OTF"
-						}
-					]
+					"choices": "FONTS"
 				}
 			]
 		},
