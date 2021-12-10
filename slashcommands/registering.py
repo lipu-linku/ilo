@@ -46,3 +46,4 @@ for command in json_commands:
 # Print current commands
 for command in requests.get(url, headers=headers).json():
     print("Exists", command)
+

@@ -1,5 +1,6 @@
 {
   "insa pi supa lape": "fonts/supalape.otf",
+  "linja ante": "fonts/linja-ante.ttf",
   "linja pi pu lukin": "fonts/PuLukin.otf",
   "linja pi tomo lipu": "fonts/linjapitomolipu.0.7.ttf",
   "linja pimeja pona": "fonts/linjapimejapona0.9.otf",
@@ -11,6 +12,7 @@
   "seta sans": "fonts/TokiPonaSetaSans-Regular2.otf",
   "sitelen Latin (ss)": "fonts/SitelenLatin_1.3.4.ttf",
   "sitelen luka tu tu": "fonts/sitelen_luka_tu_tu.ttf",
+  "sitelen pona kiwen": "fonts/sitelen-pona-kiwen-nanpa-tu.ttf",
   "sitelen pona pona": "fonts/sitelen-pona-pona.otf",
   "sitelen Sans": "fonts/Sitelen Sans 3.otf",
   "sitelen suwi ko": "fonts/sitelensuwiko20.ttf",
