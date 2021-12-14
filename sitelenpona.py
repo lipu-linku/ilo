@@ -16,18 +16,23 @@ def display(text, font_path, font_size):
 
 def stitch(images):
     imgs = [Image.open(io.BytesIO(i)) for i in images]
-    min_img_height = min(i.height for i in imgs)
+    max_img_width = max(i.width for i in imgs)
 
-    total_width = 0
+    total_height = 0
     for i, img in enumerate(imgs):
-        if img.height > min_img_height:
-            imgs[i] = img.resize((int(img.width / img.height * min_img_height), min_img_height), Image.ANTIALIAS)
-        total_width += imgs[i].width
-    img_merge = Image.new(imgs[0].mode, (total_width, min_img_height), (0,0,0,0))
-    x = 0
+        # If the image is larger than the minimum width, resize it
+        #if img.width > min_img_width:
+        #    imgs[i] = img.resize((min_img_width, int(img.height / img.width * min_img_width)), Image.ANTIALIAS)
+        total_height += imgs[i].height
+
+    # I have picked the mode of the first image to be generic. You may have other ideas
+    # Now that we know the total height of all of the resized images, we know the height of our final image
+    img_merge = Image.new(imgs[0].mode, (max_img_width, total_height))
+    y = 0
     for img in imgs:
-        img_merge.paste(img, (x, 0))
-        x += img.width
+        img_merge.paste(img, (round((max_img_width-img.width)/2), y))
+
+        y += img.height
     img_out = io.BytesIO()
     img_merge.save(img_out, format='PNG')
     return img_out.getvalue()
