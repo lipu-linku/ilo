@@ -38,6 +38,19 @@
 	]
 },
 {
+	"name": "preview",
+	"type": 1,
+	"description": "Compare available fonts for toki pona",
+	"options": [
+		{
+			"name": "text",
+			"description": "The phrase you want to preview in all available fonts.",
+			"type": 3,
+			"required": true
+		}
+	]
+},
+{
 	"name": "ss",
 	"type": 1,
 	"description": "Get the sitelen sitelen of a toki pona phrase",

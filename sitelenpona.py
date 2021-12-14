@@ -13,3 +13,21 @@ def display(text, font_path, font_size):
     img_out = io.BytesIO()
     image.save(img_out, format='PNG')
     return img_out.getvalue()
+
+def stitch(images):
+    imgs = [Image.open(io.BytesIO(i)) for i in images]
+    min_img_height = min(i.height for i in imgs)
+
+    total_width = 0
+    for i, img in enumerate(imgs):
+        if img.height > min_img_height:
+            imgs[i] = img.resize((int(img.width / img.height * min_img_height), min_img_height), Image.ANTIALIAS)
+        total_width += imgs[i].width
+    img_merge = Image.new(imgs[0].mode, (total_width, min_img_height), (0,0,0,0))
+    x = 0
+    for img in imgs:
+        img_merge.paste(img, (x, 0))
+        x += img.width
+    img_out = io.BytesIO()
+    img_merge.save(img_out, format='PNG')
+    return img_out.getvalue()

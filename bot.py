@@ -43,6 +43,9 @@ async def slash_sp(ctx, text):
 @slash.slash(name="ss")
 async def slash_ss(ctx, text):
     await ss(ctx, text)
+@slash.slash(name="preview")
+async def slash_preview(ctx, text):
+    await preview(ctx, text)
 @slash.slash(name="acro")
 async def slash_acro(ctx, text):
     await acro(ctx, text)
@@ -72,6 +75,11 @@ async def command_ss(ctx, *, text):
     if text.startswith("text:"):
         text = text.replace("text:", "", 1)
     await ss(ctx, text)
+@bot.command(name="preview")
+async def command_preview(ctx, *, text):
+    if text.startswith("text:"):
+        text = text.replace("text:", "", 1)
+    await preview(ctx, text)
 @bot.command(name="acro")
 async def command_acro(ctx, *, text):
     if text.startswith("text:"):
@@ -91,17 +99,6 @@ async def nimi(ctx, word):
     await ctx.send(embed=embed, components=components)
 
 
-"""async def ss(ctx, word):
-    lang = preferences.get_preference(str(ctx.author.id), "language", "en")
-
-    response = jasima.get_word_entry(word)
-    if isinstance(response, str):
-        await ctx.send(response)
-        return
-    embed = embed_response(word, lang, response, "image")
-    await ctx.send(embed=embed)
-"""
-
 async def lp(ctx, word):
     response = jasima.get_word_entry(word)
     if isinstance(response, str):
@@ -120,10 +117,18 @@ async def sp(ctx, text):
     await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
 
 
-async def ss(ctx, word):
+async def ss(ctx, text):
     fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
     font = "sitelen Latin (ss)"
-    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(word, fonts[font], fontsize)), filename="a.png"))
+    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
+
+
+async def preview(ctx, text):
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
+    images = []
+    for font in fonts:
+        images.append(sitelenpona.display(text, fonts[font], fontsize))
+    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.stitch(images)), filename="a.png"))
 
 
 async def acro(ctx, text):
