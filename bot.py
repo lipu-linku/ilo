@@ -1,21 +1,21 @@
 import discord
 from discord.ext import commands
-from discord_slash import SlashCommand
-from discord_slash.utils.manage_components import create_button, create_actionrow
-from discord_slash.model import ButtonStyle
+
 
 import os, io, json
 from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+
 import jasima
 import acronym
 import sitelenpona
 import preferences
 
+
 bot = commands.Bot(command_prefix="/")
-slash = SlashCommand(bot)
+
 
 @bot.event
 async def on_ready():
@@ -28,26 +28,54 @@ async def on_reaction_add(reaction, user):
         if reaction.emoji == "❌":
             await reaction.message.delete()
 
-@slash.slash(name="nimi")
-async def slash_nimi(ctx, word):
+
+@bot.slash_command(
+  name='nimi',
+  description='Get the translation of a toki pona word',
+)
+async def slash_nimi(ctx, word: discord.Option(str, 'The word you want to get the translation of.', required=True)):
     await nimi(ctx, word)
-@slash.slash(name="n")
-async def slash_n(ctx, word):
+
+@bot.slash_command(
+  name='n',
+  description='Get the translation of a toki pona word',
+)
+async def slash_n(ctx, word: discord.Option(str, 'The word you want to get the translation of.', required=True)):
     await nimi(ctx, word)
-@slash.slash(name="lp")
-async def slash_lp(ctx, word):
+
+@bot.slash_command(
+  name='lp',
+  description='Get the luka pona sign of a toki pona word',
+)
+async def slash_lp(ctx, word: discord.Option(str, 'The word you want to get the luka pona sign of.', required=True)):
     await lp(ctx, word)
-@slash.slash(name="sp")
-async def slash_sp(ctx, text):
+
+@bot.slash_command(
+  name='sp',
+  description='Get sitelen pona of a toki pona phrase',
+)
+async def slash_sp(ctx, text: discord.Option(str, 'The phrase you want to convert to sitelen pona.', required=True)):
     await sp(ctx, text)
-@slash.slash(name="ss")
-async def slash_ss(ctx, text):
+
+@bot.slash_command(
+  name='ss',
+  description='Get the sitelen sitelen of a toki pona phrase',
+)
+async def slash_ss(ctx, text: discord.Option(str, 'The phrase you want to convert to sitelen sitelen.', required=True)):
     await ss(ctx, text)
-@slash.slash(name="preview")
-async def slash_preview(ctx, text):
+
+@bot.slash_command(
+  name='preview',
+  description='Compare available fonts for toki pona',
+)
+async def slash_preview(ctx, text: discord.Option(str, 'The phrase you want to preview in all available fonts.', required=True)):
     await preview(ctx, text)
-@slash.slash(name="acro")
-async def slash_acro(ctx, text):
+
+@bot.slash_command(
+  name='acro',
+  description='Get help coming up with acronyms consisting of toki pona words',
+)
+async def slash_acro(ctx, text: discord.Option(str, 'Letters you want to make an acronym for.', required=True)):
     await acro(ctx, text)
 
 @bot.command(name="nimi")
@@ -92,11 +120,17 @@ async def nimi(ctx, word):
 
     response = jasima.get_word_entry(word)
     if isinstance(response, str):
-        await ctx.send(response)
+        if isinstance(ctx, discord.context.ApplicationContext):
+            await ctx.respond(response)
+        else:
+            await ctx.send(response)
         return
     embed = embed_response(word, lang, response, "concise")
-    components = build_action_row(word, lang, "expand")
-    await ctx.send(embed=embed, components=components)
+    view = NimiView("expand", word, lang)
+    if isinstance(ctx, discord.context.ApplicationContext):
+        await ctx.respond(embed=embed, view=view)
+    else:
+        await ctx.send(embed=embed, view=view)
 
 
 async def lp(ctx, word):
@@ -106,21 +140,33 @@ async def lp(ctx, word):
         return
     if "luka_pona" in response:
         if "gif" in response["luka_pona"]:
-            await ctx.send(response["luka_pona"]["gif"])
+            if isinstance(ctx, discord.context.ApplicationContext):
+                await ctx.respond(response["luka_pona"]["gif"])
+            else:
+                await ctx.send(response["luka_pona"]["gif"])
             return
-    await ctx.send(f"No luka pona available for **{word}**")
-
+    if isinstance(ctx, discord.context.ApplicationContext):
+        await ctx.respond(f"No luka pona available for **{word}**")
+    else:
+        await ctx.send(f"No luka pona available for **{word}**")
+    
 
 async def sp(ctx, text):
     fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
     font = preferences.get_preference(str(ctx.author.id), "font", "linja sike")
-    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
+    if isinstance(ctx, discord.context.ApplicationContext):
+        await ctx.respond(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
+    else:
+        await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
 
 
 async def ss(ctx, text):
     fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
     font = "sitelen Latin (ss)"
-    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
+    if isinstance(ctx, discord.context.ApplicationContext):
+        await ctx.respond(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
+    else:
+        await ctx.send(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
 
 
 async def preview(ctx, text):
@@ -128,14 +174,20 @@ async def preview(ctx, text):
     images = []
     for font in fonts:
         images.append(sitelenpona.display(text, fonts[font], fontsize))
-    await ctx.send(file=discord.File(io.BytesIO(sitelenpona.stitch(images)), filename="a.png"))
+    if isinstance(ctx, discord.context.ApplicationContext):
+        await ctx.respond(file=discord.File(io.BytesIO(sitelenpona.stitch(images)), filename="a.png"))
+    else:
+        await ctx.send(file=discord.File(io.BytesIO(sitelenpona.stitch(images)), filename="a.png"))
 
 
 async def acro(ctx, text):
     book = preferences.get_preference(str(ctx.author.id), "acro", "ku suli")
-    await ctx.send(acronym.respond(text, book))
+    if isinstance(ctx, discord.context.ApplicationContext):
+        await ctx.respond(acronym.respond(text, book))
+    else:
+        await ctx.send(acronym.respond(text, book))
 
-
+"""
 @slash.subcommand(base="preferences", name="language")
 async def preferences_language(ctx, lang):
     preferences.set_preference(str(ctx.author.id), "language", lang)
@@ -163,24 +215,13 @@ async def preferences_fontsize(ctx, size):
 async def preferences_reset(ctx):
     preferences.reset_preferences(str(ctx.author.id))
     await ctx.send("Reset preferences for **{}**.".format(ctx.author.display_name))
-
-
+"""
+"""
 @bot.command()
 async def reload(ctx):
     jasima.routine()
+"""
 
-
-@bot.event
-async def on_component(ctx):
-    # you may want to filter or change behaviour based on custom_id or message
-    buttontype, word, lang = ctx.custom_id.split(";")
-    if buttontype == "expand":
-        embed = embed_response(word, lang, jasima.get_word_entry(word), "verbose")
-        components = build_action_row(word, lang, "minimise")
-    if buttontype == "minimise":
-        embed = embed_response(word, lang, jasima.get_word_entry(word), "concise")
-        components = build_action_row(word, lang, "expand")
-    await ctx.edit_origin(embed=embed, components=components)
 
 def embed_response(word, lang, response, embedtype):
     embed = discord.Embed()
@@ -201,18 +242,35 @@ def embed_response(word, lang, response, embedtype):
         if "commentary" in response:
             embed.add_field(name="commentary", value=response["commentary"], inline=False)
 
-    if embedtype == "image":
-        if "sitelen_sitelen" in response:
-            embed.set_image(url=response["sitelen_sitelen"])
-        else:
-            embed.description = "no sitelen sitelen available"
+    if response["book"] not in ("pu", "ku suli"):
+        if "see_also" in response:
+            embed.add_field(name="see also", value=response["see_also"])
     return embed
 
-def build_action_row(word, lang, buttontype):
-    url = "https://lipu-linku.github.io/?q={}".format(word)
-    buttons = [create_button(style=ButtonStyle.blue, label=f"{buttontype}", custom_id=f"{buttontype};{word};{lang}"),
-               create_button(style=ButtonStyle.URL, label="more info", url=url)]
-    return [create_actionrow(*buttons)]
+
+class NimiView(discord.ui.View):
+    def __init__(self, buttontype, word, lang):
+        super().__init__()
+        minmax = NimiButton(style=discord.ButtonStyle.primary,
+                            label=buttontype,
+                            custom_id=f"{buttontype};{word};{lang}")
+        self.add_item(minmax)
+        url = "https://lipu-linku.github.io/?q={}".format(word)
+        moreinfo = discord.ui.Button(style=discord.ButtonStyle.link, label="more info", url=url)
+        self.add_item(moreinfo)
+
+
+class NimiButton(discord.ui.Button):
+    async def callback(self, interaction):
+        buttontype, word, lang = self.custom_id.split(";")
+        if buttontype == "expand":
+            embed = embed_response(word, lang, jasima.get_word_entry(word), "verbose")
+            view = NimiView("minimise", word, lang)
+        if buttontype == "minimise":
+            embed = embed_response(word, lang, jasima.get_word_entry(word), "concise")
+            view = NimiView("expand", word, lang)
+        await interaction.response.edit_message(embed=embed, view=view)
+
 
 def build_etymology(response):
     etymology = "←"
@@ -223,15 +281,9 @@ def build_etymology(response):
     return etymology
 
 
-def from_hex(value):
-    return int(value, base=16)//256//256, int(value, base=16)//256%256, int(value, base=16)%256
-colours = {"pu": discord.Colour.from_rgb(*from_hex("fff882")),
-           "ku suli": discord.Colour.from_rgb(*from_hex("42a75a")),
-           "ku lili": discord.Colour.from_rgb(*from_hex("1f5666")),
-           "none": discord.Colour.from_rgb(*from_hex("0d092a"))
-           }
-
 if __name__ == "__main__":
     with open("fonts.json") as f:
         fonts = json.load(f)
+    with open("colours.json") as f:
+        colours = {k: discord.Colour.from_rgb(*bytes.fromhex(v)) for k, v in json.load(f).items()}
     bot.run(TOKEN, reconnect=True)
