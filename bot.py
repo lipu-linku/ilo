@@ -173,7 +173,7 @@ async def command_acro(ctx, *, text):
 
 
 async def nimi(ctx, word):
-    lang = preferences.get_preference(str(ctx.author.id), "language", defaults["language"])
+    lang = preferences.get_preference(str(ctx.author.id), "language")
 
     response = jasima.get_word_entry(word)
     if isinstance(response, str):
@@ -209,8 +209,8 @@ async def lp(ctx, word):
     
 
 async def sp(ctx, text):
-    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", defaults["fontsize"])
-    font = preferences.get_preference(str(ctx.author.id), "font", defaults["font"])
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize")
+    font = preferences.get_preference(str(ctx.author.id), "font")
     if isinstance(ctx, discord.context.ApplicationContext):
         await ctx.respond(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
     else:
@@ -218,7 +218,7 @@ async def sp(ctx, text):
 
 
 async def ss(ctx, text):
-    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", defaults["fontsize"])
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize")
     font = "sitelen Latin (ss)"
     if isinstance(ctx, discord.context.ApplicationContext):
         await ctx.respond(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
@@ -227,7 +227,7 @@ async def ss(ctx, text):
 
 
 async def preview(ctx, text):
-    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", defaults["fontsize"])
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize")
     images = []
     for font in fonts:
         images.append(sitelenpona.display(text, fonts[font], fontsize))
@@ -238,7 +238,7 @@ async def preview(ctx, text):
 
 
 async def acro(ctx, text):
-    book = preferences.get_preference(str(ctx.author.id), "acro", defaults["acro"])
+    book = preferences.get_preference(str(ctx.author.id), "acro")
     if isinstance(ctx, discord.context.ApplicationContext):
         await ctx.respond(acronym.respond(text, book))
     else:

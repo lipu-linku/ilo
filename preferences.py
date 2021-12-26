@@ -1,4 +1,5 @@
 import json
+from defines import defaults
 
 PREFERENCES_PATH = "userdata/preferences.json"
 
@@ -13,12 +14,12 @@ def build_preferences(preferences):
         json.dump(preferences, f, indent=2)
 
 
-def get_preference(user_id, key, default_value):
+def get_preference(user_id, key):
     preferences = read_preferences()
     if user_id in preferences:
         if key in preferences[user_id]:
             return preferences[user_id][key]
-    return default_value
+    return defaults[key]
 
 
 def set_preference(user_id, key, value):
