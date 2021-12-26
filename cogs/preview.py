@@ -10,7 +10,7 @@ from discord import context
 from defines import fonts
 from defines import text
 from preferences import get_preference
-import sitelenpona
+import sitelen
 
 class CogPreview(commands.Cog):
     def __init__(self, bot):
@@ -34,9 +34,9 @@ async def preview(ctx, text):
     fontsize = get_preference(str(ctx.author.id), "fontsize")
     images = []
     for font in fonts:
-        images.append(sitelenpona.display(text, fonts[font], fontsize))
+        images.append(sitelen.display(text, fonts[font], fontsize))
     if isinstance(ctx, context.ApplicationContext):
-        await ctx.respond(file=File(io.BytesIO(sitelenpona.stitch(images)), filename="a.png"))
+        await ctx.respond(file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png"))
     else:
-        await ctx.send(file=File(io.BytesIO(sitelenpona.stitch(images)), filename="a.png"))
+        await ctx.send(file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png"))
 
