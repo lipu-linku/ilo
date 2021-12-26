@@ -11,6 +11,9 @@
 	"DESC_SS": "Get the sitelen sitelen of a toki pona phrase",
 	"DESC_SS_OPTION": "The phrase you want to convert to sitelen sitelen.",
 
+	"DESC_SE": "Convert your text to sitelen Emosi",
+	"DESC_SE_OPTION": "The text you want to convert to sitelen sitelen.",
+
 	"DESC_PREVIEW": "Compare available fonts for toki pona",
 	"DESC_PREVIEW_OPTION": "The phrase you want to preview in all available fonts.",
 

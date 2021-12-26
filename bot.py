@@ -11,6 +11,7 @@ from cogs.preferences import CogPreferences
 from cogs.lp import CogLp
 from cogs.sp import CogSp
 from cogs.ss import CogSs
+from cogs.se import CogSe
 from cogs.preview import CogPreview
 
 bot = commands.Bot(command_prefix="/")
@@ -39,5 +40,6 @@ if __name__ == "__main__":
     bot.add_cog(CogLp(bot))
     bot.add_cog(CogSp(bot))
     bot.add_cog(CogSs(bot))
+    bot.add_cog(CogSe(bot))
     bot.add_cog(CogPreview(bot))
     bot.run(TOKEN, reconnect=True)

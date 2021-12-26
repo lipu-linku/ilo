@@ -3,6 +3,8 @@ import re
 import json
 import subprocess
 
+from defines import extraemoji
+
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -85,6 +87,18 @@ def get_word_entry(word):
     if word not in entries:
         return help_message.format(word)
     return entries[word]
+
+
+def sitelen_emosi(word):
+        bundle = read_json()
+        entries = bundle["data"]
+        if word not in entries:
+            chars = []
+            for letter in word:
+                chars.append(extraemoji[letter]) 
+
+            return " ".join(chars)
+        return entries[word]['sitelen_emosi']
 
 
 def get_languages_for_slash_commands():

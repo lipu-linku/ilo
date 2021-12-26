@@ -7,5 +7,6 @@ def load(file_path):
 acro_choices = load("acro_choices")
 colours = load("colours")
 defaults = load("defaults")
+extraemoji = load("extraemoji")
 fonts = load("fonts")
 text = load("text")
