@@ -8,6 +8,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 
+from defines import *
 import jasima
 import acronym
 import sitelenpona
@@ -28,100 +29,96 @@ async def on_reaction_add(reaction, user):
         if reaction.emoji == "❌":
             await reaction.message.delete()
 
+def to_choices(dictionary):
+    return [discord.OptionChoice(name=k, value=v) for k, v in dictionary.items()]
+def to_colours(dictionary):
+    return {k: discord.Colour.from_rgb(*bytes.fromhex(v)) for k, v in dictionary.items()}
 
 @bot.slash_command(
   name='nimi',
-  description='Get the translation of a toki pona word',
+  description=text["DESC_NIMI"],
 )
-async def slash_nimi(ctx, word: discord.Option(str, 'The word you want to get the translation of.')):
+async def slash_nimi(ctx, word: discord.Option(str, text["DESC_NIMI_OPTION"])):
     await nimi(ctx, word)
 
 @bot.slash_command(
   name='n',
-  description='Get the translation of a toki pona word',
+  description=text["DESC_NIMI"],
 )
-async def slash_n(ctx, word: discord.Option(str, 'The word you want to get the translation of.')):
+async def slash_n(ctx, word: discord.Option(str, text["DESC_NIMI_OPTION"])):
     await nimi(ctx, word)
 
 @bot.slash_command(
   name='lp',
-  description='Get the luka pona sign of a toki pona word',
+  description=text["DESC_LP"],
 )
-async def slash_lp(ctx, word: discord.Option(str, 'The word you want to get the luka pona sign of.')):
+async def slash_lp(ctx, word: discord.Option(str, text["DESC_LP_OPTION"])):
     await lp(ctx, word)
 
 @bot.slash_command(
   name='sp',
-  description='Get sitelen pona of a toki pona phrase',
+  description=text["DESC_SP"],
 )
-async def slash_sp(ctx, text: discord.Option(str, 'The phrase you want to convert to sitelen pona.')):
+async def slash_sp(ctx, text: discord.Option(str, text["DESC_SP_OPTION"])):
     await sp(ctx, text)
 
 @bot.slash_command(
   name='ss',
-  description='Get the sitelen sitelen of a toki pona phrase',
+  description=text["DESC_SS"],
 )
-async def slash_ss(ctx, text: discord.Option(str, 'The phrase you want to convert to sitelen sitelen.')):
+async def slash_ss(ctx, text: discord.Option(str, text["DESC_SS_OPTION"])):
     await ss(ctx, text)
 
 @bot.slash_command(
   name='preview',
-  description='Compare available fonts for toki pona',
+  description=text["DESC_PREVIEW"],
 )
-async def slash_preview(ctx, text: discord.Option(str, 'The phrase you want to preview in all available fonts.')):
+async def slash_preview(ctx, text: discord.Option(str, text["DESC_PREVIEW_OPTION"])):
     await preview(ctx, text)
 
 @bot.slash_command(
   name='acro',
-  description='Get help coming up with acronyms consisting of toki pona words',
+  description=text["DESC_ACRO"],
 )
-async def slash_acro(ctx, text: discord.Option(str, 'Letters you want to make an acronym for.')):
+async def slash_acro(ctx, text: discord.Option(str, text["DESC_ACRO_OPTION"])):
     await acro(ctx, text)
 
 prefs = bot.create_group(
     "preferences",
-    "Set various user preferences determining how the bot should answer your requests."
+    text["DESC_PREFS"]
     )
 
 @prefs.command(
     name="fontsize",
-    description="Set the font size that sitelen pona will be displayed as."
+    description=text["DESC_PREFS_FONTSIZE"],
     )
-async def preferences_fontsize(ctx, size: discord.Option(int, 'The font size you want to use.')):
+async def preferences_fontsize(ctx, size: discord.Option(int, text["DESC_PREFS_FONTSIZE_OPTION"])):
     if not (size <= 500 and size >= 14):
         await ctx.respond("Font size is limited to the range from 14 to 500.")
     else:
         preferences.set_preference(str(ctx.author.id), "fontsize", size)
         await ctx.respond("Set fontsize preference for **{}** to **{}**.".format(ctx.author.display_name, size))
 
-def to_choices(dictionary):
-    return [discord.OptionChoice(name=k, value=v) for k, v in dictionary.items()]
-
-with open("acro_choices.json") as f:
-    acro_choices = to_choices(json.load(f))
 
 @prefs.command(
     name="acro",
-    description="Choose the book set of words that will be included in /acro."
+    description=text["DESC_PREFS_ACRO"],
     )
-async def preferences_acro(ctx, book: discord.Option(str, 'The book you want to use.', choices=acro_choices)):
+async def preferences_acro(ctx, book: discord.Option(str, text["DESC_PREFS_ACRO_OPTION"], choices=to_choices(acro_choices))):
     preferences.set_preference(str(ctx.author.id), "acro", book)
     await ctx.respond("Set acronym book preference for **{}** to **{}**.".format(ctx.author.display_name, book))
 
-with open("fonts.json") as f:
-    fonts = json.load(f)
-
 @prefs.command(
     name="font",
-    description="Choose the font that sitelen pona will be displayed as."
+    description=text["DESC_PREFS_FONT"],
     )
-async def preferences_font(ctx, font: discord.Option(str, 'The font you want to use.', choices=list(fonts))):
+async def preferences_font(ctx, font: discord.Option(str, text["DESC_PREFS_FONT_OPTION"], choices=list(fonts))):
     preferences.set_preference(str(ctx.author.id), "font", font)
     await ctx.respond("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
 
 @prefs.command(
     name="reset",
-    description="Reset all preferences to their default values."
+    description=text["DESC_PREFS_RESET"],
     )
 async def preferences_reset(ctx):
     preferences.reset_preferences(str(ctx.author.id))
@@ -131,9 +128,9 @@ language_choices = to_choices(jasima.get_languages_for_slash_commands())
 
 @prefs.command(
     name="language",
-    description="Set the language that dictionary definitions will use."
+    description=text["DESC_PREFS_LANGUAGE"],
     )
-async def preferences_language(ctx, lang: discord.Option(str, 'The language you want to use.', choices=language_choices)):
+async def preferences_language(ctx, lang: discord.Option(str, text["DESC_PREFS_LANGUAGE_OPTION"], choices=language_choices)):
     preferences.set_preference(str(ctx.author.id), "language", lang)
     await ctx.respond("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
 
@@ -176,7 +173,7 @@ async def command_acro(ctx, *, text):
 
 
 async def nimi(ctx, word):
-    lang = preferences.get_preference(str(ctx.author.id), "language", "en")
+    lang = preferences.get_preference(str(ctx.author.id), "language", defaults["language"])
 
     response = jasima.get_word_entry(word)
     if isinstance(response, str):
@@ -212,8 +209,8 @@ async def lp(ctx, word):
     
 
 async def sp(ctx, text):
-    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
-    font = preferences.get_preference(str(ctx.author.id), "font", "linja sike")
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", defaults["fontsize"])
+    font = preferences.get_preference(str(ctx.author.id), "font", defaults["font"])
     if isinstance(ctx, discord.context.ApplicationContext):
         await ctx.respond(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
     else:
@@ -221,7 +218,7 @@ async def sp(ctx, text):
 
 
 async def ss(ctx, text):
-    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", defaults["fontsize"])
     font = "sitelen Latin (ss)"
     if isinstance(ctx, discord.context.ApplicationContext):
         await ctx.respond(file=discord.File(io.BytesIO(sitelenpona.display(text, fonts[font], fontsize)), filename="a.png"))
@@ -230,7 +227,7 @@ async def ss(ctx, text):
 
 
 async def preview(ctx, text):
-    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", 72)
+    fontsize = preferences.get_preference(str(ctx.author.id), "fontsize", defaults["fontsize"])
     images = []
     for font in fonts:
         images.append(sitelenpona.display(text, fonts[font], fontsize))
@@ -241,7 +238,7 @@ async def preview(ctx, text):
 
 
 async def acro(ctx, text):
-    book = preferences.get_preference(str(ctx.author.id), "acro", "ku suli")
+    book = preferences.get_preference(str(ctx.author.id), "acro", defaults["acro"])
     if isinstance(ctx, discord.context.ApplicationContext):
         await ctx.respond(acronym.respond(text, book))
     else:
@@ -258,7 +255,7 @@ async def reload(ctx):
 def embed_response(word, lang, response, embedtype):
     embed = discord.Embed()
     embed.title = response["word"]
-    embed.colour = colours[response["book"]]
+    embed.colour = to_colours(colours)[response["book"]]
     description = response["def"][lang] if lang in response["def"] else "(en) {}".format(response["def"]["en"])
     embed.add_field(name="book", value=response["book"])
 
@@ -314,6 +311,4 @@ def build_etymology(response):
 
 
 if __name__ == "__main__":
-    with open("colours.json") as f:
-        colours = {k: discord.Colour.from_rgb(*bytes.fromhex(v)) for k, v in json.load(f).items()}
     bot.run(TOKEN, reconnect=True)
