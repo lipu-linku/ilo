@@ -78,26 +78,23 @@ def upload_json_to_github():
 
 
 def get_word_entry(word):
-        bundle = read_json()
-        entries = bundle["data"]
-        if len(word.split()) > 1:
-            return multiple_words_message.format(word)
-        if word not in entries:
-            return help_message.format(word)
-        return entries[word]
+    bundle = read_json()
+    entries = bundle["data"]
+    if len(word.split()) > 1:
+        return multiple_words_message.format(word)
+    if word not in entries:
+        return help_message.format(word)
+    return entries[word]
 
 
-def build_languages_for_slash_commands(languages):
-    options = []
-    for lang_id, language in languages.items():
-        options.append({"name": language["name_endonym"], "value": lang_id})
-    with open(LANGUAGE_OPTIONS_PATH, 'w') as f:
-        json.dump(options, f, indent=4)
-    
+def get_languages_for_slash_commands():
+    bundle = read_json()
+    languages = bundle["languages"]
+    return {v["name_endonym"]: k for k, v in languages.items()}
+
 
 def routine():
     bundle = build_json()
-    build_languages_for_slash_commands(bundle["languages"])
     upload_json_to_github()
 
 

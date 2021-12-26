@@ -33,50 +33,110 @@ async def on_reaction_add(reaction, user):
   name='nimi',
   description='Get the translation of a toki pona word',
 )
-async def slash_nimi(ctx, word: discord.Option(str, 'The word you want to get the translation of.', required=True)):
+async def slash_nimi(ctx, word: discord.Option(str, 'The word you want to get the translation of.')):
     await nimi(ctx, word)
 
 @bot.slash_command(
   name='n',
   description='Get the translation of a toki pona word',
 )
-async def slash_n(ctx, word: discord.Option(str, 'The word you want to get the translation of.', required=True)):
+async def slash_n(ctx, word: discord.Option(str, 'The word you want to get the translation of.')):
     await nimi(ctx, word)
 
 @bot.slash_command(
   name='lp',
   description='Get the luka pona sign of a toki pona word',
 )
-async def slash_lp(ctx, word: discord.Option(str, 'The word you want to get the luka pona sign of.', required=True)):
+async def slash_lp(ctx, word: discord.Option(str, 'The word you want to get the luka pona sign of.')):
     await lp(ctx, word)
 
 @bot.slash_command(
   name='sp',
   description='Get sitelen pona of a toki pona phrase',
 )
-async def slash_sp(ctx, text: discord.Option(str, 'The phrase you want to convert to sitelen pona.', required=True)):
+async def slash_sp(ctx, text: discord.Option(str, 'The phrase you want to convert to sitelen pona.')):
     await sp(ctx, text)
 
 @bot.slash_command(
   name='ss',
   description='Get the sitelen sitelen of a toki pona phrase',
 )
-async def slash_ss(ctx, text: discord.Option(str, 'The phrase you want to convert to sitelen sitelen.', required=True)):
+async def slash_ss(ctx, text: discord.Option(str, 'The phrase you want to convert to sitelen sitelen.')):
     await ss(ctx, text)
 
 @bot.slash_command(
   name='preview',
   description='Compare available fonts for toki pona',
 )
-async def slash_preview(ctx, text: discord.Option(str, 'The phrase you want to preview in all available fonts.', required=True)):
+async def slash_preview(ctx, text: discord.Option(str, 'The phrase you want to preview in all available fonts.')):
     await preview(ctx, text)
 
 @bot.slash_command(
   name='acro',
   description='Get help coming up with acronyms consisting of toki pona words',
 )
-async def slash_acro(ctx, text: discord.Option(str, 'Letters you want to make an acronym for.', required=True)):
+async def slash_acro(ctx, text: discord.Option(str, 'Letters you want to make an acronym for.')):
     await acro(ctx, text)
+
+prefs = bot.create_group(
+    "preferences",
+    "Set various user preferences determining how the bot should answer your requests."
+    )
+
+@prefs.command(
+    name="fontsize",
+    description="Set the font size that sitelen pona will be displayed as."
+    )
+async def preferences_fontsize(ctx, size: discord.Option(int, 'The font size you want to use.')):
+    if not (size <= 500 and size >= 14):
+        await ctx.respond("Font size is limited to the range from 14 to 500.")
+    else:
+        preferences.set_preference(str(ctx.author.id), "fontsize", size)
+        await ctx.respond("Set fontsize preference for **{}** to **{}**.".format(ctx.author.display_name, size))
+
+def to_choices(dictionary):
+    return [discord.OptionChoice(name=k, value=v) for k, v in dictionary.items()]
+
+with open("acro_choices.json") as f:
+    acro_choices = to_choices(json.load(f))
+
+@prefs.command(
+    name="acro",
+    description="Choose the book set of words that will be included in /acro."
+    )
+async def preferences_acro(ctx, book: discord.Option(str, 'The book you want to use.', choices=acro_choices)):
+    preferences.set_preference(str(ctx.author.id), "acro", book)
+    await ctx.respond("Set acronym book preference for **{}** to **{}**.".format(ctx.author.display_name, book))
+
+with open("fonts.json") as f:
+    fonts = json.load(f)
+
+@prefs.command(
+    name="font",
+    description="Choose the font that sitelen pona will be displayed as."
+    )
+async def preferences_font(ctx, font: discord.Option(str, 'The font you want to use.', choices=list(fonts))):
+    preferences.set_preference(str(ctx.author.id), "font", font)
+    await ctx.respond("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
+
+@prefs.command(
+    name="reset",
+    description="Reset all preferences to their default values."
+    )
+async def preferences_reset(ctx):
+    preferences.reset_preferences(str(ctx.author.id))
+    await ctx.respond("Reset preferences for **{}**.".format(ctx.author.display_name))
+
+language_choices = to_choices(jasima.get_languages_for_slash_commands())
+
+@prefs.command(
+    name="language",
+    description="Set the language that dictionary definitions will use."
+    )
+async def preferences_language(ctx, lang: discord.Option(str, 'The language you want to use.', choices=language_choices)):
+    preferences.set_preference(str(ctx.author.id), "language", lang)
+    await ctx.respond("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
+
 
 @bot.command(name="nimi")
 async def command_nimi(ctx, word):
@@ -187,35 +247,7 @@ async def acro(ctx, text):
     else:
         await ctx.send(acronym.respond(text, book))
 
-"""
-@slash.subcommand(base="preferences", name="language")
-async def preferences_language(ctx, lang):
-    preferences.set_preference(str(ctx.author.id), "language", lang)
-    await ctx.send("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
 
-@slash.subcommand(base="preferences", name="acro")
-async def preferences_acro(ctx, book):
-    preferences.set_preference(str(ctx.author.id), "acro", book)
-    await ctx.send("Set acronym book preference for **{}** to **{}**.".format(ctx.author.display_name, book))
-
-@slash.subcommand(base="preferences", name="font")
-async def preferences_font(ctx, font):
-    preferences.set_preference(str(ctx.author.id), "font", font)
-    await ctx.send("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
-
-@slash.subcommand(base="preferences", name="fontsize")
-async def preferences_fontsize(ctx, size):
-    if not (size <= 500 and size >= 14):
-        await ctx.send("Font size is limited to the range from 14 to 500.")
-    else:
-        preferences.set_preference(str(ctx.author.id), "fontsize", size)
-        await ctx.send("Set fontsize preference for **{}** to **{}**.".format(ctx.author.display_name, size))
-
-@slash.subcommand(base="preferences", name="reset")
-async def preferences_reset(ctx):
-    preferences.reset_preferences(str(ctx.author.id))
-    await ctx.send("Reset preferences for **{}**.".format(ctx.author.display_name))
-"""
 """
 @bot.command()
 async def reload(ctx):
@@ -282,8 +314,6 @@ def build_etymology(response):
 
 
 if __name__ == "__main__":
-    with open("fonts.json") as f:
-        fonts = json.load(f)
     with open("colours.json") as f:
         colours = {k: discord.Colour.from_rgb(*bytes.fromhex(v)) for k, v in json.load(f).items()}
     bot.run(TOKEN, reconnect=True)
