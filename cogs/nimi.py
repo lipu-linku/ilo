@@ -2,7 +2,6 @@ from discord.ext import commands
 from discord.commands import slash_command
 from discord import Option
 from discord import Embed
-from discord import Colour
 from discord import ButtonStyle
 from discord.ui import View
 from discord.ui import Button
@@ -12,6 +11,7 @@ from discord import context
 from defines import text
 from defines import colours
 from preferences import get_preference
+from colour import discord_colours
 import jasima
 
 class CogNimi(commands.Cog):
@@ -60,13 +60,10 @@ async def nimi(ctx, word):
     else:
         await ctx.send(embed=embed, view=view)
 
-def to_colours(dictionary):
-    return {k: Colour.from_rgb(*bytes.fromhex(v)) for k, v in dictionary.items()}
-
 def embed_response(word, lang, response, embedtype):
     embed = Embed()
     embed.title = response["word"]
-    embed.colour = to_colours(colours)[response["book"]]
+    embed.colour = discord_colours(colours)[response["book"]]
     description = response["def"][lang] if lang in response["def"] else "(en) {}".format(response["def"]["en"])
     embed.add_field(name="book", value=response["book"])
 

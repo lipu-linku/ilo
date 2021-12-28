@@ -33,6 +33,9 @@
 	"DESC_PREFS_FONT_OPTION": "The font you want to use.",
 
 	"DESC_PREFS_LANGUAGE": "Set the language that dictionary definitions will use",
-	"DESC_PREFS_LANGUAGE_OPTION": "The language you want to use."
+	"DESC_PREFS_LANGUAGE_OPTION": "The language you want to use.",
+
+	"DESC_PREFS_COLOR": "Set the text colour that /sp and other commands will use",
+	"DESC_PREFS_COLOR_OPTION": "The text colour you want to use."
 
 }

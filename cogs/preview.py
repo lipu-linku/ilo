@@ -10,6 +10,7 @@ from discord import context
 from defines import fonts
 from defines import text
 from preferences import get_preference
+from colour import rgb_tuple
 import sitelen
 
 class CogPreview(commands.Cog):
@@ -32,9 +33,10 @@ class CogPreview(commands.Cog):
 
 async def preview(ctx, text):
     fontsize = get_preference(str(ctx.author.id), "fontsize")
+    color = get_preference(str(ctx.author.id), "color")
     images = []
     for font in fonts:
-        images.append(sitelen.display(text, fonts[font], fontsize))
+        images.append(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     if isinstance(ctx, context.ApplicationContext):
         await ctx.respond(file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png"))
     else:
