@@ -30,7 +30,8 @@ async def on_reaction_add(reaction, user):
 """
 @bot.command()
 async def reload(ctx):
-    jasima.routine()
+    from jasima import routine
+    routine()
 """
 
 if __name__ == "__main__":

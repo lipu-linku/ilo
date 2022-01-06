@@ -1,4 +1,6 @@
 {
+  "Fairfax": "fonts/Fairfax.ttf",
+  "FairfaxHD": "fonts/FairfaxHD.ttf",
   "insa pi supa lape": "fonts/supalape.otf",
   "linja ante": "fonts/linja-ante.ttf",
   "linja pi pu lukin": "fonts/PuLukin.otf",
@@ -10,6 +12,7 @@
   "linja suwi": "fonts/linjasuwi.otf",
   "linja wawa": "fonts/linjawawa1.21.ttf",
   "seta sans": "fonts/TokiPonaSetaSans-Regular2.otf",
+  "sitelen Kotopon": "fonts/sitelenKotopon.otf",
   "sitelen Latin (ss)": "fonts/SitelenLatin_135.ttf",
   "sitelen luka tu tu": "fonts/sitelen_luka_tu_tu.ttf",
   "sitelen pona kiwen": "fonts/sitelen-pona-kiwen-nanpa-tu.ttf",
