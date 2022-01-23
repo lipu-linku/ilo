@@ -76,7 +76,10 @@ def read_json():
 
 
 def upload_json_to_github():
-    subprocess.call("git.bat {} {} {}".format(GITHUB_ACCOUNT, GITHUB_REPO, GITHUB_TOKEN))
+    if os.name == 'nt':
+        subprocess.call("git.bat {} {} {}".format(GITHUB_ACCOUNT, GITHUB_REPO, GITHUB_TOKEN))
+    else:
+        subprocess.call("./git.sh {} {} {}".format(GITHUB_ACCOUNT, GITHUB_REPO, GITHUB_TOKEN))
 
 
 def get_word_entry(word):
