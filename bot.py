@@ -13,13 +13,14 @@ from cogs.sp import CogSp
 from cogs.ss import CogSs
 from cogs.se import CogSe
 from cogs.preview import CogPreview
+from cogs.borgle import CogBorgle
 
 bot = commands.Bot(command_prefix="/")
 
 @bot.event
 async def on_ready():
-    for guild in bot.guilds:
-        print("* {}".format(guild.name))
+    for index, guild in enumerate(bot.guilds):
+        print("{}) {}".format(index+1, guild.name))
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -43,4 +44,5 @@ if __name__ == "__main__":
     bot.add_cog(CogSs(bot))
     bot.add_cog(CogSe(bot))
     bot.add_cog(CogPreview(bot))
+    bot.add_cog(CogBorgle(bot))
     bot.run(TOKEN, reconnect=True)

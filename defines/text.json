@@ -17,6 +17,12 @@
 	"DESC_PREVIEW": "Compare available fonts for toki pona",
 	"DESC_PREVIEW_OPTION": "The phrase you want to preview in all available fonts.",
 
+	"DESC_BORGLE": "Convert toki pona to plorcly borglar",
+	"DESC_BORGLE_OPTION": "The text you want to convert.",
+
+	"DESC_DEBORGLE": "Convert plorcly borglar to toki pona",
+	"DESC_DEBORGLE_OPTION": "The text you want to convert.",
+
 	"DESC_ACRO": "Get help coming up with acronyms consisting of toki pona words",
 	"DESC_ACRO_OPTION": "Letters you want to make an acronym for.",
 
