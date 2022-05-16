@@ -2,6 +2,7 @@
   "Fairfax": "fonts/Fairfax.ttf",
   "FairfaxHD": "fonts/FairfaxHD.ttf",
   "insa pi supa lape": "fonts/supalape.otf",
+  "leko lili": "fonts/lekolili15x15.ttf",
   "linja ante": "fonts/linja-ante.ttf",
   "linja luka": "fonts/linja-luka-1.0.otf",
   "linja nanpa": "fonts/linja-nanpa-2.2.otf",
@@ -13,6 +14,7 @@
   "linja sike": "fonts/linja-sike-5.otf",
   "linja suwi": "fonts/linjasuwi.otf",
   "linja wawa": "fonts/linjawawa1.21.ttf",
+  "PMD sky": "fonts/sitelen-pona-pmd-sky-font.otf",
   "seta sans": "fonts/TokiPonaSetaSans-Regular2.otf",
   "sitelen Kotopon": "fonts/sitelenKotopon.otf",
   "sitelen Latin (ss)": "fonts/SitelenLatin_1.3.6.ttf",
@@ -22,5 +24,6 @@
   "sitelen Sans": "fonts/Sitelen Sans 3.otf",
   "sitelen suwi ko": "fonts/sitelensuwiko20.ttf",
   "sitelen telo": "fonts/sitelen_telo_1.01.otf",
-  "toki pona OTF": "fonts/toki pona OTF v2.otf"
+  "toki pona OTF": "fonts/toki pona OTF v2.otf",
+  "Unifont CSUR": "fonts/unifont_csur-14.0.03.otf"
 }
