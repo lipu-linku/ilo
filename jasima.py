@@ -1,22 +1,11 @@
+#!/bin/python3
+
 import urllib.request
-import re
 import json
-import subprocess
 
 from defines import extraemoji
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
-DATA_LINK = os.getenv('GOOGLE_SHEETS_DATA_LINK')
-LANGUAGES_LINK = os.getenv('GOOGLE_SHEETS_LANGUAGES_LINK')
-CREDITS_LINK = os.getenv('GOOGLE_SHEETS_CREDITS_LINK')
-GITHUB_ACCOUNT = "lipu-linku"
-GITHUB_REPO = "jasima"
-GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-
-JSON_PATH = "../jasima/data.json"
+JSON_LINK = "https://lipu-linku.github.io/jasima/data.json"
 LANGUAGE_OPTIONS_PATH = "slashcommands/language_options.json"
 
 help_message = "The word you requested, ***{}***, is not in the database I use. Make sure you didn't misspell it, or talk to kala Asi if this word really is missing."
@@ -24,66 +13,12 @@ multiple_words_message = "The phrase you requested, ***{}***, contains multiple 
 sheets_fail = "Something's wrong, I think I failed to reach Google Sheets. Please tell kala Asi."
 exception_nonspecific = "Something failed and I'm not sure what. Please tell kala Asi."
 
+
 def get_site(link):
     return urllib.request.urlopen(link).read().decode('utf8')
 
 
-def build_json():
-    bundle = {
-        "languages": build_dict_from_sheet(LANGUAGES_LINK),
-        "credits": build_dict_from_sheet(CREDITS_LINK),
-        "data": build_dict_from_sheet(DATA_LINK),
-    }
-    with open(JSON_PATH, 'w') as f:
-        json.dump(bundle, f, indent=2)
-    return bundle
-
-
-def build_dict_from_sheet(link):
-    datasheet = get_site(link).split("\r\n")
-
-    keys = datasheet.pop(0).split("\t")
-    entries = [line.split("\t") for line in datasheet]
-
-    ID_COLUMN = keys.index("id")
-    keys.pop(ID_COLUMN)
-
-    data = {}
-    for line in entries:
-        entry = {}
-        entry_id = line.pop(ID_COLUMN)
-        for index, value in enumerate(line):
-            if value:
-                if "/" not in keys[index]:
-                    entry[keys[index]] = value
-                else:
-                    # e.g. 'def/en':
-                    # outer = 'def'
-                    # inner = 'en'
-                    outer, inner = keys[index].split("/")
-                    if outer not in entry:
-                        entry[outer] = {}
-                    entry[outer][inner] = value
-        data[entry_id] = entry
-    # Sort by id, case insensitive
-    data = {k: v for k, v in sorted(data.items(), key=lambda x: x[0].lower())}
-    return data
-    
-
-def read_json():
-    with open(JSON_PATH) as f:
-        return json.load(f)
-
-
-def upload_json_to_github():
-    if os.name == 'nt':
-        subprocess.call("git.bat {} {} {}".format(GITHUB_ACCOUNT, GITHUB_REPO, GITHUB_TOKEN))
-    else:
-        subprocess.call("./git.sh {} {} {}".format(GITHUB_ACCOUNT, GITHUB_REPO, GITHUB_TOKEN))
-
-
 def get_word_entry(word):
-    bundle = read_json()
     entries = bundle["data"]
     if len(word.split()) > 1:
         return multiple_words_message.format(word)
@@ -93,27 +28,19 @@ def get_word_entry(word):
 
 
 def sitelen_emosi(word):
-        bundle = read_json()
         entries = bundle["data"]
         if word not in entries:
             chars = []
             for letter in word:
-                chars.append(extraemoji[letter]) 
+                chars.append(extraemoji[letter])
 
             return " ".join(chars)
-        return entries[word]['sitelen_emosi']
+        return entries[word].get("sitelen_emosi", "")
 
 
 def get_languages_for_slash_commands():
-    bundle = read_json()
     languages = bundle["languages"]
     return {v["name_endonym"]: k for k, v in languages.items()}
 
 
-def routine():
-    bundle = build_json()
-    upload_json_to_github()
-
-
-if __name__ == "__main__":
-    routine()
+bundle = json.loads(get_site(JSON_LINK))

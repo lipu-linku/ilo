@@ -28,13 +28,6 @@ async def on_reaction_add(reaction, user):
         if reaction.emoji == "❌":
             await reaction.message.delete()
 
-"""
-@bot.command()
-async def reload(ctx):
-    from jasima import routine
-    routine()
-"""
-
 if __name__ == "__main__":
     bot.add_cog(CogAcro(bot))
     bot.add_cog(CogNimi(bot))
