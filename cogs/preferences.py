@@ -58,7 +58,7 @@ class CogPreferences(commands.Cog):
         name="font",
         description=text["DESC_PREFS_FONT"],
         )
-    async def font(self, ctx, font: Option(str, text["DESC_PREFS_FONT_OPTION"], choices=list(fonts))):
+    async def font(self, ctx, font: Option(str, text["DESC_PREFS_FONT_OPTION"], choices=list(fonts)[:25])):
         preferences.set_preference(str(ctx.author.id), "font", font)
         await ctx.respond("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
 
@@ -74,7 +74,7 @@ class CogPreferences(commands.Cog):
         name="language",
         description=text["DESC_PREFS_LANGUAGE"],
         )
-    async def language(self, ctx, lang: Option(str, text["DESC_PREFS_LANGUAGE_OPTION"], choices=language_choices)):
+    async def language(self, ctx, lang: Option(str, text["DESC_PREFS_LANGUAGE_OPTION"], choices=language_choices[:25])):
         preferences.set_preference(str(ctx.author.id), "language", lang)
         await ctx.respond("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
 
