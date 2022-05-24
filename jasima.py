@@ -29,13 +29,13 @@ def get_word_entry(word):
 
 def sitelen_emosi(word):
         entries = bundle["data"]
-        if word not in entries:
-            chars = []
-            for letter in word:
-                chars.append(extraemoji[letter])
-
-            return " ".join(chars)
-        return entries[word].get("sitelen_emosi", "")
+        if word in entries:
+            if "sitelen_emosi" in entries[word]:
+                return entries[word]["sitelen_emosi"]
+        chars = []
+        for letter in word:
+            chars.append(extraemoji[letter])
+        return " ".join(chars)
 
 
 def get_languages_for_slash_commands():
