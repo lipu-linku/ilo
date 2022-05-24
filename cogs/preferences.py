@@ -63,6 +63,14 @@ class CogPreferences(commands.Cog):
         await ctx.respond("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
 
     @prefs.command(
+        name="font2",
+        description=text["DESC_PREFS_FONT"],
+        )
+    async def font(self, ctx, font: Option(str, text["DESC_PREFS_FONT_OPTION"], choices=list(fonts)[25:])):
+        preferences.set_preference(str(ctx.author.id), "font", font)
+        await ctx.respond("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
+
+    @prefs.command(
         name="reset",
         description=text["DESC_PREFS_RESET"],
         )
@@ -75,6 +83,14 @@ class CogPreferences(commands.Cog):
         description=text["DESC_PREFS_LANGUAGE"],
         )
     async def language(self, ctx, lang: Option(str, text["DESC_PREFS_LANGUAGE_OPTION"], choices=language_choices[:25])):
+        preferences.set_preference(str(ctx.author.id), "language", lang)
+        await ctx.respond("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
+
+    @prefs.command(
+        name="language2",
+        description=text["DESC_PREFS_LANGUAGE"],
+        )
+    async def language(self, ctx, lang: Option(str, text["DESC_PREFS_LANGUAGE_OPTION"], choices=language_choices[25:])):
         preferences.set_preference(str(ctx.author.id), "language", lang)
         await ctx.respond("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
 
