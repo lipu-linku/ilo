@@ -7,7 +7,7 @@ from discord import File
 
 from discord import context
 
-from defines import fonts
+from fonts import fonts
 from defines import text
 from preferences import get_preference
 from colour import rgb_tuple

@@ -4,10 +4,11 @@ from discord import Option
 from discord import OptionChoice
 
 from defines import acro_choices
-from defines import fonts
 from defines import text
 
 from jasima import get_languages_for_slash_commands
+from fonts import fonts
+
 from colour import is_colour
 import preferences
 
