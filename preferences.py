@@ -20,12 +20,12 @@ class PreferenceHandler():
         self.userdata = self.from_json()
 
     def from_json(self):
-        with open(PREFERENCES_PATH) as f:
+        with open(PREFERENCES_PATH, encoding="utf-8") as f:
             userdata = json.load(f)
         return userdata
 
     def to_json(self):
-        with open(PREFERENCES_PATH, 'w') as f:
+        with open(PREFERENCES_PATH, 'w', encoding="utf-8") as f:
             json.dump(self.userdata, f, indent=2)
 
     def get(self, user_id, key):
