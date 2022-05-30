@@ -1,4 +1,3 @@
 *.env
 __pycache__/
-userdata/
 cogs/__pycache__/
