@@ -1,4 +1,5 @@
 from discord.ext import commands
+# from discord import Intents
 
 import os
 from dotenv import load_dotenv
@@ -15,7 +16,9 @@ from cogs.se import CogSe
 from cogs.preview import CogPreview
 from cogs.borgle import CogBorgle
 
-bot = commands.Bot(command_prefix="/")
+bot = commands.Bot(command_prefix="/",
+                   # intents=Intents.all(),
+                   )
 
 @bot.event
 async def on_ready():
