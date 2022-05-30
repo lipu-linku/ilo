@@ -9,7 +9,7 @@ from discord import context
 
 from fonts import fonts
 from defines import text
-from preferences import get_preference
+from preferences import preferences
 from colour import rgb_tuple
 import sitelen
 
@@ -31,8 +31,8 @@ class CogSs(commands.Cog):
         await ss(ctx, text)
 
 async def ss(ctx, text):
-    fontsize = get_preference(str(ctx.author.id), "fontsize")
-    color = get_preference(str(ctx.author.id), "color")
+    fontsize = preferences.get(str(ctx.author.id), "fontsize")
+    color = preferences.get(str(ctx.author.id), "color")
     font = "sitelen Latin (ss)"
     if isinstance(ctx, context.ApplicationContext):
         await ctx.respond(file=File(io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color))), filename="a.png"))

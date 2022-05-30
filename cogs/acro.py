@@ -5,7 +5,7 @@ from discord import Option
 from discord import context
 
 from defines import text
-from preferences import get_preference
+from preferences import preferences
 import acronym
 
 class CogAcro(commands.Cog):
@@ -27,7 +27,7 @@ class CogAcro(commands.Cog):
 
 
 async def acro(ctx, text):
-    book = get_preference(str(ctx.author.id), "acro")
+    book = preferences.get(str(ctx.author.id), "acro")
     if isinstance(ctx, context.ApplicationContext):
         await ctx.respond(acronym.respond(text, book))
     else:

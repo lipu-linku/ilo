@@ -1,98 +1,84 @@
+import re
+
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
 from discord import Option
 from discord import OptionChoice
 
-from defines import acro_choices
 from defines import text
+from defines import pref_list
 
-from jasima import get_languages_for_slash_commands
-from fonts import fonts
+from preferences import preferences
 
-from colour import is_colour
-import preferences
+CHOICE_SIZE = 25
 
 def to_choices(dictionary):
     return [OptionChoice(name=k, value=v) for k, v in dictionary.items()]
 
-language_choices = to_choices(get_languages_for_slash_commands())
+def to_chunks(sequence, n):
+    return [sequence[i:i+n] for i in range(0, len(sequence), n)]
+
+def build_subcommands(prefs, template):
+    if template.choices is None:
+        option = Option(template.option_type,
+                        template.option_desc)
+        build_subcommand(prefs, template.name, template.description, option)
+    else:
+        choices = to_chunks(to_choices(template.choices), CHOICE_SIZE)
+        for index, chunk in enumerate(choices):
+            option = Option(template.option_type,
+                            template.option_desc,
+                            choices=chunk)
+            name = f"{template.name}{index if index else ''}"
+            build_subcommand(prefs, name, template.description, option)
+
+
+def build_subcommand(prefs, name, description, option):
+    @prefs.command(name=name, description=description)
+    async def preference_subcommand(self, ctx, preference: option):
+        template = preferences.templates[re.sub("\d", "", ctx.command.name)]
+        validation = template.validation(preference)
+        if validation is not True:
+            await ctx.respond(validation)
+            return
+        preferences.set(str(ctx.author.id), template.name, preference)
+        await ctx.respond("Set {} preference for **{}** to **{}**."
+                          .format(template.name, ctx.author.display_name, preference))
 
 class CogPreferences(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        #for template in preferences.templates.values():
+        #    self.build_subcommands(template, prefs)
+        #for subcommand in prefs.subcommands:
+        #    print(subcommand)
+
+
     prefs = SlashCommandGroup(
         "preferences",
         text["DESC_PREFS"]
         )
+    for template in preferences.templates.values():
+        build_subcommands(prefs, template)
 
     @prefs.command(
-        name="fontsize",
-        description=text["DESC_PREFS_FONTSIZE"],
+        name="list",
+        description=text["DESC_PREFS_LIST"],
         )
-    async def fontsize(self, ctx, size: Option(int, text["DESC_PREFS_FONTSIZE_OPTION"])):
-        if not (size <= 500 and size >= 14):
-            await ctx.respond("Font size is limited to the range from 14 to 500.")
-        else:
-            preferences.set_preference(str(ctx.author.id), "fontsize", size)
-            await ctx.respond("Set fontsize preference for **{}** to **{}**.".format(ctx.author.display_name, size))
-
-    @prefs.command(
-        name="color",
-        description=text["DESC_PREFS_COLOR"],
-        )
-    async def colour(self, ctx, color: Option(str, text["DESC_PREFS_COLOR_OPTION"])):
-        if not is_colour(color):
-            await ctx.respond("The string has to be a valid hexadecimal rgb colour, e.g. `2288ff`.")
-        else:
-            preferences.set_preference(str(ctx.author.id), "color", color)
-            await ctx.respond("Set color preference for **{}** to **{}**.".format(ctx.author.display_name, color))
-
-    @prefs.command(
-        name="acro",
-        description=text["DESC_PREFS_ACRO"],
-        )
-    async def acro(self, ctx, book: Option(str, text["DESC_PREFS_ACRO_OPTION"], choices=to_choices(acro_choices))):
-        preferences.set_preference(str(ctx.author.id), "acro", book)
-        await ctx.respond("Set acronym book preference for **{}** to **{}**.".format(ctx.author.display_name, book))
-
-    @prefs.command(
-        name="font",
-        description=text["DESC_PREFS_FONT"],
-        )
-    async def font(self, ctx, font: Option(str, text["DESC_PREFS_FONT_OPTION"], choices=list(fonts)[:25])):
-        preferences.set_preference(str(ctx.author.id), "font", font)
-        await ctx.respond("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
-
-    @prefs.command(
-        name="font2",
-        description=text["DESC_PREFS_FONT"],
-        )
-    async def font(self, ctx, font: Option(str, text["DESC_PREFS_FONT_OPTION"], choices=list(fonts)[25:])):
-        preferences.set_preference(str(ctx.author.id), "font", font)
-        await ctx.respond("Set font preference for **{}** to **{}**.".format(ctx.author.display_name, font))
+    async def list(self, ctx):
+        response = "Preferences for **{}**:\n".format(ctx.author.display_name)
+        for key in preferences.templates:
+            value = preferences.get_raw(str(ctx.author.id), key)
+            status = preferences.get_status(str(ctx.author.id), key, value)
+            default = preferences.get_default(key)
+            response += pref_list[status].format(key=key, value=value, default=default)
+        await ctx.respond(response)
 
     @prefs.command(
         name="reset",
         description=text["DESC_PREFS_RESET"],
         )
     async def reset(self, ctx):
-        preferences.reset_preferences(str(ctx.author.id))
-        await ctx.respond("Reset preferences for **{}**.".format(ctx.author.display_name))
-
-    @prefs.command(
-        name="language",
-        description=text["DESC_PREFS_LANGUAGE"],
-        )
-    async def language(self, ctx, lang: Option(str, text["DESC_PREFS_LANGUAGE_OPTION"], choices=language_choices[:25])):
-        preferences.set_preference(str(ctx.author.id), "language", lang)
-        await ctx.respond("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
-
-    @prefs.command(
-        name="language2",
-        description=text["DESC_PREFS_LANGUAGE"],
-        )
-    async def language(self, ctx, lang: Option(str, text["DESC_PREFS_LANGUAGE_OPTION"], choices=language_choices[25:])):
-        preferences.set_preference(str(ctx.author.id), "language", lang)
-        await ctx.respond("Set language preference for **{}** to **{}**.".format(ctx.author.display_name, lang))
-
+        preferences.reset(str(ctx.author.id))
+        await ctx.respond("Reset all preferences for **{}**.".format(ctx.author.display_name))
 

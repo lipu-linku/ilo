@@ -6,7 +6,7 @@ def load(file_path):
 
 acro_choices = load("acro_choices")
 colours = load("colours")
-defaults = load("defaults")
 extraemoji = load("extraemoji")
 text = load("text")
 borgle_map = load("borgle_map")
+pref_list = load("pref_list")
