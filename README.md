@@ -30,4 +30,4 @@
 - Run the bot: `python bot.py`
 
 ## License
-To be determined.
+ilo Linku is licensed under the GNU General Public License Version 3.
