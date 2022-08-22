@@ -23,6 +23,8 @@
 	"DESC_DEBORGLE": "Convert plorcly borglar to toki pona",
 	"DESC_DEBORGLE_OPTION": "The text you want to convert.",
 
+	"DESC_STEST": "Get a random sentence from the Conlang Syntax Test Cases list.",
+
 	"DESC_ACRO": "Get help coming up with acronyms consisting of toki pona words",
 	"DESC_ACRO_OPTION": "Letters you want to make an acronym for.",
 

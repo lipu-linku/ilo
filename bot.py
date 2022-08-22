@@ -15,6 +15,7 @@ from cogs.ss import CogSs
 from cogs.se import CogSe
 from cogs.preview import CogPreview
 from cogs.borgle import CogBorgle
+from cogs.stest import CogStest
 
 bot = commands.Bot(command_prefix="/",
                    # intents=Intents.all(),
@@ -41,4 +42,5 @@ if __name__ == "__main__":
     bot.add_cog(CogSe(bot))
     bot.add_cog(CogPreview(bot))
     bot.add_cog(CogBorgle(bot))
+    bot.add_cog(CogStest(bot))
     bot.run(TOKEN, reconnect=True)
