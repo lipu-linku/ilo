@@ -36,7 +36,7 @@ def build_subcommands(prefs, template):
 def build_subcommand(prefs, name, description, option):
     @prefs.command(name=name, description=description)
     async def preference_subcommand(self, ctx, preference: option):
-        template = preferences.templates[re.sub("\d", "", ctx.command.name)]
+        template = preferences.templates[re.sub("_page\d*", "", ctx.command.name)]
         validation = template.validation(preference)
         if validation is not True:
             await ctx.respond(validation)
