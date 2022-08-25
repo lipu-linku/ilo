@@ -29,7 +29,7 @@ def build_subcommands(prefs, template):
             option = Option(template.option_type,
                             template.option_desc,
                             choices=chunk)
-            name = f"{template.name}{index if index else ''}"
+            name = f"{template.name}_page{index+1}" if len(choices) > 1 else template.name
             build_subcommand(prefs, name, template.description, option)
 
 
