@@ -7,9 +7,9 @@ from discord import File
 
 from discord import context
 
-from defines import fonts
+from fonts import fonts
 from defines import text
-from preferences import get_preference
+from preferences import preferences
 from colour import rgb_tuple
 import sitelen
 
@@ -31,9 +31,9 @@ class CogSp(commands.Cog):
         await sp(ctx, text)
 
 async def sp(ctx, text):
-    fontsize = get_preference(str(ctx.author.id), "fontsize")
-    font = get_preference(str(ctx.author.id), "font")
-    color = get_preference(str(ctx.author.id), "color")
+    fontsize = preferences.get(str(ctx.author.id), "fontsize")
+    font = preferences.get(str(ctx.author.id), "font")
+    color = preferences.get(str(ctx.author.id), "color")
     if isinstance(ctx, context.ApplicationContext):
         await ctx.respond(file=File(io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color))), filename="a.png"))
     else:

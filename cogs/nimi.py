@@ -10,7 +10,7 @@ from discord import context
 
 from defines import text
 from defines import colours
-from preferences import get_preference
+from preferences import preferences
 from colour import discord_colours
 import jasima
 
@@ -44,7 +44,7 @@ class CogNimi(commands.Cog):
         await nimi(ctx, word)
 
 async def nimi(ctx, word):
-    lang = get_preference(str(ctx.author.id), "language")
+    lang = preferences.get(str(ctx.author.id), "language")
 
     response = jasima.get_word_entry(word)
     if isinstance(response, str):

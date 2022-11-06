@@ -1,4 +1,5 @@
 from discord.ext import commands
+# from discord import Intents
 
 import os
 from dotenv import load_dotenv
@@ -14,8 +15,11 @@ from cogs.ss import CogSs
 from cogs.se import CogSe
 from cogs.preview import CogPreview
 from cogs.borgle import CogBorgle
+from cogs.stest import CogStest
 
-bot = commands.Bot(command_prefix="/")
+bot = commands.Bot(command_prefix="/",
+                   # intents=Intents.all(),
+                   )
 
 @bot.event
 async def on_ready():
@@ -28,13 +32,6 @@ async def on_reaction_add(reaction, user):
         if reaction.emoji == "❌":
             await reaction.message.delete()
 
-"""
-@bot.command()
-async def reload(ctx):
-    from jasima import routine
-    routine()
-"""
-
 if __name__ == "__main__":
     bot.add_cog(CogAcro(bot))
     bot.add_cog(CogNimi(bot))
@@ -45,4 +42,5 @@ if __name__ == "__main__":
     bot.add_cog(CogSe(bot))
     bot.add_cog(CogPreview(bot))
     bot.add_cog(CogBorgle(bot))
+    bot.add_cog(CogStest(bot))
     bot.run(TOKEN, reconnect=True)

@@ -12,7 +12,7 @@ books_allowed = {"pu": ["pu"],
                  "ku lili": ["pu", "ku suli", "ku lili"],
                  "all": ["pu", "ku suli", "ku lili", "none"]}
 def respond(word, book_label):
-    data = jasima.read_json()["data"]
+    data = jasima.bundle["data"]
     data = sorted(data.values(), key=lambda x: books_order[x["book"]])
     responses = {}
     for entry in data:
