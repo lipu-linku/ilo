@@ -1,0 +1,42 @@
+[project]
+name = "ilo"
+version = "0.1.0"
+description = ""
+authors = []
+dependencies = ["py-cord[speed]>=2.3.0", "Pillow>=9.3.0"]
+requires-python = ">=3.8"
+license = { text = "MIT" }
+[project.optional-dependencies]
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "E501", "F722", "E402"]
+# E402 conflicts with isort
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=7.2.0",
+    "black>=22.10.0",
+    "pre-commit>=2.20.0",
+    "isort>=5.10.1",
+    "flake9>=3.8.3.post2",
+]
+
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/__pycache__"]
+ignore = []
+defineConstant = { DEBUG = true }
+stubPath = ""
+
+reportMissingImports = true
+reportMissingTypeStubs = false
