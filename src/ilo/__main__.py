@@ -1,11 +1,15 @@
 import os
 
 from discord.ext import commands
+from dotenv import load_dotenv
 
 # from discord import Intents
 
 
 TOKEN = os.getenv("DISCORD_TOKEN")
+if not TOKEN:
+    load_dotenv()
+    TOKEN = os.getenv("DISCORD_TOKEN")
 
 from ilo.cogs.acro import CogAcro
 from ilo.cogs.borgle import CogBorgle
