@@ -4,9 +4,9 @@ from discord import Option
 
 from discord import context
 
-from defines import text
-from preferences import preferences
-import acronym
+from ilo.defines import text
+from ilo.preferences import preferences
+from ilo import acronym
 
 class CogAcro(commands.Cog):
     def __init__(self, bot):

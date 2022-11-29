@@ -1,36 +1,41 @@
+import os
+
 from discord.ext import commands
+
 # from discord import Intents
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
 
-from cogs.acro import CogAcro
-from cogs.nimi import CogNimi
-from cogs.preferences import CogPreferences
-from cogs.lp import CogLp
-from cogs.sp import CogSp
-from cogs.ss import CogSs
-from cogs.se import CogSe
-from cogs.preview import CogPreview
-from cogs.borgle import CogBorgle
-from cogs.stest import CogStest
+TOKEN = os.getenv("DISCORD_TOKEN")
 
-bot = commands.Bot(command_prefix="/",
-                   # intents=Intents.all(),
-                   )
+from ilo.cogs.acro import CogAcro
+from ilo.cogs.borgle import CogBorgle
+from ilo.cogs.lp import CogLp
+from ilo.cogs.nimi import CogNimi
+from ilo.cogs.preferences import CogPreferences
+from ilo.cogs.preview import CogPreview
+from ilo.cogs.se import CogSe
+from ilo.cogs.sp import CogSp
+from ilo.cogs.ss import CogSs
+from ilo.cogs.stest import CogStest
+
+bot = commands.Bot(
+    command_prefix="/",
+    # intents=Intents.all(),
+)
+
 
 @bot.event
 async def on_ready():
     for index, guild in enumerate(bot.guilds):
-        print("{}) {}".format(index+1, guild.name))
+        print("{}) {}".format(index + 1, guild.name))
+
 
 @bot.event
 async def on_reaction_add(reaction, user):
     if reaction.message.author == bot.user:
         if reaction.emoji == "❌":
             await reaction.message.delete()
+
 
 if __name__ == "__main__":
     bot.add_cog(CogAcro(bot))

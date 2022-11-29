@@ -8,11 +8,11 @@ from discord.ui import Button
 
 from discord import context
 
-from defines import text
-from defines import colours
-from preferences import preferences
-from colour import discord_colours
-import jasima
+from ilo.defines import text
+from ilo.defines import colours
+from ilo.preferences import preferences
+from ilo.colour import discord_colours
+from ilo import jasima
 
 class CogNimi(commands.Cog):
     def __init__(self, bot):

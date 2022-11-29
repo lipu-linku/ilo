@@ -8,8 +8,8 @@ from discord import Option
 
 from discord import context
 
-from defines import text
-from jasima import sitelen_emosi
+from ilo.defines import text
+from ilo.jasima import sitelen_emosi
 
 class CogSe(commands.Cog):
     def __init__(self, bot):

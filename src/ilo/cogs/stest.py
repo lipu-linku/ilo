@@ -4,8 +4,8 @@ from discord import Option
 
 from discord import context
 
-from defines import sentences
-from defines import text
+from ilo.defines import sentences
+from ilo.defines import text
 import random
 
 class CogStest(commands.Cog):

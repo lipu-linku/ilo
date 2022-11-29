@@ -7,11 +7,11 @@ from discord import File
 
 from discord import context
 
-from fonts import fonts
-from defines import text
-from preferences import preferences
-from colour import rgb_tuple
-import sitelen
+from ilo.fonts import fonts
+from ilo.defines import text
+from ilo.preferences import preferences
+from ilo.colour import rgb_tuple
+from ilo import sitelen
 
 class CogSp(commands.Cog):
     def __init__(self, bot):

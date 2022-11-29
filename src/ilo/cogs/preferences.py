@@ -5,10 +5,10 @@ from discord.commands import SlashCommandGroup
 from discord import Option
 from discord import OptionChoice
 
-from defines import text
-from defines import pref_list
+from ilo.defines import text
+from ilo.defines import pref_list
 
-from preferences import preferences
+from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
 

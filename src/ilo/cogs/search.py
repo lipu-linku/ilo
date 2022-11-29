@@ -3,11 +3,11 @@ from discord.commands import slash_command
 from discord.ext import commands
 from discord.ui import Button, View
 
-import jasima
-from cogs.nimi import embed_response
-from colour import discord_colours
-from defines import colours, text
-from preferences import preferences
+from ilo import jasima
+from ilo.cogs.nimi import embed_response
+from ilo.colour import discord_colours
+from ilo.defines import colours, text
+from ilo.preferences import preferences
 
 
 class CogNimi(commands.Cog):

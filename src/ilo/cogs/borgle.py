@@ -4,8 +4,8 @@ from discord import Option
 
 from discord import context
 
-from defines import borgle_map
-from defines import text
+from ilo.defines import borgle_map
+from ilo.defines import text
 import re
 
 class CogBorgle(commands.Cog):

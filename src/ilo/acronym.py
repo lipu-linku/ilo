@@ -1,4 +1,4 @@
-import jasima
+from ilo import jasima
 templates_books = {"none": "{}",
                    "ku lili": "*{}*",
                    "ku suli": "**{}**",

@@ -4,8 +4,8 @@ from discord import Option
 
 from discord import context
 
-from defines import text
-import jasima
+from ilo.defines import text
+from ilo import jasima
 
 class CogLp(commands.Cog):
     def __init__(self, bot):

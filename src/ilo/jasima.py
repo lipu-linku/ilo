@@ -3,7 +3,7 @@
 import urllib.request
 import json
 
-from defines import extraemoji
+from ilo.defines import extraemoji
 
 JSON_LINK = "https://lipu-linku.github.io/jasima/data.json"
 LANGUAGE_OPTIONS_PATH = "slashcommands/language_options.json"

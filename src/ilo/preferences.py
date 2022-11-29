@@ -1,9 +1,9 @@
 import json
-from defines import text
-from defines import acro_choices
-from fonts import fonts
-from jasima import get_languages_for_slash_commands
-from colour import is_colour
+from ilo.defines import text
+from ilo.defines import acro_choices
+from ilo.fonts import fonts
+from ilo.jasima import get_languages_for_slash_commands
+from ilo.colour import is_colour
 
 PREFERENCES_PATH = "userdata/preferences.json"
 
