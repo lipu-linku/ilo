@@ -8,6 +8,7 @@ from ilo.defines import sentences
 from ilo.defines import text
 import random
 
+
 class CogStest(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -17,8 +18,8 @@ class CogStest(commands.Cog):
             await stest(ctx)
 
     @slash_command(
-      name='stest',
-      description=text["DESC_STEST"],
+        name="stest",
+        description=text["DESC_STEST"],
     )
     async def slash_stest(self, ctx):
         await stest(ctx)

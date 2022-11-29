@@ -13,6 +13,7 @@ from ilo.preferences import preferences
 from ilo.colour import rgb_tuple
 from ilo import sitelen
 
+
 class CogPreview(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -24,8 +25,8 @@ class CogPreview(commands.Cog):
             await preview(ctx, text)
 
     @slash_command(
-      name='preview',
-      description=text["DESC_PREVIEW"],
+        name="preview",
+        description=text["DESC_PREVIEW"],
     )
     async def slash_preview(self, ctx, text: Option(str, text["DESC_PREVIEW_OPTION"])):
         await preview(ctx, text)
@@ -38,7 +39,8 @@ async def preview(ctx, text):
     for font in fonts:
         images.append(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     if isinstance(ctx, context.ApplicationContext):
-        await ctx.respond(file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png"))
+        await ctx.respond(
+            file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png")
+        )
     else:
         await ctx.send(file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png"))
-

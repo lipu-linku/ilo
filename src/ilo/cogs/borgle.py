@@ -8,6 +8,7 @@ from ilo.defines import borgle_map
 from ilo.defines import text
 import re
 
+
 class CogBorgle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -25,17 +26,19 @@ class CogBorgle(commands.Cog):
             await deborgle(ctx, text)
 
     @slash_command(
-      name='borgle',
-      description=text["DESC_BORGLE"],
+        name="borgle",
+        description=text["DESC_BORGLE"],
     )
     async def slash_borgle(self, ctx, text: Option(str, text["DESC_BORGLE_OPTION"])):
         await borgle(ctx, text)
 
     @slash_command(
-      name='deborgle',
-      description=text["DESC_DEBORGLE"],
+        name="deborgle",
+        description=text["DESC_DEBORGLE"],
     )
-    async def slash_deborgle(self, ctx, text: Option(str, text["DESC_DEBORGLE_OPTION"])):
+    async def slash_deborgle(
+        self, ctx, text: Option(str, text["DESC_DEBORGLE_OPTION"])
+    ):
         await deborgle(ctx, text)
 
 
@@ -44,6 +47,7 @@ async def borgle(ctx, text):
         await ctx.respond(do_text(text))
     else:
         await ctx.send(do_text(text))
+
 
 async def deborgle(ctx, text):
     if isinstance(ctx, context.ApplicationContext):
@@ -55,8 +59,10 @@ async def deborgle(ctx, text):
 def do_text(text):
     return "\n".join(do_line(line) for line in text.split("\n"))
 
+
 def do_line(line):
     return " ".join(do_word(word) for word in line.split())
+
 
 def do_word(word):
     # coda n
@@ -68,14 +74,15 @@ def do_word(word):
     # plorcly borglar
     return "".join(do_letter(letter) for letter in word)
 
+
 def do_letter(letter):
     if letter not in borgle_map:
         return letter
     else:
         return borgle_map[letter]
 
+
 def undo(text):
     for key, value in borgle_map.items():
         text = re.sub(f"(?<!@){value}", f"@{key}", text)
     return text.replace("q", "n").replace("y", "i").replace("@", "")
-

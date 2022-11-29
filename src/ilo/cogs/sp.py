@@ -13,6 +13,7 @@ from ilo.preferences import preferences
 from ilo.colour import rgb_tuple
 from ilo import sitelen
 
+
 class CogSp(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -24,17 +25,32 @@ class CogSp(commands.Cog):
             await sp(ctx, text)
 
     @slash_command(
-      name='sp',
-      description=text["DESC_SP"],
+        name="sp",
+        description=text["DESC_SP"],
     )
     async def slash_sp(self, ctx, text: Option(str, text["DESC_SP_OPTION"])):
         await sp(ctx, text)
+
 
 async def sp(ctx, text):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     font = preferences.get(str(ctx.author.id), "font")
     color = preferences.get(str(ctx.author.id), "color")
     if isinstance(ctx, context.ApplicationContext):
-        await ctx.respond(file=File(io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color))), filename="a.png"))
+        await ctx.respond(
+            file=File(
+                io.BytesIO(
+                    sitelen.display(text, fonts[font], fontsize, rgb_tuple(color))
+                ),
+                filename="a.png",
+            )
+        )
     else:
-        await ctx.send(file=File(io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color))), filename="a.png"))
+        await ctx.send(
+            file=File(
+                io.BytesIO(
+                    sitelen.display(text, fonts[font], fontsize, rgb_tuple(color))
+                ),
+                filename="a.png",
+            )
+        )

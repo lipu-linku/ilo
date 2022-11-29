@@ -1,21 +1,22 @@
 import json
-from ilo.defines import text
-from ilo.defines import acro_choices
+
+from ilo.colour import is_colour
+from ilo.defines import acro_choices, text
 from ilo.fonts import fonts
 from ilo.jasima import get_languages_for_slash_commands
-from ilo.colour import is_colour
 
 PREFERENCES_PATH = "userdata/preferences.json"
 
-class PreferenceHandler():
+
+class PreferenceHandler:
     def __init__(self):
         self.templates = [
-                Template("fontsize", 72, validation=fontsize_validation),
-                Template("color", "ffffff", validation=colour_validation),
-                Template("acro", "ku suli", acro_choices),
-                Template("font", "linja sike", {font: font for font in fonts}),
-                Template("language", "en", get_languages_for_slash_commands()),
-            ]
+            Template("fontsize", 72, validation=fontsize_validation),
+            Template("color", "ffffff", validation=colour_validation),
+            Template("acro", "ku suli", acro_choices),
+            Template("font", "linja sike", {font: font for font in fonts}),
+            Template("language", "en", get_languages_for_slash_commands()),
+        ]
         self.templates = {template.name: template for template in self.templates}
         self.userdata = self.from_json()
 
@@ -25,7 +26,7 @@ class PreferenceHandler():
         return userdata
 
     def to_json(self):
-        with open(PREFERENCES_PATH, 'w', encoding="utf-8") as f:
+        with open(PREFERENCES_PATH, "w", encoding="utf-8") as f:
             json.dump(self.userdata, f, indent=2)
 
     def get(self, user_id, key):
@@ -62,7 +63,7 @@ class PreferenceHandler():
         self.to_json()
 
 
-class Template():
+class Template:
     def __init__(self, name, default, choices=None, validation=lambda x: True):
         self.name = name
         self.default = default
