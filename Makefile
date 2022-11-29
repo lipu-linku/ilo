@@ -1,6 +1,6 @@
 init:
 	pdm install
-	pdm run pre-commit install
+	# pdm run pre-commit install
 
 test:
 	pdm run pytest -rP ./tests
