@@ -11,6 +11,9 @@ build:
 up:
 	docker compose up -d
 
+local:
+	pdm run python -m ilo
+
 down:
 	docker compose down
 
