@@ -17,11 +17,11 @@ RUN apt-get update -y && \
 
 ENV PYTHONPATH=/project/pkgs
 
-VOLUME [ "/project/userdata" ]
-# this will be empty by default; use make import
 COPY src/ /project/pkgs/
 COPY defines/ /project/defines/
 COPY fonts/ /project/fonts
+# this is a volume oops
+# COPY userdata/ /project/userdata
 
 # this will change most often
 COPY --from=builder /project/__pypackages__/3.9/lib /project/pkgs

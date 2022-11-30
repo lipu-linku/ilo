@@ -10,6 +10,12 @@ services:
       DISCORD_TOKEN: "${DISCORD_TOKEN}"
       LOG_LEVEL: "${LOG_LEVEL}"
       TEST_SERVERS: "${TEST_SERVERS}"
+    volumes:
+      - userdata:/project/userdata/
     deploy:
       restart_policy:
         condition: "unless-stopped"
+
+volumes:
+  userdata:
+    name: userdata
