@@ -5,6 +5,7 @@ services:
     build:
       context: "."
       dockerfile: "Dockerfile"
+    container_name: "ilo-linku"
     environment:
       DISCORD_TOKEN: "${DISCORD_TOKEN}"
       LOG_LEVEL: "${LOG_LEVEL}"

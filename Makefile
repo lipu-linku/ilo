@@ -22,8 +22,8 @@ logs:
 
 import:
 	# container must be running
-	docker cp ./userdata/preferences.json $(shell docker ps | grep ilo-bot | awk '{print $$1}'):/project/userdata/preferences.json
+	docker cp ./userdata/preferences.json $(shell docker ps | grep ilo-linku | awk '{print $$1}'):/project/userdata/preferences.json
 
 export:
 	# container must be running
-	docker cp $(shell docker ps | grep ilo-bot | awk '{print $$1}'):/project/userdata/preferences.json ./userdata/preferences.json
+	docker cp $(shell docker ps | grep ilo-linku | awk '{print $$1}'):/project/userdata/preferences.json ./userdata/preferences.json
