@@ -14,6 +14,9 @@ up:
 local:
 	pdm run python -m ilo
 
+stop:
+	docker compose stop
+
 down:
 	docker compose down
 
