@@ -1,0 +1,15 @@
+---
+version: "3.8"
+services:
+  bot:
+    build:
+      context: "."
+      dockerfile: "Dockerfile"
+    container_name: "ilo-linku"
+    environment:
+      DISCORD_TOKEN: "${DISCORD_TOKEN}"
+      LOG_LEVEL: "${LOG_LEVEL}"
+      TEST_SERVERS: "${TEST_SERVERS}"
+    deploy:
+      restart_policy:
+        condition: "unless-stopped"

@@ -4,9 +4,10 @@ from discord import Option
 
 from discord import context
 
-from defines import text
-from preferences import preferences
-import acronym
+from ilo.defines import text
+from ilo.preferences import preferences
+from ilo import acronym
+
 
 class CogAcro(commands.Cog):
     def __init__(self, bot):
@@ -19,8 +20,8 @@ class CogAcro(commands.Cog):
             await acro(ctx, text)
 
     @slash_command(
-      name='acro',
-      description=text["DESC_ACRO"],
+        name="acro",
+        description=text["DESC_ACRO"],
     )
     async def slash_acro(self, ctx, text: Option(str, text["DESC_ACRO_OPTION"])):
         await acro(ctx, text)

@@ -1,4 +1,5 @@
-*.env
-__pycache__/
+.env
+__pycache__
+__pypackages__
 userdata/
-cogs/__pycache__/
+.pdm.toml
