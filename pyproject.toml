@@ -9,7 +9,7 @@ dependencies = [
     "python-dotenv>=0.21.0",
 ]
 requires-python = ">=3.8"
-license = { text = "MIT" }
+license = { text = "GPL-3.0" }
 [project.optional-dependencies]
 [tool.isort]
 profile = "black"
