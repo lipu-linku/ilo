@@ -1,4 +1,5 @@
 import json
+import os
 
 from ilo.colour import is_colour
 from ilo.defines import acro_choices, text
@@ -18,7 +19,11 @@ class PreferenceHandler:
             Template("language", "en", get_languages_for_slash_commands()),
         ]
         self.templates = {template.name: template for template in self.templates}
-        self.userdata = self.from_json()
+        if os.path.exists(PREFERENCES_PATH):
+            self.userdata = self.from_json()
+        else:
+            self.userdata = {}
+            self.to_json()
 
     def from_json(self):
         with open(PREFERENCES_PATH, encoding="utf-8") as f:
