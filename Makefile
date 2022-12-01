@@ -1,3 +1,8 @@
+MAIN=podman
+SUB=podman-compose
+# MAIN=docker
+# SUB=docker compose
+
 init:
 	pdm install
 	# pdm run pre-commit install
@@ -6,24 +11,27 @@ test:
 	pdm run pytest -rP ./tests
 
 build:
-	docker compose build
+	${SUB} build
 
 up:
-	docker compose up -d
+	${SUB} up -d
 
 local:
 	pdm run python -m ilo
 
+stop:
+	${SUB} stop
+
 down:
-	docker compose down
+	${SUB} down
 
 logs:
-	docker compose logs
+	${SUB} logs
 
 import:
 	# container must be running
-	docker cp ./userdata/preferences.json $(shell docker ps | grep ilo-linku | awk '{print $$1}'):/project/userdata/preferences.json
+	${MAIN} cp ./userdata/preferences.json $(shell ${MAIN} ps | grep ilo-linku | awk '{print $$1}'):/project/userdata/preferences.json
 
 export:
 	# container must be running
-	docker cp $(shell docker ps | grep ilo-linku | awk '{print $$1}'):/project/userdata/preferences.json ./userdata/preferences.json
+	${MAIN} cp $(shell ${MAIN} ps | grep ilo-linku | awk '{print $$1}'):/project/userdata/preferences.json ./userdata/preferences.json
