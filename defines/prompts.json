@@ -1,84 +1,158 @@
-{
-    "tok": [
-        "nimi sina pi toki pona li tan seme?",
-        "jan seme pi kulupu mama sina li sona toki pona?",
-        "jan seme pi sitelen tawa li pona tawa sina?",
-        "kili seme li pona tawa sina?",
-        "sina wile kama sona e toki ante seme tan seme?",
-        "musi seme li pona tawa sina?",
-        "seli en lete la seme li pona nanpa wan tawa sina?",
-        "soweli lili mute en soweli suli wan la sina wile utala e seme?",
-        "sina wile sitelen lon lipu kepeken luka anu lon ilo nanpa anu seme?",
-        "soweli nasa li lon ala lon tomo sina? sina wile ala wile ni?",
-        "sina ken tawa lon tenpo la, sina wile tawa lon tenpo seme? sina pali e seme?",
-        "sina wile toki pona e lipu seme e musi seme?",
-        "seme li kama lon poka sina li nasa nanpa wan?",
-        "tomo sona la nasin sona seme li pona tawa sina? ni li tan seme?",
-        "sewi li pana e ijo la ijo seme li pona nanpa wan tawa sina?",
-        "mani li suli ala la, sina wile pali seme?",
-        "sina kama sona e toki pona tan seme?",
-        "soweli seme li suwi tawa sina li jaki tawa jan ante mute?",
-        "tenpo poka la sina seme?",
-        "sina sona ala sona e jan poka pi toki pona?",
-        "jan mute li sona ala e kalama musi seme pi pona mute?",
-        "tomo sina la seme li lon?",
-        "jan pona sina nanpa wan li pona seme?",
-        "ma sina la sina lukin e seme?",
-        "moku seme li pona nanpa wan tawa sina?",
-        "sina lon ala tomo la sina seme?",
-        "sina lukin e lipu seme lon tenpo poka?",
-        "sina lukin e sitelen tawa seme lon tenpo poka?",
-        "seme li pona wawa e pilin sina a?",
-        "tenpo poka la, sina toki e seme lon toki pona?",
-        "sina ken tawa ma ale la, sina tawa seme?",
-        "sina jo e jan pi ken ale la, sina wile e seme tu wan?",
-        "nasin tawa seme li pona tawa sina?",
-        "sina wile ala wile awen lon ma ante? wile la, ma seme? tan seme?",
-        "sina ken kon lon tenpo suno wan la sina tawa seme? sina lukin e seme?",
-        "sina ken soweli la, sina wile soweli seme?",
-        "sina wile ala wile lon tenpo pini? wile la, tenpo seme?",
-        "seme li nasin nasa pi kulupu mama sina?",
-        "sina ken toki tawa jan wan. ona li ken lon li ken moli. ni la, sina toki tawa jan seme?"
-    ],
-    "en": [
-        "Where does your Toki Pona name come from?",
-        "Who else in your family knows Toki Pona?",
-        "What movie/show characters do you like?",
-        "What's a fruit or vegetable you like?",
-        "What other languages would you like to learn and why?",
-        "What amusing things do you like?",
-        "Do you prefer heat or cold?",
-        "Would you rather fight many small animals or one large animal?",
-        "Do you prefer writing on paper by hand, with a computer, or some other way?",
-        "Do you have any unusual pets? Would you like to?",
-        "If you could time travel, where would you go? What would you do?",
-        "What would you like to translate into/adapt for Toki Pona?",
-        "What's the strangest event that happened close to you?",
-        "What is/was your favorite subject in school? Why?",
-        "What is your favorite weather?",
-        "If money wasn’t important, what job would you like to do?",
-        "Why did you start learning Toki Pona?",
-        "What animal do you find cute that others find ugly?",
-        "What have you done recently?",
-        "Do you know anyone else who speaks toki pona in real life?",
-        "What's a great song that most people don't know about?",
-        "How would you describe your home?",
-        "What is your favorite person like?",
-        "What does the land you come from look like?",
-        "What is your favorite meal?",
-        "If you're outside, what do you like to do?",
-        "Could you describe the last story or article you read?",
-        "What was the last movie or show you watched like?",
-        "What makes your day instantly better?",
-        "What do you use to travel?",
-        "What's the last thing you talked about in toki pona?",
-        "If you had a genie, which 3 wishes are you picking?",
-        "What's your favorite method of transportation?",
-        "Do you want to live somewhere else? If so, where? Why?",
-        "If you could be a ghost for a day, where would you go and what would you observe?",
-        "If you could become an animal, what would you be?",
-        "If you could live in a historical period, would you want to? If so, which one?",
-        "What's a strange tradition or inside joke your family has?",
-        "If you could have a conversation with any person, living or dead, who would you choose?"
-    ]
-}
+[
+    {
+        "tok": "nimi sina pi toki pona li tan seme?",
+        "en": "Where does your Toki Pona name come from?"
+    },
+    {
+        "tok": "jan seme pi kulupu mama sina li sona toki pona?",
+        "en": "Who else in your family knows Toki Pona?"
+    },
+    {
+        "tok": "jan seme pi sitelen tawa li pona tawa sina?",
+        "en": "What movie/show characters do you like?"
+    },
+    {
+        "tok": "kili seme li pona tawa sina?",
+        "en": "What's a fruit or vegetable you like?"
+    },
+    {
+        "tok": "sina wile kama sona e toki ante seme tan seme?",
+        "en": "What other languages would you like to learn and why?"
+    },
+    {
+        "tok": "musi seme li pona tawa sina?",
+        "en": "What amusing things do you like?"
+    },
+    {
+        "tok": "seli en lete la seme li pona nanpa wan tawa sina?",
+        "en": "Do you prefer heat or cold?"
+    },
+    {
+        "tok": "soweli lili mute en soweli suli wan la sina wile utala e seme?",
+        "en": "Would you rather fight many small animals or one large animal?"
+    },
+    {
+        "tok": "sina wile sitelen lon lipu kepeken luka anu lon ilo nanpa anu seme?",
+        "en": "Do you prefer writing on paper by hand, with a computer, or some other way?"
+    },
+    {
+        "tok": "soweli nasa li lon ala lon tomo sina? sina wile ala wile ni?",
+        "en": "Do you have any unusual pets? Would you like to?"
+    },
+    {
+        "tok": "sina ken tawa lon tenpo la, sina wile tawa lon tenpo seme? sina pali e seme?",
+        "en": "If you could time travel, where would you go? What would you do?"
+    },
+    {
+        "tok": "sina wile toki pona e lipu seme e musi seme?",
+        "en": "What would you like to translate into/adapt for Toki Pona?"
+    },
+    {
+        "tok": "seme li kama lon poka sina li nasa nanpa wan?",
+        "en": "What's the strangest event that happened close to you?"
+    },
+    {
+        "tok": "tomo sona la nasin sona seme li pona tawa sina? ni li tan seme?",
+        "en": "What is/was your favorite subject in school? Why?"
+    },
+    {
+        "tok": "sewi li pana e ijo la ijo seme li pona nanpa wan tawa sina?",
+        "en": "What is your favorite weather?"
+    },
+    {
+        "tok": "mani li suli ala la, sina wile pali seme?",
+        "en": "If money wasn't important, what job would you like to do?"
+    },
+    {
+        "tok": "sina kama sona e toki pona tan seme?",
+        "en": "Why did you start learning Toki Pona?"
+    },
+    {
+        "tok": "soweli seme li suwi tawa sina li jaki tawa jan ante mute?",
+        "en": "What animal do you find cute that others find ugly?"
+    },
+    {
+        "tok": "tenpo poka la sina seme?",
+        "en": "What have you done recently?"
+    },
+    {
+        "tok": "sina sona ala sona e jan poka pi toki pona?",
+        "en": "Do you know anyone else who speaks toki pona in real life?"
+    },
+    {
+        "tok": "jan mute li sona ala e kalama musi seme pi pona mute?",
+        "en": "What's a great song that most people don't know about?"
+    },
+    {
+        "tok": "tomo sina la seme li lon?",
+        "en": "How would you describe your home?"
+    },
+    {
+        "tok": "jan pona sina nanpa wan li pona seme?",
+        "en": "What is your favorite person like?"
+    },
+    {
+        "tok": "ma sina la sina lukin e seme?",
+        "en": "What does the land you come from look like?"
+    },
+    {
+        "tok": "moku seme li pona nanpa wan tawa sina?",
+        "en": "What is your favorite meal?"
+    },
+    {
+        "tok": "sina lon ala tomo la sina seme?",
+        "en": "If you're outside, what do you like to do?"
+    },
+    {
+        "tok": "sina lukin e lipu seme lon tenpo poka?",
+        "en": "Could you describe the last story or article you read?"
+    },
+    {
+        "tok": "sina lukin e sitelen tawa seme lon tenpo poka?",
+        "en": "What was the last movie or show you watched like?"
+    },
+    {
+        "tok": "seme li pona wawa e pilin sina a?",
+        "en": "What makes your day instantly better?"
+    },
+    {
+        "tok": "tenpo poka la, sina toki e seme lon toki pona?",
+        "en": "What do you use to travel?"
+    },
+    {
+        "tok": "sina ken tawa ma ale la, sina tawa seme?",
+        "en": "What's the last thing you talked about in toki pona?"
+    },
+    {
+        "tok": "sina jo e jan pi ken ale la, sina wile e seme tu wan?",
+        "en": "If you had a genie, which 3 wishes are you picking?"
+    },
+    {
+        "tok": "nasin tawa seme li pona tawa sina?",
+        "en": "What's your favorite method of transportation?"
+    },
+    {
+        "tok": "sina wile ala wile awen lon ma ante? wile la, ma seme? tan seme?",
+        "en": "Do you want to live somewhere else? If so, where? Why?"
+    },
+    {
+        "tok": "sina ken kon lon tenpo suno wan la sina tawa seme? sina lukin e seme?",
+        "en": "If you could be a ghost for a day, where would you go and what would you observe?"
+    },
+    {
+        "tok": "sina ken soweli la, sina wile soweli seme?",
+        "en": "If you could become an animal, what would you be?"
+    },
+    {
+        "tok": "sina wile ala wile lon tenpo pini? wile la, tenpo seme?",
+        "en": "If you could live in a historical period, would you want to? If so, which one?"
+    },
+    {
+        "tok": "seme li nasin nasa pi kulupu mama sina?",
+        "en": "What's a strange tradition or inside joke your family has?"
+    },
+    {
+        "tok": "sina ken toki tawa jan wan. ona li ken lon li ken moli. ni la, sina toki tawa jan seme?",
+        "en": "If you could have a conversation with any person, living or dead, who would you choose?"
+    }
+]

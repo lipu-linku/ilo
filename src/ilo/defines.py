@@ -11,6 +11,12 @@ def plaintext(file_path):
         return list(f.readlines())
 
 
+def get_languages_for_prompts() -> list:
+    if prompts:
+        return prompts[0].keys()
+    return []
+
+
 acro_choices = load("acro_choices")
 colours = load("colours")
 extraemoji = load("extraemoji")
@@ -18,4 +24,4 @@ text = load("text")
 borgle_map = load("borgle_map")
 pref_list = load("pref_list")
 sentences = plaintext("sentences")
-prompts= load("prompts")
+prompts = load("prompts")

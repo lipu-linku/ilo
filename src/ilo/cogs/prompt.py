@@ -1,10 +1,10 @@
 import random
 
-from discord import Option, context, option
+from discord import context, option
 from discord.commands import slash_command
 from discord.ext import commands
 
-from ilo.defines import prompts, text
+from ilo.defines import get_languages_for_prompts, prompts, text
 
 
 class CogPrompt(commands.Cog):
@@ -15,6 +15,8 @@ class CogPrompt(commands.Cog):
         async def command_prompt(ctx, lang):
             await prompt(ctx, lang)
 
+    available_langs = get_languages_for_prompts()
+
     @slash_command(
         name="prompt",
         description=text["DESC_PROMPT"],
@@ -22,13 +24,11 @@ class CogPrompt(commands.Cog):
     @option(
         name="lang",
         description=text["DESC_PROMPT_LANGUAGE_OPTION"],
-        choices=["en", "tok"],
+        choices=available_langs,
         # required=True,
-        default="tok",
+        default=available_langs[0],  # assumed to be tok
     )
-    async def slash_prompt(
-            self, ctx, lang: str
-    ):
+    async def slash_prompt(self, ctx, lang: str):
         await prompt(ctx, lang)
 
 
@@ -37,6 +37,6 @@ async def prompt(ctx, lang: str):
         callback = ctx.respond
     else:
         callback = ctx.send
-    to_fetch = prompts[lang]
-    sentence = random.choice(to_fetch)
+    all_sents = random.choice(prompts)
+    sentence = all_sents[lang]
     await callback(sentence)
