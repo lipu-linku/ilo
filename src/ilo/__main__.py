@@ -17,6 +17,7 @@ from ilo.cogs.lp import CogLp
 from ilo.cogs.nimi import CogNimi
 from ilo.cogs.preferences import CogPreferences
 from ilo.cogs.preview import CogPreview
+from ilo.cogs.prompt import CogPrompt
 from ilo.cogs.se import CogSe
 from ilo.cogs.sp import CogSp
 from ilo.cogs.ss import CogSs
@@ -52,4 +53,5 @@ if __name__ == "__main__":
     bot.add_cog(CogPreview(bot))
     bot.add_cog(CogBorgle(bot))
     bot.add_cog(CogStest(bot))
+    bot.add_cog(CogPrompt(bot))
     bot.run(TOKEN, reconnect=True)
