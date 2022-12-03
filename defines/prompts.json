@@ -154,5 +154,21 @@
     {
         "tok": "sina ken toki tawa jan wan. ona li ken lon li ken moli. ni la, sina toki tawa jan seme?",
         "en": "If you could have a conversation with any person, living or dead, who would you choose?"
+    },
+    {
+        "tok": "tomo ale la, sina ken awen lon tomo wan. tomo ni li seme? sina awen lon poka seme?",
+        "en": "If you could live in any house, what would it be like? Who would you live with? What would be nearby?"
+    },
+    {
+        "tok": "tomo sina la, sina awen taso anu lon poka mama anu lon poka pi jan pona anu seme?",
+        "en": "Do you live by yourself or with family or with roommates/friends?"
+    },
+    {
+        "tok": "soweli pona anu akesi pona anu kala pona anu pipi pona anu waso pona li lon ala lon tomo sina? lon la, nimi ona li seme?",
+        "en": "Do you live with any pets? What are their names?"
+    },
+    {
+        "tok": "jan ante li lon tomo sina la sina musi seme?",
+        "en": "When someone else is at your house, what are some fun things to do?"
     }
 ]
