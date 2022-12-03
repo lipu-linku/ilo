@@ -27,11 +27,3 @@ down:
 
 logs:
 	${SUB} logs
-
-import:
-	# container must be running
-	${MAIN} cp ./userdata/preferences.json $(shell ${MAIN} ps | grep ilo-linku | awk '{print $$1}'):/project/userdata/preferences.json
-
-export:
-	# container must be running
-	${MAIN} cp $(shell ${MAIN} ps | grep ilo-linku | awk '{print $$1}'):/project/userdata/preferences.json ./userdata/preferences.json
