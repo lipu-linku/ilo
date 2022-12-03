@@ -11,12 +11,6 @@ def plaintext(file_path):
         return list(f.readlines())
 
 
-def get_languages_for_prompts() -> list:
-    if prompts:
-        return prompts[0].keys()
-    return []
-
-
 acro_choices = load("acro_choices")
 colours = load("colours")
 extraemoji = load("extraemoji")

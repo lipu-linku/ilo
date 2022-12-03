@@ -26,7 +26,7 @@
 	"DESC_STEST": "Get a random sentence from the Conlang Syntax Test Cases list.",
 
 	"DESC_PROMPT": "Get a random conversation prompt.",
-	"DESC_PROMPT_LANGUAGE_OPTION": "Choose a language for the prompt.",
+	"DESC_PROMPT_LANGUAGE_OPTION": "Disable translation (only Toki Pona)",
 
 	"DESC_ACRO": "Get help coming up with acronyms consisting of toki pona words",
 	"DESC_ACRO_OPTION": "Letters you want to make an acronym for.",

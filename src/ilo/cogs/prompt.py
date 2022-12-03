@@ -4,7 +4,8 @@ from discord import context, option
 from discord.commands import slash_command
 from discord.ext import commands
 
-from ilo.defines import get_languages_for_prompts, prompts, text
+from ilo.preferences import preferences
+from ilo.defines import prompts, text
 
 
 class CogPrompt(commands.Cog):
@@ -12,31 +13,31 @@ class CogPrompt(commands.Cog):
         self.bot = bot
 
         @bot.command(name="prompt")
-        async def command_prompt(ctx, lang):
-            await prompt(ctx, lang)
-
-    available_langs = get_languages_for_prompts()
+        async def command_prompt(ctx, translate: bool):
+            await prompt(ctx, translate)
 
     @slash_command(
         name="prompt",
         description=text["DESC_PROMPT"],
     )
     @option(
-        name="lang",
+        name="translate",
         description=text["DESC_PROMPT_LANGUAGE_OPTION"],
-        choices=available_langs,
-        # required=True,
-        default=available_langs[0],  # assumed to be tok
+        default=True # choices are implied
     )
-    async def slash_prompt(self, ctx, lang: str):
-        await prompt(ctx, lang)
+    async def slash_prompt(self, ctx, translate: bool):
+        await prompt(ctx, translate)
 
 
-async def prompt(ctx, lang: str):
+async def prompt(ctx, translate: bool):
     if isinstance(ctx, context.ApplicationContext):
         callback = ctx.respond
     else:
         callback = ctx.send
     all_sents = random.choice(prompts)
-    sentence = all_sents[lang]
-    await callback(sentence)
+    tok_prompt = all_sents["tok"]
+    if translate:
+        lang = preferences.get(str(ctx.author.id), "language")
+        translation = all_sents[lang] if lang in all_sents else all_sents["en"]
+        tok_prompt  += f"\n||{translation}||"
+    await callback(tok_prompt)
