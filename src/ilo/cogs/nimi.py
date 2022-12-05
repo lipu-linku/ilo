@@ -67,13 +67,14 @@ async def nimi(ctx, word):
 def embed_response(word, lang, response, embedtype):
     embed = Embed()
     embed.title = response["word"]
-    embed.colour = discord_colours(colours)[response["book"]]
+    embed.colour = discord_colours(colours)[response["usage_category"]]
     description = (
         response["def"][lang]
         if lang in response["def"]
         else "(en) {}".format(response["def"]["en"])
     )
-    embed.add_field(name="book", value=response["book"])
+    usage = response["usage_category"] if "usage_category" in response else "unknown"
+    embed.add_field(name="usage", value=f"{usage} ({response['book']})")
 
     if embedtype == "concise":
         embed.add_field(name="description", value=description)
