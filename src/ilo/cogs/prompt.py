@@ -39,7 +39,7 @@ async def prompt(ctx, translate: bool):
 
     # if user lang is tok, don't translate
     lang = preferences.get(str(ctx.author.id), "language")
-    translate = translate and (lang is not "tok")
+    translate = translate and (lang != "tok")
     if translate:
         translation = all_sents[lang] if lang in all_sents else all_sents["en"]
         tok_prompt  += f"\n||{translation}||"
