@@ -10,6 +10,10 @@ from ilo.defines import text
 from ilo.jasima import sitelen_emosi
 
 
+def setup(bot):
+    bot.add_cog(CogSe(bot))
+
+
 class CogSe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

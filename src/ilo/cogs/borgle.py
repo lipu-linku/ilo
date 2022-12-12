@@ -7,6 +7,10 @@ from ilo.defines import text
 import re
 
 
+def setup(bot):
+    bot.add_cog(CogBorgle(bot))
+
+
 class CogBorgle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

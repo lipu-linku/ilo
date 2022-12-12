@@ -12,7 +12,6 @@ from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
 
-
 def to_choices(dictionary):
     return [OptionChoice(name=k, value=v) for k, v in dictionary.items()]
 
@@ -49,6 +48,10 @@ def build_subcommand(prefs, name, description, option):
                 template.name, ctx.author.display_name, preference
             )
         )
+
+
+def setup(bot):
+    bot.add_cog(CogPreferences(bot))
 
 
 class CogPreferences(commands.Cog):

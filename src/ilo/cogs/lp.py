@@ -6,6 +6,10 @@ from ilo.defines import text
 from ilo import jasima
 
 
+def setup(bot):
+    bot.add_cog(CogLp(bot))
+
+
 class CogLp(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

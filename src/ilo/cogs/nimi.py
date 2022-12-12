@@ -13,6 +13,10 @@ from ilo.colour import discord_colours
 from ilo import jasima
 
 
+def setup(bot):
+    bot.add_cog(CogNimi(bot))
+
+
 class CogNimi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

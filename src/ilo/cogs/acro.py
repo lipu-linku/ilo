@@ -7,6 +7,10 @@ from ilo.preferences import preferences
 from ilo import acronym
 
 
+def setup(bot):
+    bot.add_cog(CogAcro(bot))
+
+
 class CogAcro(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
