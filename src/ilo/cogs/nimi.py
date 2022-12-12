@@ -6,8 +6,6 @@ from discord import ButtonStyle
 from discord.ui import View
 from discord.ui import Button
 
-from discord import context
-
 from ilo.defines import text
 from ilo.defines import colours
 from ilo.preferences import preferences
@@ -18,18 +16,6 @@ from ilo import jasima
 class CogNimi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-        @bot.command(name="nimi")
-        async def command_nimi(ctx, word):
-            if word.startswith("word:"):
-                word = word.replace("word:", "", 1)
-            await nimi(ctx, word)
-
-        @bot.command(name="n")
-        async def command_n(ctx, word):
-            if word.startswith("word:"):
-                word = word.replace("word:", "", 1)
-            await nimi(ctx, word)
 
     @slash_command(
         name="nimi",
@@ -51,17 +37,11 @@ async def nimi(ctx, word):
 
     response = jasima.get_word_entry(word)
     if isinstance(response, str):
-        if isinstance(ctx, context.ApplicationContext):
-            await ctx.respond(response)
-        else:
-            await ctx.send(response)
+        await ctx.respond(response)
         return
     embed = embed_response(word, lang, response, "concise")
     view = NimiView("expand", word, lang)
-    if isinstance(ctx, context.ApplicationContext):
-        await ctx.respond(embed=embed, view=view)
-    else:
-        await ctx.send(embed=embed, view=view)
+    await ctx.respond(embed=embed, view=view)
 
 
 def embed_response(word, lang, response, embedtype):

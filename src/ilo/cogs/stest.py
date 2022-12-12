@@ -2,8 +2,6 @@ from discord.ext import commands
 from discord.commands import slash_command
 from discord import Option
 
-from discord import context
-
 from ilo.defines import sentences
 from ilo.defines import text
 import random
@@ -12,10 +10,6 @@ import random
 class CogStest(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-        @bot.command(name="stest")
-        async def command_stest(ctx):
-            await stest(ctx)
 
     @slash_command(
         name="stest",
@@ -28,7 +22,4 @@ class CogStest(commands.Cog):
 async def stest(ctx):
     index, sentence = random.choice(list(enumerate(sentences)))
     indexed_sentence = f"{index+1}. {sentence}"
-    if isinstance(ctx, context.ApplicationContext):
-        await ctx.respond(indexed_sentence)
-    else:
-        await ctx.send(indexed_sentence)
+    await ctx.respond(indexed_sentence)

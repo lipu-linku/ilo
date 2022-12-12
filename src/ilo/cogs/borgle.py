@@ -2,8 +2,6 @@ from discord.ext import commands
 from discord.commands import slash_command
 from discord import Option
 
-from discord import context
-
 from ilo.defines import borgle_map
 from ilo.defines import text
 import re
@@ -13,24 +11,12 @@ class CogBorgle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        @bot.command(name="borgle")
-        async def command_borgle(ctx, *, text):
-            if text.startswith("text:"):
-                text = text.replace("text:", "", 1)
-            await borgle(ctx, text)
-
-        @bot.command(name="deborgle")
-        async def command_deborgle(ctx, *, text):
-            if text.startswith("text:"):
-                text = text.replace("text:", "", 1)
-            await deborgle(ctx, text)
-
     @slash_command(
         name="borgle",
         description=text["DESC_BORGLE"],
     )
     async def slash_borgle(self, ctx, text: Option(str, text["DESC_BORGLE_OPTION"])):
-        await borgle(ctx, text)
+        await ctx.respond(do_text(text))
 
     @slash_command(
         name="deborgle",
@@ -39,21 +25,7 @@ class CogBorgle(commands.Cog):
     async def slash_deborgle(
         self, ctx, text: Option(str, text["DESC_DEBORGLE_OPTION"])
     ):
-        await deborgle(ctx, text)
-
-
-async def borgle(ctx, text):
-    if isinstance(ctx, context.ApplicationContext):
-        await ctx.respond(do_text(text))
-    else:
-        await ctx.send(do_text(text))
-
-
-async def deborgle(ctx, text):
-    if isinstance(ctx, context.ApplicationContext):
         await ctx.respond(undo(text))
-    else:
-        await ctx.send(undo(text))
 
 
 def do_text(text):
