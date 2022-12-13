@@ -32,8 +32,9 @@ async def on_reaction_add(reaction, user):
 
 
 def load_extensions():
-    for cogname in os.listdir("./src/ilo/cogs/"):
-        path = "./src/ilo/cogs/" + cogname
+    cogs_path = os.path.dirname(__file__) + "/cogs/"
+    for cogname in os.listdir(cogs_path):
+        path = cogs_path + cogname
         if os.path.isdir(path):
             if "__init__.py" in os.listdir(path):
                 bot.load_extension(f"ilo.cogs.{cogname}")
