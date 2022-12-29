@@ -58,7 +58,7 @@ def embed_response(word, lang, response, embedtype):
         else "(en) {}".format(response["def"]["en"])
     )
     usage = response["usage_category"] if "usage_category" in response else "unknown"
-    embed.add_field(name="usage", value=f"{usage} ({response['book'].replace("none", "no book"})")
+    embed.add_field(name="usage", value=f"{usage} ({response['book'].replace('none', 'no book')})")
 
     if embedtype == "concise":
         embed.add_field(name="description", value=description)
