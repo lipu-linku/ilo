@@ -8,7 +8,7 @@ init:
 	# pdm run pre-commit install
 
 test:
-	pdm run pytest -rP ./tests
+	pdm run pytest -vvrP ./tests
 
 build:
 	${SUB} build
