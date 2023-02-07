@@ -32,6 +32,16 @@ def test_unpunct_second_sent(tokenizer):
     assert sents == compare
 
 
+def test_comma():
+    ex = "mi, en, sina"
+    sents = _sent_tokenize(ex)
+    compare_sents = ["mi, en, sina"]
+    assert sents == compare_sents
+    words = [_word_tokenize(sent) for sent in sents]
+    compare_words = [["mi", ",", "en", ",", "sina"]]
+    assert words == compare_words
+
+
 @pytest.mark.parametrize("tokenizer", [_sent_tokenize])
 def test_messy_document(tokenizer):
     doc = "nimi mi li jan Wiku...    sina wile seme??!?? mi wile pona tawa jan mute mute a!!! ! !"
