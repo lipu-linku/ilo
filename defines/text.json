@@ -28,6 +28,10 @@
 	"DESC_PROMPT": "Get a random conversation prompt.",
 	"DESC_PROMPT_LANGUAGE_OPTION": "Provide translation",
 
+	"DESC_RELEX_EN": "Relex a given toki pona sentence to English.",
+	"DESC_RELEX_MAMA": "Relex a toki pona sentence to each word's etymology.",
+	"DESC_RELEX_INPUT": "The statement(s) to relex.",
+
 	"DESC_ACRO": "Get help coming up with acronyms consisting of toki pona words",
 	"DESC_ACRO_OPTION": "Letters you want to make an acronym for.",
 

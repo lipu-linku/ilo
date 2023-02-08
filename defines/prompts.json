@@ -170,5 +170,33 @@
     {
         "tok": "jan ante li lon tomo sina la sina musi seme?",
         "en": "When someone else is at your house, what are some fun things to do?"
+    },
+    {
+        "tok": "jan li pana e ijo tawa sina la ijo seme li pona nanpa wan?",
+        "en": "What's the best gift you've ever received?"
+    },
+    {
+        "tok": "musi ilo seme li pona nanpa wan tawa sina?",
+        "en": "What's your favorite videogame?"
+    },
+    {
+        "tok": "sina toki tawa jan sin la sina wile sona e seme?",
+        "en": "When you meet somebody new, what do you ask them?"
+    },
+    {
+        "tok": "sina kama ken wawa la sina wile e wawa seme?",
+        "en": "If you got a superpower, what superpower would it be?"
+    },
+    {
+        "tok": "jan mute li pana e sona pona pi tenpo ale. sona seme li pona nanpa wan tawa sina?",
+        "en": "Many people give advice that's good for all time. What's the best advice you've ever received?"
+    },
+    {
+        "tok": "kulupu mama la jan seme li poka nanpa wan tawa sina?",
+        "en": "Who's the closest person in your family to you?"
+    },
+    {
+        "tok": "moku seme li ike nanpa wan tawa sina? tan seme?",
+        "en": "What food is your least favorite? Why?"
     }
 ]

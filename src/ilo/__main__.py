@@ -10,6 +10,8 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 if not TOKEN:
     load_dotenv()
     TOKEN = os.getenv("DISCORD_TOKEN")
+if not TOKEN:
+    raise EnvironmentError("No discord token found in the environment!")
 
 
 bot = commands.Bot(
@@ -38,6 +40,7 @@ def load_extensions():
         if os.path.isdir(path):
             if "__init__.py" in os.listdir(path):
                 bot.load_extension(f"ilo.cogs.{cogname}")
+
 
 if __name__ == "__main__":
     load_extensions()
