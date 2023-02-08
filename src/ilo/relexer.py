@@ -45,6 +45,8 @@ def relex_word_en(word: str) -> str:
     This is not reasonable to reverse at present. jasima needs a relex column.
     """
     found = bundle.get(word)
+    if not found:
+        return word
     if word in EN_SPECIAL_CASES:
         return EN_SPECIAL_CASES[word]
     fetch_from = found.get("ku_data") or found["def"]["en"] if found else word
@@ -59,6 +61,8 @@ def __clean_etym(etym: str, multiple: bool = False) -> str:
 
 def relex_word_etym(word: str) -> str:
     found = bundle.get(word)
+    if not found:
+        return word
     etymology = found.get("etymology")
     if not etymology or etymology in {"∅", "?", "unknown"}:
         return word
@@ -71,7 +75,7 @@ def __sent_relex(input: str, relex_func: Callable) -> str:
     sents_of_words = tokenize(input)
     reconstructed = ""
     for sent in sents_of_words:
-        to_reconstruct = [relex_func(word) for word in sent[:-1]]
+        to_reconstruct = [relex_func(word) or word for word in sent[:-1]]
         reconstructed += " ".join(to_reconstruct)
 
         # the last is punct if punct is present
