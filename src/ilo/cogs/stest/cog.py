@@ -7,10 +7,6 @@ from ilo.defines import text
 import random
 
 
-def setup(bot):
-    bot.add_cog(CogStest(bot))
-
-
 class CogStest(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

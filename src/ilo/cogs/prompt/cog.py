@@ -8,10 +8,6 @@ from ilo.preferences import preferences
 from ilo.defines import prompts, text
 
 
-def setup(bot):
-    bot.add_cog(CogPrompt(bot))
-
-
 class CogPrompt(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

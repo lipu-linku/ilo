@@ -50,10 +50,6 @@ def build_subcommand(prefs, name, description, option):
         )
 
 
-def setup(bot):
-    bot.add_cog(CogPreferences(bot))
-
-
 class CogPreferences(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

@@ -12,10 +12,6 @@ from ilo.colour import rgb_tuple
 from ilo import sitelen
 
 
-def setup(bot):
-    bot.add_cog(CogSs(bot))
-
-
 class CogSs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
