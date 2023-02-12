@@ -1,13 +1,15 @@
 # from pozzei
 
+from pathlib import Path
 import re
+import json
 
 from discord.ext import commands
 from discord.commands import slash_command
 from discord import Option
 
 from ilo.defines import text
-from ilo.jasima import sitelen_emosi
+from ilo.jasima import bundle
 
 
 class CogSe(commands.Cog):
@@ -46,3 +48,18 @@ def clean_string(string):
     clean_string = re.sub(r"(\.){1,2}", " . ", clean_string)
     clean_string = clean_string.lower()
     return clean_string
+
+
+def sitelen_emosi(word):
+    entries = bundle["data"]
+    if word in entries:
+        if "sitelen_emosi" in entries[word]:
+            return entries[word]["sitelen_emosi"]
+    chars = []
+    for letter in word:
+        chars.append(extraemoji[letter])
+    return " ".join(chars)
+
+
+with open(Path(__file__).parent / "extraemoji.json", encoding="utf-8") as f:
+     extraemoji = json.load(f)

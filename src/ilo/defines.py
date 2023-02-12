@@ -11,9 +11,7 @@ def plaintext(file_path):
         return list(f.readlines())
 
 
-acro_choices = load("acro_choices")
 colours = load("colours")
-extraemoji = load("extraemoji")
 text = load("text")
 borgle_map = load("borgle_map")
 pref_list = load("pref_list")
