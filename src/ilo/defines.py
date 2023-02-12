@@ -11,6 +11,4 @@ def plaintext(file_path):
         return list(f.readlines())
 
 
-colours = load("colours")
 text = load("text")
-pref_list = load("pref_list")

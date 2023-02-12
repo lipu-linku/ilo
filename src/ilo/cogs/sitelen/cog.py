@@ -9,7 +9,6 @@ from ilo.fonts import fonts
 from ilo.defines import text
 from ilo.preferences import preferences
 from ilo.preferences import Template
-from ilo.colour import rgb_tuple
 from ilo import sitelen
 
 
@@ -86,3 +85,7 @@ def is_colour(value):
             return True
     except ValueError:
         return False
+
+
+def rgb_tuple(value):
+    return tuple(bytes.fromhex(value))

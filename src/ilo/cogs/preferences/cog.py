@@ -6,11 +6,16 @@ from discord import Option
 from discord import OptionChoice
 
 from ilo.defines import text
-from ilo.defines import pref_list
-
 from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
+
+RESPONSES = {
+  "set": "{key}: **{value}** (default: {default})\n",
+  "invalid": "{key}: {value}. The value is invalid, **{default}** (default) is used instead.\n",
+  "unset": "{key}: {default} (by default)\n"
+}
+
 
 def to_choices(dictionary):
     return [OptionChoice(name=k, value=v) for k, v in dictionary.items()]
@@ -72,7 +77,7 @@ class CogPreferences(commands.Cog):
             value = preferences.get_raw(str(ctx.author.id), key)
             status = preferences.get_status(str(ctx.author.id), key, value)
             default = preferences.get_default(key)
-            response += pref_list[status].format(key=key, value=value, default=default)
+            response += RESPONSES[status].format(key=key, value=value, default=default)
         await ctx.respond(response)
 
     @prefs.command(

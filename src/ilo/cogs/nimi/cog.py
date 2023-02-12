@@ -7,11 +7,11 @@ from discord.ui import View
 from discord.ui import Button
 
 from ilo.defines import text
-from ilo.defines import colours
 from ilo.preferences import preferences
 from ilo.preferences import Template
-from ilo.colour import discord_colours
 from ilo import jasima
+
+from ilo.cogs.nimi.colour import colours
 
 
 class CogNimi(commands.Cog):
@@ -49,7 +49,7 @@ async def nimi(ctx, word):
 def embed_response(word, lang, response, embedtype):
     embed = Embed()
     embed.title = response["word"]
-    embed.colour = discord_colours(colours)[response["usage_category"]]
+    embed.colour = colours[response["usage_category"]]
     description = (
         response["def"][lang]
         if lang in response["def"]
