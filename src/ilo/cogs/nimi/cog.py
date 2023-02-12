@@ -9,6 +9,7 @@ from discord.ui import Button
 from ilo.defines import text
 from ilo.defines import colours
 from ilo.preferences import preferences
+from ilo.preferences import Template
 from ilo.colour import discord_colours
 from ilo import jasima
 
@@ -16,6 +17,7 @@ from ilo import jasima
 class CogNimi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        preferences.register(Template("language", "en", jasima.get_languages_for_slash_commands()))
 
     @slash_command(
         name="nimi",

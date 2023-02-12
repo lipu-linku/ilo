@@ -2,14 +2,17 @@ from discord.ext import commands
 from discord.commands import slash_command
 from discord import Option
 
+from ilo.defines import acro_choices
 from ilo.defines import text
 from ilo.preferences import preferences
+from ilo.preferences import Template
 from ilo import acronym
 
 
 class CogAcro(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        preferences.register(Template("acro", "ku suli", acro_choices))
 
     @slash_command(
         name="acro",

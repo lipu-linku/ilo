@@ -8,6 +8,7 @@ from discord import File
 from ilo.fonts import fonts
 from ilo.defines import text
 from ilo.preferences import preferences
+from ilo.preferences import Template
 from ilo.colour import rgb_tuple
 from ilo import sitelen
 
@@ -15,6 +16,9 @@ from ilo import sitelen
 class CogSitelen(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        preferences.register(Template("fontsize", 72, validation=fontsize_validation))
+        preferences.register(Template("color", "ffffff", validation=colour_validation))
+        preferences.register(Template("font", "linja sike", {font: font for font in fonts}))
 
     @slash_command(
         name="sp",
@@ -61,3 +65,24 @@ async def preview(ctx, text):
     for font in fonts:
         images.append(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     await ctx.respond(file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png"))
+
+
+def fontsize_validation(value):
+    if not (value <= 500 and value >= 14):
+        return "Font size is limited to the range from 14 to 500."
+    return True
+
+
+def colour_validation(value):
+    if not is_colour(value):
+        return "The string has to be a valid hexadecimal rgb colour, e.g. `2288ff`."
+    return True
+
+
+def is_colour(value):
+    try:
+        value = rgb_tuple(value)
+        if len(value) == 3:
+            return True
+    except ValueError:
+        return False
