@@ -6,7 +6,8 @@ from ilo.defines import acro_choices
 from ilo.defines import text
 from ilo.preferences import preferences
 from ilo.preferences import Template
-from ilo import acronym
+
+from ilo.cogs.acro import acronym
 
 
 class CogAcro(commands.Cog):
