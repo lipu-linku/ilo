@@ -13,7 +13,4 @@ def plaintext(file_path):
 
 colours = load("colours")
 text = load("text")
-borgle_map = load("borgle_map")
 pref_list = load("pref_list")
-sentences = plaintext("sentences")
-prompts = load("prompts")

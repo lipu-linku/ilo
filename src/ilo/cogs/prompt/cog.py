@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 import random
 
 from discord import option
@@ -5,7 +7,7 @@ from discord.commands import slash_command
 from discord.ext import commands
 
 from ilo.preferences import preferences
-from ilo.defines import prompts, text
+from ilo.defines import text
 
 
 class CogPrompt(commands.Cog):
@@ -36,3 +38,7 @@ async def prompt(ctx, translate: bool):
         translation = all_sents[lang] if lang in all_sents else all_sents["en"]
         tok_prompt  += f"\n||{translation}||"
     await ctx.respond(tok_prompt)
+
+
+with open(Path(__file__).parent / "prompts.json", encoding="utf-8") as f:
+     prompts = json.load(f)
