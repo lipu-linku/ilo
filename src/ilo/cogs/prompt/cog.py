@@ -1,13 +1,12 @@
-import json
-from pathlib import Path
 import random
 
 from discord import option
 from discord.commands import slash_command
 from discord.ext import commands
 
-from ilo.preferences import preferences
+from ilo.cog_utils import load_file
 from ilo.defines import text
+from ilo.preferences import preferences
 
 
 class CogPrompt(commands.Cog):
@@ -40,5 +39,4 @@ async def prompt(ctx, translate: bool):
     await ctx.respond(tok_prompt)
 
 
-with open(Path(__file__).parent / "prompts.json", encoding="utf-8") as f:
-     prompts = json.load(f)
+prompts = load_file(__file__, "prompts.json")

@@ -1,13 +1,12 @@
 # from pozzei
 
-from pathlib import Path
 import re
-import json
 
 from discord.ext import commands
 from discord.commands import slash_command
 from discord import Option
 
+from ilo.cog_utils import load_file
 from ilo.defines import text
 from ilo.jasima import bundle
 
@@ -61,5 +60,4 @@ def sitelen_emosi(word):
     return " ".join(chars)
 
 
-with open(Path(__file__).parent / "extraemoji.json", encoding="utf-8") as f:
-     extraemoji = json.load(f)
+extraemoji = load_file(__file__, "extraemoji.json")

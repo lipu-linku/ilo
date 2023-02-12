@@ -1,11 +1,10 @@
-import json
-from pathlib import Path
 import re
 
 from discord.ext import commands
 from discord.commands import slash_command
 from discord import Option
 
+from ilo.cog_utils import load_file
 from ilo.defines import text
 
 
@@ -62,5 +61,4 @@ def undo(text):
     return text.replace("q", "n").replace("y", "i").replace("@", "")
 
 
-with open(Path(__file__).parent / "borgle_map.json", encoding="utf-8") as f:
-     borgle_map = json.load(f)
+borgle_map = load_file(__file__, "borgle_map.json")
