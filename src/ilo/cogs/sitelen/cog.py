@@ -12,9 +12,9 @@ from ilo import sitelen
 class CogSitelen(Cog):
     def __init__(self, bot):
         self.bot = bot
-        preferences.register(Template("fontsize", 72, validation=fontsize_validation))
-        preferences.register(Template("color", "ffffff", validation=colour_validation))
-        preferences.register(Template("font", "linja sike", {font: font for font in fonts}))
+        preferences.register(Template(self.locale, "fontsize", 72, validation=fontsize_validation))
+        preferences.register(Template(self.locale, "color", "ffffff", validation=colour_validation))
+        preferences.register(Template(self.locale, "font", "linja sike", {font: font for font in fonts}))
 
     locale = Locale(__file__)
 

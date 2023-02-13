@@ -16,7 +16,7 @@ from ilo.cogs.nimi.colour import colours
 class CogNimi(Cog):
     def __init__(self, bot):
         self.bot = bot
-        preferences.register(Template("language", "en", jasima.get_languages_for_slash_commands()))
+        preferences.register(Template(self.locale, "language", "en", jasima.get_languages_for_slash_commands()))
 
     locale = Locale(__file__)
 

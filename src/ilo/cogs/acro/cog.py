@@ -10,7 +10,7 @@ from ilo.cogs.acro import acronym
 class CogAcro(Cog):
     def __init__(self, bot):
         self.bot = bot
-        preferences.register(Template("acro", "ku suli", acro_choices))
+        preferences.register(Template(self.locale, "acro", "ku suli", acro_choices))
 
     locale = Locale(__file__)
 

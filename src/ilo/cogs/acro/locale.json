@@ -1,4 +1,7 @@
 {
 	"acro": "Get help coming up with acronyms consisting of toki pona words",
-	"acro-text": "Letters you want to make an acronym for."
+	"acro-text": "Letters you want to make an acronym for.",
+
+	"prefs-acro": "Choose the book set of words that will be included in /acro",
+	"prefs-acro-option": "The book you want to use."
 }

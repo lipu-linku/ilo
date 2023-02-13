@@ -1,8 +1,6 @@
 import json
 import os
 
-from ilo.defines import text
-
 PREFERENCES_PATH = "userdata/preferences.json"
 
 
@@ -62,12 +60,13 @@ class PreferenceHandler:
 
 
 class Template:
-    def __init__(self, name, default, choices=None, validation=lambda x: True):
+    def __init__(self, locale, name, default, choices=None, validation=lambda x: True):
+        self.locale = locale
         self.name = name
         self.default = default
         self.option_type = type(default)
-        self.description = text["DESC_PREFS_{}".format(name.upper())]
-        self.option_desc = text["DESC_PREFS_{}_OPTION".format(name.upper())]
+        self.description = locale[f"prefs-{name}"]
+        self.option_desc = locale[f"prefs-{name}-option"]
         self.choices = choices
         self.validation = validation
 

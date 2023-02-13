@@ -35,7 +35,7 @@ async def on_reaction_add(reaction, user):
 
 def load_extensions():
     cogs_path = os.path.dirname(__file__) + "/cogs/"
-    for cogname in os.listdir(cogs_path):
+    for cogname in sorted(os.listdir(cogs_path), key=len):
         path = cogs_path + cogname
         if os.path.isdir(path):
             if "__init__.py" in os.listdir(path):

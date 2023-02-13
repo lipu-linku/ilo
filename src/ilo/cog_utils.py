@@ -18,6 +18,9 @@ class Locale:
     def __init__(self, file_path):
         self.locale = load_file(file_path, "locale.json")
 
+    def __getitem__(self, key):
+        return self.locale[key]
+
     def command(self, name, **kwargs):
         return pycord_slash_command(name=name, description=self.locale[name], **kwargs)
 

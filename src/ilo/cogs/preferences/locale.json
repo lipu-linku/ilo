@@ -1,0 +1,5 @@
+{
+	"prefs": "Set various user preferences determining how the bot should answer your requests",
+	"list": "List your preferences",
+	"reset": "Reset all preferences to their default values"
+}

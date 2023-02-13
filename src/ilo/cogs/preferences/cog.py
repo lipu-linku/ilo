@@ -5,7 +5,7 @@ from discord.commands import SlashCommandGroup
 from discord import Option
 from discord import OptionChoice
 
-from ilo.defines import text
+from ilo.cog_utils import Locale
 from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
@@ -63,13 +63,15 @@ class CogPreferences(Cog):
         # for subcommand in prefs.subcommands:
         #    print(subcommand)
 
-    prefs = SlashCommandGroup("preferences", text["DESC_PREFS"])
+    locale = Locale(__file__)
+
+    prefs = SlashCommandGroup("preferences", locale["prefs"])
     for template in preferences.templates.values():
         build_subcommands(prefs, template)
 
     @prefs.command(
         name="list",
-        description=text["DESC_PREFS_LIST"],
+        description=locale["list"],
     )
     async def list(self, ctx):
         response = "Preferences for **{}**:\n".format(ctx.author.display_name)
@@ -82,7 +84,7 @@ class CogPreferences(Cog):
 
     @prefs.command(
         name="reset",
-        description=text["DESC_PREFS_RESET"],
+        description=locale["reset"],
     )
     async def reset(self, ctx):
         preferences.reset(str(ctx.author.id))
