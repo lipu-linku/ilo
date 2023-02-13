@@ -1,20 +1,17 @@
 import random
 
-from discord.ext import commands
+from discord.ext.commands import Cog
 from discord.commands import slash_command
-from discord import Option
 
 from ilo.cog_utils import load_file
 from ilo.defines import text
 
-class CogStest(commands.Cog):
+
+class CogStest(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(
-        name="stest",
-        description=text["DESC_STEST"],
-    )
+    @slash_command(name="stest", description=text["DESC_STEST"])
     async def slash_stest(self, ctx):
         await stest(ctx)
 

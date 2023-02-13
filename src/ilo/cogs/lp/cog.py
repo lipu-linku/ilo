@@ -1,20 +1,17 @@
-from discord.ext import commands
-from discord.commands import slash_command
-from discord import Option
+from discord.ext.commands import Cog
+from discord.commands import slash_command, option
 
 from ilo.defines import text
 from ilo import jasima
 
 
-class CogLp(commands.Cog):
+class CogLp(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(
-        name="lp",
-        description=text["DESC_LP"],
-    )
-    async def slash_lp(self, ctx, word: Option(str, text["DESC_LP_OPTION"])):
+    @slash_command(name="lp", description=text["DESC_LP"])
+    @option(name="word", description=text["DESC_LP_OPTION"])
+    async def slash_lp(self, ctx, word):
         await lp(ctx, word)
 
 

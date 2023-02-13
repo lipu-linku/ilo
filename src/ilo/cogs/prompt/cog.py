@@ -1,22 +1,18 @@
 import random
 
-from discord import option
-from discord.commands import slash_command
-from discord.ext import commands
+from discord.ext.commands import Cog
+from discord.commands import slash_command, option
 
 from ilo.cog_utils import load_file
 from ilo.defines import text
 from ilo.preferences import preferences
 
 
-class CogPrompt(commands.Cog):
+class CogPrompt(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(
-        name="prompt",
-        description=text["DESC_PROMPT"],
-    )
+    @slash_command(name="prompt", description=text["DESC_PROMPT"])
     @option(
         name="translate",
         description=text["DESC_PROMPT_LANGUAGE_OPTION"],

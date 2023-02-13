@@ -1,6 +1,5 @@
-from discord.ext import commands
-from discord.commands import slash_command
-from discord import Option
+from discord.ext.commands import Cog
+from discord.commands import slash_command, option
 from discord import Embed
 from discord import ButtonStyle
 from discord.ui import View
@@ -14,23 +13,19 @@ from ilo import jasima
 from ilo.cogs.nimi.colour import colours
 
 
-class CogNimi(commands.Cog):
+class CogNimi(Cog):
     def __init__(self, bot):
         self.bot = bot
         preferences.register(Template("language", "en", jasima.get_languages_for_slash_commands()))
 
-    @slash_command(
-        name="nimi",
-        description=text["DESC_NIMI"],
-    )
-    async def slash_nimi(self, ctx, word: Option(str, text["DESC_NIMI_OPTION"])):
+    @slash_command(name="nimi", description=text["DESC_NIMI"])
+    @option(name="word", description=text["DESC_NIMI_OPTION"])
+    async def slash_nimi(self, ctx, word):
         await nimi(ctx, word)
 
-    @slash_command(
-        name="n",
-        description=text["DESC_NIMI"],
-    )
-    async def slash_n(self, ctx, word: Option(str, text["DESC_NIMI_OPTION"])):
+    @slash_command(name="n", description=text["DESC_NIMI"])
+    @option(name="word", description=text["DESC_NIMI_OPTION"])
+    async def slash_n(self, ctx, word):
         await nimi(ctx, word)
 
 

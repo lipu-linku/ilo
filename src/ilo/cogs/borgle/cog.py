@@ -1,31 +1,24 @@
 import re
 
-from discord.ext import commands
-from discord.commands import slash_command
-from discord import Option
+from discord.ext.commands import Cog
+from discord.commands import slash_command, option
 
 from ilo.cog_utils import load_file
 from ilo.defines import text
 
 
-class CogBorgle(commands.Cog):
+class CogBorgle(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(
-        name="borgle",
-        description=text["DESC_BORGLE"],
-    )
-    async def slash_borgle(self, ctx, text: Option(str, text["DESC_BORGLE_OPTION"])):
+    @slash_command(name="borgle", description=text["DESC_BORGLE"])
+    @option(name="text", description=text["DESC_BORGLE_OPTION"])
+    async def slash_borgle(self, ctx, text):
         await ctx.respond(do_text(text))
 
-    @slash_command(
-        name="deborgle",
-        description=text["DESC_DEBORGLE"],
-    )
-    async def slash_deborgle(
-        self, ctx, text: Option(str, text["DESC_DEBORGLE_OPTION"])
-    ):
+    @slash_command(name="deborgle", description=text["DESC_DEBORGLE"])
+    @option(name="text", description=text["DESC_DEBORGLE_OPTION"])
+    async def slash_deborgle(self, ctx, text):
         await ctx.respond(undo(text))
 
 

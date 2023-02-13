@@ -1,12 +1,11 @@
-from discord import option
-from discord.commands import slash_command
-from discord.ext import commands
+from discord.ext.commands import Cog
+from discord.commands import slash_command, option
 
 from ilo.defines import text
 from ilo.relexer import relex
 
 
-class CogRelex(commands.Cog):
+class CogRelex(Cog):
     def __init__(self, bot):
         self.bot = bot
 

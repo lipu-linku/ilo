@@ -1,6 +1,5 @@
-from discord.ext import commands
-from discord.commands import slash_command
-from discord import Option
+from discord.ext.commands import Cog
+from discord.commands import slash_command, option
 
 from ilo.defines import text
 from ilo.preferences import preferences
@@ -17,16 +16,14 @@ acro_choices = {
 }
 
 
-class CogAcro(commands.Cog):
+class CogAcro(Cog):
     def __init__(self, bot):
         self.bot = bot
         preferences.register(Template("acro", "ku suli", acro_choices))
 
-    @slash_command(
-        name="acro",
-        description=text["DESC_ACRO"],
-    )
-    async def slash_acro(self, ctx, text: Option(str, text["DESC_ACRO_OPTION"])):
+    @slash_command(name="acro", description=text["DESC_ACRO"])
+    @option(name="text", description=text["DESC_ACRO_OPTION"])
+    async def slash_acro(self, ctx, text):
         await acro(ctx, text)
 
 

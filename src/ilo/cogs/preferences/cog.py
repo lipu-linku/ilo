@@ -1,6 +1,6 @@
 import re
 
-from discord.ext import commands
+from discord.ext.commands import Cog
 from discord.commands import SlashCommandGroup
 from discord import Option
 from discord import OptionChoice
@@ -55,7 +55,7 @@ def build_subcommand(prefs, name, description, option):
         )
 
 
-class CogPreferences(commands.Cog):
+class CogPreferences(Cog):
     def __init__(self, bot):
         self.bot = bot
         # for template in preferences.templates.values():
