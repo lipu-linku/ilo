@@ -1,11 +1,9 @@
 import io
-
 from discord.ext.commands import Cog
-from discord.commands import slash_command, option
 from discord import File
 
+from ilo.cog_utils import Locale, load_file
 from ilo.fonts import fonts
-from ilo.defines import text
 from ilo.preferences import preferences
 from ilo.preferences import Template
 from ilo import sitelen
@@ -18,18 +16,20 @@ class CogSitelen(Cog):
         preferences.register(Template("color", "ffffff", validation=colour_validation))
         preferences.register(Template("font", "linja sike", {font: font for font in fonts}))
 
-    @slash_command(name="sp", description=text["DESC_SP"])
-    @option(name="text", description=text["DESC_SP_OPTION"])
+    locale = Locale(__file__)
+
+    @locale.command("sp")
+    @locale.option("sp-text")
     async def slash_sp(self, ctx, text):
         await sp(ctx, text)
 
-    @slash_command(name="ss", description=text["DESC_SS"])
-    @option(name="text", description=text["DESC_SS_OPTION"])
+    @locale.command("ss")
+    @locale.option("ss-text")
     async def slash_ss(self, ctx, text):
         await ss(ctx, text)
 
-    @slash_command(name="preview", description=text["DESC_PREVIEW"])
-    @option(name="text", description=text["DESC_PREVIEW_OPTION"])
+    @locale.command("preview")
+    @locale.option("preview-text")
     async def slash_preview(self, ctx, text):
         await preview(ctx, text)
 

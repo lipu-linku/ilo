@@ -1,40 +1,4 @@
 {
-	"DESC_NIMI": "Get the translation of a toki pona word",
-	"DESC_NIMI_OPTION": "The word you want to get the translation of.",
-
-	"DESC_LP": "Get the luka pona sign of a toki pona word",
-	"DESC_LP_OPTION": "The word you want to get the luka pona sign of.",
-
-	"DESC_SP": "Get sitelen pona of a toki pona phrase",
-	"DESC_SP_OPTION": "The phrase you want to convert to sitelen pona.",
-
-	"DESC_SS": "Get the sitelen sitelen of a toki pona phrase",
-	"DESC_SS_OPTION": "The phrase you want to convert to sitelen sitelen.",
-
-	"DESC_SE": "Convert your text to sitelen Emosi",
-	"DESC_SE_OPTION": "The text you want to convert to sitelen sitelen.",
-
-	"DESC_PREVIEW": "Compare available fonts for toki pona",
-	"DESC_PREVIEW_OPTION": "The phrase you want to preview in all available fonts.",
-
-	"DESC_BORGLE": "Convert toki pona to plorcly borglar",
-	"DESC_BORGLE_OPTION": "The text you want to convert.",
-
-	"DESC_DEBORGLE": "Convert plorcly borglar to toki pona",
-	"DESC_DEBORGLE_OPTION": "The text you want to convert.",
-
-	"DESC_STEST": "Get a random sentence from the Conlang Syntax Test Cases list.",
-
-	"DESC_PROMPT": "Get a random conversation prompt.",
-	"DESC_PROMPT_LANGUAGE_OPTION": "Provide translation",
-
-	"DESC_RELEX_EN": "Relex a given toki pona sentence to English.",
-	"DESC_RELEX_MAMA": "Relex a toki pona sentence to each word's etymology.",
-	"DESC_RELEX_INPUT": "The statement(s) to relex.",
-
-	"DESC_ACRO": "Get help coming up with acronyms consisting of toki pona words",
-	"DESC_ACRO_OPTION": "Letters you want to make an acronym for.",
-
 	"DESC_PREFS": "Set various user preferences determining how the bot should answer your requests",
 	"DESC_PREFS_LIST": "List your preferences",
 	"DESC_PREFS_RESET": "Reset all preferences to their default values",

@@ -1,23 +1,22 @@
 import re
 
 from discord.ext.commands import Cog
-from discord.commands import slash_command, option
 
-from ilo.cog_utils import load_file
-from ilo.defines import text
-
+from ilo.cog_utils import Locale, load_file
 
 class CogBorgle(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(name="borgle", description=text["DESC_BORGLE"])
-    @option(name="text", description=text["DESC_BORGLE_OPTION"])
+    locale = Locale(__file__)
+
+    @locale.command("borgle")
+    @locale.option("borgle-text")
     async def slash_borgle(self, ctx, text):
         await ctx.respond(do_text(text))
 
-    @slash_command(name="deborgle", description=text["DESC_DEBORGLE"])
-    @option(name="text", description=text["DESC_DEBORGLE_OPTION"])
+    @locale.command("deborgle")
+    @locale.option("deborgle-text")
     async def slash_deborgle(self, ctx, text):
         await ctx.respond(undo(text))
 

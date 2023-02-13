@@ -1,17 +1,17 @@
 import random
 
 from discord.ext.commands import Cog
-from discord.commands import slash_command
 
-from ilo.cog_utils import load_file
-from ilo.defines import text
+from ilo.cog_utils import Locale, load_file
 
 
 class CogStest(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(name="stest", description=text["DESC_STEST"])
+    locale = Locale(__file__)
+
+    @locale.command("stest")
     async def slash_stest(self, ctx):
         await stest(ctx)
 

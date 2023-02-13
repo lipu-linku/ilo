@@ -1,11 +1,11 @@
 from discord.ext.commands import Cog
-from discord.commands import slash_command, option
+
 from discord import Embed
 from discord import ButtonStyle
 from discord.ui import View
 from discord.ui import Button
 
-from ilo.defines import text
+from ilo.cog_utils import Locale, load_file
 from ilo.preferences import preferences
 from ilo.preferences import Template
 from ilo import jasima
@@ -18,13 +18,15 @@ class CogNimi(Cog):
         self.bot = bot
         preferences.register(Template("language", "en", jasima.get_languages_for_slash_commands()))
 
-    @slash_command(name="nimi", description=text["DESC_NIMI"])
-    @option(name="word", description=text["DESC_NIMI_OPTION"])
+    locale = Locale(__file__)
+
+    @locale.command("nimi")
+    @locale.option("nimi-word")
     async def slash_nimi(self, ctx, word):
         await nimi(ctx, word)
 
-    @slash_command(name="n", description=text["DESC_NIMI"])
-    @option(name="word", description=text["DESC_NIMI_OPTION"])
+    @locale.command("n")
+    @locale.option("n-word")
     async def slash_n(self, ctx, word):
         await nimi(ctx, word)
 

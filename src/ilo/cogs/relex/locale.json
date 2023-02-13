@@ -1,0 +1,5 @@
+{
+	"relex": "Relex a given toki pona sentence to English.",
+	"mama": "Relex a toki pona sentence to each word's etymology.",
+	"input": "The statement(s) to relex."
+}
