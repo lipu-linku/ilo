@@ -1,7 +1,12 @@
+import logging
 import os
 
 from discord.ext import commands
 from dotenv import load_dotenv
+
+from ilo.log_config import configure_logger
+
+LOG = logging.getLogger("ilo")
 
 # from discord import Intents
 
@@ -13,6 +18,11 @@ if not TOKEN:
 if not TOKEN:
     raise EnvironmentError("No discord token found in the environment!")
 
+LOG_LEVEL = os.getenv("LOG_LEVEL")
+if not LOG_LEVEL:
+    LOG_LEVEL = "INFO"
+
+LOG_LEVEL_INT = getattr(logging, LOG_LEVEL.upper())
 
 bot = commands.Bot(
     command_prefix="/",
@@ -39,9 +49,11 @@ def load_extensions():
         path = cogs_path + cogname
         if os.path.isdir(path):
             if "__init__.py" in os.listdir(path):
+                LOG.info("Loading cog %s", cogname)
                 bot.load_extension(f"ilo.cogs.{cogname}")
 
 
 if __name__ == "__main__":
+    configure_logger(log_level=LOG_LEVEL_INT)  # TODO: stacktrace level
     load_extensions()
     bot.run(TOKEN, reconnect=True)
