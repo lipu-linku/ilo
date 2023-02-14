@@ -54,6 +54,7 @@ def load_extensions():
 
 
 if __name__ == "__main__":
-    configure_logger(log_level=LOG_LEVEL_INT)  # TODO: stacktrace level
+    configure_logger("ilo", log_level=LOG_LEVEL_INT)
+    configure_logger("discord", log_level=logging.WARNING)
     load_extensions()
     bot.run(TOKEN, reconnect=True)

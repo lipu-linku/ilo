@@ -15,13 +15,15 @@ LOG_FORMAT = (
 
 
 def configure_logger(
-    logger: str = "ilo",
+    logger: str,
     log_level: int = logging.DEBUG,
     stacktrace_level: int = logging.ERROR,
 ) -> None:
-    logging.basicConfig(level=log_level, format=LOG_FORMAT)
     _log = logging.getLogger(logger)
+    _log.setLevel(log_level)
+    # level set on a per-logger basis to avoid 'discord' logger
 
+    logging.basicConfig(format=LOG_FORMAT)
     if stacktrace_level > logging.NOTSET:
         if stacktrace_level <= logging.DEBUG:
             _log.debug = partial(_log.debug, exc_info=True, stack_info=True)
