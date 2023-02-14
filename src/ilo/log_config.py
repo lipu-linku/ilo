@@ -10,7 +10,7 @@ import logging
 from functools import partial
 
 LOG_FORMAT = (
-    "[%(asctime)s] [%(filename)22s:%(lineno)-4s] [%(levelname)8s]   %(message)s"
+    "[%(asctime)s] [%(filename)14s:%(lineno)-4s] [%(levelname)8s]   %(message)s"
 )
 
 
