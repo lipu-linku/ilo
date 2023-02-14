@@ -1,5 +1,0 @@
-{
-  "set": "{key}: **{value}** (default: {default})\n",
-  "invalid": "{key}: {value}. The value is invalid, **{default}** (default) is used instead.\n",
-  "unset": "{key}: {default} (by default)\n"
-}

@@ -2,27 +2,21 @@
 
 import re
 
-from discord.ext import commands
-from discord.commands import slash_command
-from discord import Option
+from discord.ext.commands import Cog
 
-from ilo.defines import text
-from ilo.jasima import sitelen_emosi
+from ilo.cog_utils import Locale, load_file
+from ilo.jasima import bundle
 
 
-def setup(bot):
-    bot.add_cog(CogSe(bot))
-
-
-class CogSe(commands.Cog):
+class CogSe(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(
-        name="se",
-        description=text["DESC_SE"],
-    )
-    async def slash_se(self, ctx, text: Option(str, text["DESC_SE_OPTION"])):
+    locale = Locale(__file__)
+
+    @locale.command("se")
+    @locale.option("se-text")
+    async def slash_se(self, ctx, text):
         await se(ctx, text)
 
 
@@ -50,3 +44,17 @@ def clean_string(string):
     clean_string = re.sub(r"(\.){1,2}", " . ", clean_string)
     clean_string = clean_string.lower()
     return clean_string
+
+
+def sitelen_emosi(word):
+    entries = bundle["data"]
+    if word in entries:
+        if "sitelen_emosi" in entries[word]:
+            return entries[word]["sitelen_emosi"]
+    chars = []
+    for letter in word:
+        chars.append(extraemoji[letter])
+    return " ".join(chars)
+
+
+extraemoji = load_file(__file__, "extraemoji.json")

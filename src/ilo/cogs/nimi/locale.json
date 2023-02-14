@@ -1,0 +1,10 @@
+{
+	"nimi": "Get the translation of a toki pona word",
+	"nimi-word": "The word you want to get the translation of.",
+
+	"n": "Get the translation of a toki pona word",
+	"n-word": "The word you want to get the translation of.",
+
+	"prefs-language": "Set the language that dictionary definitions will use",
+	"prefs-language-option": "The language you want to use."
+}

@@ -1,34 +1,23 @@
-from discord.ext import commands
-from discord.commands import slash_command
-from discord import Option
-
-from ilo.defines import borgle_map
-from ilo.defines import text
 import re
 
+from discord.ext.commands import Cog
 
-def setup(bot):
-    bot.add_cog(CogBorgle(bot))
+from ilo.cog_utils import Locale, load_file
 
-
-class CogBorgle(commands.Cog):
+class CogBorgle(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(
-        name="borgle",
-        description=text["DESC_BORGLE"],
-    )
-    async def slash_borgle(self, ctx, text: Option(str, text["DESC_BORGLE_OPTION"])):
+    locale = Locale(__file__)
+
+    @locale.command("borgle")
+    @locale.option("borgle-text")
+    async def slash_borgle(self, ctx, text):
         await ctx.respond(do_text(text))
 
-    @slash_command(
-        name="deborgle",
-        description=text["DESC_DEBORGLE"],
-    )
-    async def slash_deborgle(
-        self, ctx, text: Option(str, text["DESC_DEBORGLE_OPTION"])
-    ):
+    @locale.command("deborgle")
+    @locale.option("deborgle-text")
+    async def slash_deborgle(self, ctx, text):
         await ctx.respond(undo(text))
 
 
@@ -62,3 +51,6 @@ def undo(text):
     for key, value in borgle_map.items():
         text = re.sub(f"(?<!@){value}", f"@{key}", text)
     return text.replace("q", "n").replace("y", "i").replace("@", "")
+
+
+borgle_map = load_file(__file__, "borgle_map.json")

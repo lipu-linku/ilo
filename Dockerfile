@@ -18,7 +18,6 @@ RUN apt-get update -y && \
 ENV PYTHONPATH=/project/pkgs
 
 COPY src/ /project/pkgs/
-COPY defines/ /project/defines/
 COPY fonts/ /project/fonts
 # this is a volume oops
 # COPY userdata/ /project/userdata

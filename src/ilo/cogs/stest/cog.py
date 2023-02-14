@@ -1,24 +1,17 @@
-from discord.ext import commands
-from discord.commands import slash_command
-from discord import Option
-
-from ilo.defines import sentences
-from ilo.defines import text
 import random
 
+from discord.ext.commands import Cog
 
-def setup(bot):
-    bot.add_cog(CogStest(bot))
+from ilo.cog_utils import Locale, load_file
 
 
-class CogStest(commands.Cog):
+class CogStest(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(
-        name="stest",
-        description=text["DESC_STEST"],
-    )
+    locale = Locale(__file__)
+
+    @locale.command("stest")
     async def slash_stest(self, ctx):
         await stest(ctx)
 
@@ -27,3 +20,6 @@ async def stest(ctx):
     index, sentence = random.choice(list(enumerate(sentences)))
     indexed_sentence = f"{index+1}. {sentence}"
     await ctx.respond(indexed_sentence)
+
+
+sentences = load_file(__file__, "sentences.txt")

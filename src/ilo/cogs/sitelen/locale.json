@@ -1,0 +1,19 @@
+{
+	"sp": "Get sitelen pona of a toki pona phrase",
+	"sp-text": "The phrase you want to convert to sitelen pona.",
+
+	"ss": "Get the sitelen sitelen of a toki pona phrase",
+	"ss-text": "The phrase you want to convert to sitelen sitelen.",
+
+	"preview": "Compare available fonts for toki pona",
+	"preview-text": "The phrase you want to preview in all available fonts.",
+
+	"prefs-fontsize": "Set the font size that sitelen pona will be displayed as",
+	"prefs-fontsize-option": "The font size you want to use.",
+
+	"prefs-font": "Choose the font that sitelen pona will be displayed as",
+	"prefs-font-option": "The font you want to use.",
+
+	"prefs-color": "Set the text colour that /sp and other commands will use",
+	"prefs-color-option": "The text colour you want to use."
+}

@@ -1,38 +1,33 @@
-from discord.ext import commands
-from discord.commands import slash_command
-from discord import Option
+from discord.ext.commands import Cog
+
 from discord import Embed
 from discord import ButtonStyle
 from discord.ui import View
 from discord.ui import Button
 
-from ilo.defines import text
-from ilo.defines import colours
+from ilo.cog_utils import Locale, load_file
 from ilo.preferences import preferences
-from ilo.colour import discord_colours
+from ilo.preferences import Template
 from ilo import jasima
 
-
-def setup(bot):
-    bot.add_cog(CogNimi(bot))
+from ilo.cogs.nimi.colour import colours
 
 
-class CogNimi(commands.Cog):
+class CogNimi(Cog):
     def __init__(self, bot):
         self.bot = bot
+        preferences.register(Template(self.locale, "language", "en", jasima.get_languages_for_slash_commands()))
 
-    @slash_command(
-        name="nimi",
-        description=text["DESC_NIMI"],
-    )
-    async def slash_nimi(self, ctx, word: Option(str, text["DESC_NIMI_OPTION"])):
+    locale = Locale(__file__)
+
+    @locale.command("nimi")
+    @locale.option("nimi-word")
+    async def slash_nimi(self, ctx, word):
         await nimi(ctx, word)
 
-    @slash_command(
-        name="n",
-        description=text["DESC_NIMI"],
-    )
-    async def slash_n(self, ctx, word: Option(str, text["DESC_NIMI_OPTION"])):
+    @locale.command("n")
+    @locale.option("n-word")
+    async def slash_n(self, ctx, word):
         await nimi(ctx, word)
 
 
@@ -51,7 +46,7 @@ async def nimi(ctx, word):
 def embed_response(word, lang, response, embedtype):
     embed = Embed()
     embed.title = response["word"]
-    embed.colour = discord_colours(colours)[response["usage_category"]]
+    embed.colour = colours[response["usage_category"]]
     description = (
         response["def"][lang]
         if lang in response["def"]

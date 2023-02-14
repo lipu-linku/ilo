@@ -1,16 +1,21 @@
 import re
 
-from discord.ext import commands
+from discord.ext.commands import Cog
 from discord.commands import SlashCommandGroup
 from discord import Option
 from discord import OptionChoice
 
-from ilo.defines import text
-from ilo.defines import pref_list
-
+from ilo.cog_utils import Locale
 from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
+
+RESPONSES = {
+  "set": "{key}: **{value}** (default: {default})\n",
+  "invalid": "{key}: {value}. The value is invalid, **{default}** (default) is used instead.\n",
+  "unset": "{key}: {default} (by default)\n"
+}
+
 
 def to_choices(dictionary):
     return [OptionChoice(name=k, value=v) for k, v in dictionary.items()]
@@ -50,11 +55,7 @@ def build_subcommand(prefs, name, description, option):
         )
 
 
-def setup(bot):
-    bot.add_cog(CogPreferences(bot))
-
-
-class CogPreferences(commands.Cog):
+class CogPreferences(Cog):
     def __init__(self, bot):
         self.bot = bot
         # for template in preferences.templates.values():
@@ -62,13 +63,15 @@ class CogPreferences(commands.Cog):
         # for subcommand in prefs.subcommands:
         #    print(subcommand)
 
-    prefs = SlashCommandGroup("preferences", text["DESC_PREFS"])
+    locale = Locale(__file__)
+
+    prefs = SlashCommandGroup("preferences", locale["prefs"])
     for template in preferences.templates.values():
         build_subcommands(prefs, template)
 
     @prefs.command(
         name="list",
-        description=text["DESC_PREFS_LIST"],
+        description=locale["list"],
     )
     async def list(self, ctx):
         response = "Preferences for **{}**:\n".format(ctx.author.display_name)
@@ -76,12 +79,12 @@ class CogPreferences(commands.Cog):
             value = preferences.get_raw(str(ctx.author.id), key)
             status = preferences.get_status(str(ctx.author.id), key, value)
             default = preferences.get_default(key)
-            response += pref_list[status].format(key=key, value=value, default=default)
+            response += RESPONSES[status].format(key=key, value=value, default=default)
         await ctx.respond(response)
 
     @prefs.command(
         name="reset",
-        description=text["DESC_PREFS_RESET"],
+        description=locale["reset"],
     )
     async def reset(self, ctx):
         preferences.reset(str(ctx.author.id))
