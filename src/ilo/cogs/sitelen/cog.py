@@ -44,10 +44,15 @@ class CogSitelen(Cog):
         await preview(ctx, text)
 
 
+def unescape_newline(text: str):
+    return text.replace("\\n", "\n")
+
+
 async def sp(ctx, text):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     font = preferences.get(str(ctx.author.id), "font")
     color = preferences.get(str(ctx.author.id), "color")
+    text = unescape_newline(text)
     image = io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     await ctx.respond(file=File(image, filename="a.png"))
 
@@ -56,6 +61,7 @@ async def ss(ctx, text):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     color = preferences.get(str(ctx.author.id), "color")
     font = "sitelen Latin (ss)"
+    text = unescape_newline(text)
     image = io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     await ctx.respond(file=File(image, filename="a.png"))
 
