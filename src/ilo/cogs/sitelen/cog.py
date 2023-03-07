@@ -23,9 +23,19 @@ class CogSitelen(Cog):
     async def slash_sp(self, ctx, text):
         await sp(ctx, text)
 
+    @locale.command("sitelenpona")
+    @locale.option("sitelenpona-text")
+    async def slash_sitelenpona(self, ctx, text):
+        await sp(ctx, text)
+
     @locale.command("ss")
     @locale.option("ss-text")
     async def slash_ss(self, ctx, text):
+        await ss(ctx, text)
+
+    @locale.command("sitelensitelen")
+    @locale.option("sitelensitelen-text")
+    async def slash_sitelensitelen(self, ctx, text):
         await ss(ctx, text)
 
     @locale.command("preview")
