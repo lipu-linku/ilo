@@ -2,8 +2,14 @@
 	"sp": "Get sitelen pona of a toki pona phrase",
 	"sp-text": "The phrase you want to convert to sitelen pona.",
 
+	"sitelenpona": "Get sitelen pona of a toki pona phrase",
+	"sitelenpona-text": "The phrase you want to convert to sitelen pona.",
+
 	"ss": "Get the sitelen sitelen of a toki pona phrase",
 	"ss-text": "The phrase you want to convert to sitelen sitelen.",
+
+	"sitelensitelen": "Get the sitelen sitelen of a toki pona phrase",
+	"sitelensitelen-text": "The phrase you want to convert to sitelen sitelen.",
 
 	"preview": "Compare available fonts for toki pona",
 	"preview-text": "The phrase you want to preview in all available fonts.",

@@ -1,7 +1,7 @@
 import logging
 import os
 
-from discord.ext import commands
+from discord.ext import bridge, commands
 from dotenv import load_dotenv
 
 from ilo.log_config import configure_logger
@@ -24,8 +24,8 @@ if not LOG_LEVEL:
 
 LOG_LEVEL_INT = getattr(logging, LOG_LEVEL.upper())
 
-bot = commands.Bot(
-    command_prefix="/",
+bot = bridge.Bot(
+    command_prefix=commands.when_mentioned_or("/")
     # intents=Intents.all(),
 )
 

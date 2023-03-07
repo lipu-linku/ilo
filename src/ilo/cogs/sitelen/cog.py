@@ -23,9 +23,19 @@ class CogSitelen(Cog):
     async def slash_sp(self, ctx, text):
         await sp(ctx, text)
 
+    @locale.command("sitelenpona")
+    @locale.option("sitelenpona-text")
+    async def slash_sitelenpona(self, ctx, text):
+        await sp(ctx, text)
+
     @locale.command("ss")
     @locale.option("ss-text")
     async def slash_ss(self, ctx, text):
+        await ss(ctx, text)
+
+    @locale.command("sitelensitelen")
+    @locale.option("sitelensitelen-text")
+    async def slash_sitelensitelen(self, ctx, text):
         await ss(ctx, text)
 
     @locale.command("preview")
@@ -34,10 +44,15 @@ class CogSitelen(Cog):
         await preview(ctx, text)
 
 
+def unescape_newline(text: str):
+    return text.replace("\\n", "\n")
+
+
 async def sp(ctx, text):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     font = preferences.get(str(ctx.author.id), "font")
     color = preferences.get(str(ctx.author.id), "color")
+    text = unescape_newline(text)
     image = io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     await ctx.respond(file=File(image, filename="a.png"))
 
@@ -46,6 +61,7 @@ async def ss(ctx, text):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     color = preferences.get(str(ctx.author.id), "color")
     font = "sitelen Latin (ss)"
+    text = unescape_newline(text)
     image = io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     await ctx.respond(file=File(image, filename="a.png"))
 

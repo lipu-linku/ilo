@@ -4,6 +4,7 @@ from pathlib import Path
 from discord.ext.commands import Cog as PycordCog
 from discord.commands import slash_command as pycord_slash_command
 from discord.commands import option as pycord_option
+from discord.ext.bridge import bridge_command as pycord_bridge_command
 
 
 def load_file(file_path, file_name):
@@ -22,7 +23,7 @@ class Locale:
         return self.locale[key]
 
     def command(self, name, **kwargs):
-        return pycord_slash_command(name=name, description=self.locale[name], **kwargs)
+        return pycord_bridge_command(name=name, description=self.locale[name], **kwargs)
 
     def option(self, name, **kwargs):
         return pycord_option(name=name.split("-")[-1], description=self.locale[name], **kwargs)
