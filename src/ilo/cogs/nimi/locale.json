@@ -5,6 +5,10 @@
 	"n": "Get the translation of a toki pona word",
 	"n-word": "The word you want to get the translation of.",
 
+	"guess": "Get a random word or definition of a word to figure out.",
+	"guess-show": "Show the word or definition.",
+	"guess-usage": "The minimum recognition of the returned word.",
+
 	"prefs-language": "Set the language that dictionary definitions will use",
 	"prefs-language-option": "The language you want to use."
 }

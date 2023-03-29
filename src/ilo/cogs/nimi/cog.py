@@ -1,16 +1,15 @@
+from typing import Literal
+
+import discord
+from discord import ButtonStyle, Embed
 from discord.ext.commands import Cog
+from discord.ui import Button, View
 
-from discord import Embed
-from discord import ButtonStyle
-from discord.ui import View
-from discord.ui import Button
-
-from ilo.cog_utils import Locale, load_file
-from ilo.preferences import preferences
-from ilo.preferences import Template
 from ilo import jasima
-
+from ilo.cog_utils import Locale, load_file
 from ilo.cogs.nimi.colour import colours
+from ilo.preferences import Template, preferences
+
 
 
 class CogNimi(Cog):
@@ -30,6 +29,14 @@ class CogNimi(Cog):
     async def slash_n(self, ctx, word):
         await nimi(ctx, word)
 
+    # imo guess is a special case of nimi
+    @locale.command("guess")
+    @locale.option("guess-show", choices=["word", "def"])
+    @locale.option("guess-usage", choices=jasima.USAGES)
+    async def slash_guess(self, ctx, show: str = "def", usage: str = "widespread"):
+        assert show in ("word", "def")
+        await guess(ctx, show, usage)
+
 
 async def nimi(ctx, word):
     lang = preferences.get(str(ctx.author.id), "language")
@@ -41,6 +48,36 @@ async def nimi(ctx, word):
     embed = embed_response(word, lang, response, "concise")
     view = NimiView("expand", word, lang)
     await ctx.respond(embed=embed, view=view)
+
+
+async def guess(ctx, show: Literal["word", "def"], usage: str):
+    lang = preferences.get(str(ctx.author.id), "language")
+
+    word, response = jasima.get_random_word(min_usage=usage)
+    embed = guess_embed_response(word, lang, response, show)
+    await ctx.respond(embed=embed)
+
+
+def spoiler_wrap(s: str) -> str:
+    return f"|| {s} ||"
+
+
+def guess_embed_response(word, lang, response, show: Literal["word", "def"]):
+    embed = Embed()
+    embed.title = response["word"]
+    if show != "word":
+        embed.title = spoiler_wrap(embed.title)
+
+    embed.colour = colours[response["usage_category"]]
+    description = (
+        response["def"][lang]
+        if lang in response["def"]
+        else "(en) {}".format(response["def"]["en"])
+    )
+    if show != "def":
+        description = spoiler_wrap(description)
+    embed.add_field(name="description", value=description)
+    return embed
 
 
 def embed_response(word, lang, response, embedtype):
