@@ -9,7 +9,7 @@ services:
     environment:
       DISCORD_TOKEN: "${DISCORD_TOKEN}"
       LOG_LEVEL: "${LOG_LEVEL}"
-      TEST_SERVERS: "${TEST_SERVERS}"
+      DEBUG_GUILDS: "${DEBUG_GUILDS}"
     volumes:
       - ./userdata/:/project/userdata/
     deploy:
