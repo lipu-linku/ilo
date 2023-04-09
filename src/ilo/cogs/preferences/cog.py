@@ -1,9 +1,8 @@
 import re
 
-from discord.ext.commands import Cog
+from discord import AutocompleteContext, Option, OptionChoice
 from discord.commands import SlashCommandGroup
-from discord import Option
-from discord import OptionChoice
+from discord.ext.commands import Cog
 
 from ilo.cog_utils import Locale
 from ilo.preferences import preferences
@@ -30,13 +29,17 @@ def build_subcommands(prefs, template):
         option = Option(template.option_type, template.option_desc)
         build_subcommand(prefs, template.name, template.description, option)
     else:
-        choices = to_chunks(to_choices(template.choices), CHOICE_SIZE)
-        for index, chunk in enumerate(choices):
-            option = Option(template.option_type, template.option_desc, choices=chunk)
-            name = (
-                f"{template.name}_page{index+1}" if len(choices) > 1 else template.name
-            )
-            build_subcommand(prefs, name, template.description, option)
+        # choices = to_chunks(to_choices(template.choices), CHOICE_SIZE)
+        # for index, chunk in enumerate(choices):
+        option = Option(
+            template.option_type,
+            template.option_desc,
+            autocomplete=build_autocomplete(template.choices),
+        )
+        # name = (
+        #     f"{template.name}_page{index+1}" if len(choices) > 1 else template.name
+        # )
+        build_subcommand(prefs, template.name, template.description, option)
 
 
 def build_subcommand(prefs, name, description, option):
@@ -53,6 +56,13 @@ def build_subcommand(prefs, name, description, option):
                 template.name, ctx.author.display_name, preference
             )
         )
+
+
+def build_autocomplete(options: list[str]):
+    def autocompleter(ctx: AutocompleteContext):
+        return list(filter(lambda x: x.lower().startswith(ctx.value.lower()), options))
+
+    return autocompleter
 
 
 class CogPreferences(Cog):
