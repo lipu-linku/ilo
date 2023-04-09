@@ -15,7 +15,19 @@ from ilo.preferences import Template, preferences
 class CogNimi(Cog):
     def __init__(self, bot):
         self.bot = bot
-        preferences.register(Template(self.locale, "language", "en", jasima.get_languages_for_slash_commands()))
+        preferences.register(
+            Template(
+                self.locale, "language", "en", jasima.get_languages_for_slash_commands()
+            )
+        )
+        preferences.register(
+            Template(
+                self.locale,
+                "usage",
+                "widespread",
+                jasima.get_usages_for_slash_commands(),
+            )
+        )
 
     locale = Locale(__file__)
 
