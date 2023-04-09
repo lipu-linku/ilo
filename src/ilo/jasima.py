@@ -67,4 +67,19 @@ def get_usages_for_slash_commands():
     return [usage for usage in USAGE_MAP]
 
 
+def coalesce_usage(word: dict) -> int:
+    if usages := word.get("recognition"):  # in case a word has no usage
+        return int(usages[-1])  # always most recent
+    return 0
+
+
+def get_words_min_usage_filter(usage: str):
+    """Make autocomplete better for word selection, prune to only words at or above selected usage"""
+    return [
+        word
+        for word, w_data in bundle["data"].items()
+        if coalesce_usage(w_data) >= USAGE_MAP[usage]
+    ]
+
+
 bundle = json.loads(get_site(JSON_LINK))
