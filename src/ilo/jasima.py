@@ -63,4 +63,8 @@ def get_languages_for_slash_commands():
     return {v["name_endonym"]: k for k, v in languages.items()}
 
 
+def get_usages_for_slash_commands():
+    return [usage for usage in USAGE_MAP]
+
+
 bundle = json.loads(get_site(JSON_LINK))
