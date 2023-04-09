@@ -53,7 +53,7 @@ def get_random_word(min_usage: str = "widespread") -> Tuple[str, dict]:
     return word, response
 
 
-def get_words_for_slash_commands():
+def get_words_for_slash_commands():  # autocomplete, not pref
     words = bundle["data"]
     return [word for word in words]
 
@@ -63,8 +63,8 @@ def get_languages_for_slash_commands():
     return {v["name_endonym"]: k for k, v in languages.items()}
 
 
-def get_usages_for_slash_commands():
-    return [usage for usage in USAGE_MAP]
+def get_usages_for_slash_commands() -> dict:  # it expects a dict for pref choices
+    return {usage: usage for usage in USAGE_MAP}
 
 
 def coalesce_usage(word: dict) -> int:
