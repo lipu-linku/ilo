@@ -50,6 +50,8 @@ def build_subcommand(prefs, name, description, option):
         if validation is not True:
             await ctx.respond(validation)
             return
+        if template.choices and isinstance(template.choices, dict):
+            preference = template.choices[preference]  # just languages
         preferences.set(str(ctx.author.id), template.name, preference)
         await ctx.respond(
             "Set {} preference for **{}** to **{}**.".format(
