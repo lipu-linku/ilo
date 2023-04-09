@@ -53,6 +53,11 @@ def get_random_word(min_usage: str = "widespread") -> Tuple[str, dict]:
     return word, response
 
 
+def get_words_for_slash_commands():
+    words = bundle["data"]
+    return [word for word in words]
+
+
 def get_languages_for_slash_commands():
     languages = bundle["languages"]
     return {v["name_endonym"]: k for k, v in languages.items()}
