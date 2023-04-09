@@ -6,7 +6,7 @@ from discord.ext.commands import Cog
 from discord.ui import Button, View
 
 from ilo import jasima
-from ilo.cog_utils import Locale, load_file
+from ilo.cog_utils import Locale, load_file, word_autocomplete
 from ilo.cogs.nimi.colour import colours
 from ilo.preferences import Template, preferences
 
@@ -32,7 +32,7 @@ class CogNimi(Cog):
     locale = Locale(__file__)
 
     @locale.command("nimi")
-    @locale.option("nimi-word")
+    @locale.option("nimi-word", autocomplete=word_autocomplete)
     async def slash_nimi(self, ctx, word):
         await nimi(ctx, word)
 
