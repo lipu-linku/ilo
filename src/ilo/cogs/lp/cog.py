@@ -1,8 +1,8 @@
+from discord.commands import option, slash_command
 from discord.ext.commands import Cog
-from discord.commands import slash_command, option
 
-from ilo.cog_utils import Locale, load_file
 from ilo import jasima
+from ilo.cog_utils import Locale, load_file, word_autocomplete
 
 
 class CogLp(Cog):
@@ -12,7 +12,7 @@ class CogLp(Cog):
     locale = Locale(__file__)
 
     @locale.command("lp")
-    @locale.option("lp-word")
+    @locale.option("lp-word", autocomplete=word_autocomplete)
     async def slash_lp(self, ctx, word):
         await lp(ctx, word)
 
