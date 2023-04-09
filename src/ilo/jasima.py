@@ -69,7 +69,8 @@ def get_usages_for_slash_commands() -> dict:  # it expects a dict for pref choic
 
 def coalesce_usage(word: dict) -> int:
     if usages := word.get("recognition"):  # in case a word has no usage
-        return int(usages[-1])  # always most recent
+        if last_usage := usages.get("2022-08"):
+            return int(last_usage)
     return 0
 
 
