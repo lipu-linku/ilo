@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Optional
 
 import discord
 from discord import ButtonStyle, Embed
@@ -9,7 +9,6 @@ from ilo import jasima
 from ilo.cog_utils import Locale, load_file, word_autocomplete
 from ilo.cogs.nimi.colour import colours
 from ilo.preferences import Template, preferences
-
 
 
 class CogNimi(Cog):
@@ -37,7 +36,7 @@ class CogNimi(Cog):
         await nimi(ctx, word)
 
     @locale.command("n")
-    @locale.option("n-word")
+    @locale.option("n-word", autocomplete=word_autocomplete)
     async def slash_n(self, ctx, word):
         await nimi(ctx, word)
 
@@ -45,7 +44,7 @@ class CogNimi(Cog):
     @locale.command("guess")
     @locale.option("guess-show", choices=["word", "def"])
     @locale.option("guess-usage", choices=jasima.USAGES)
-    async def slash_guess(self, ctx, show: str = "def", usage: str = "widespread"):
+    async def slash_guess(self, ctx, show: str = "def", usage: str = ""):
         assert show in ("word", "def")
         await guess(ctx, show, usage)
 
@@ -62,8 +61,10 @@ async def nimi(ctx, word):
     await ctx.respond(embed=embed, view=view)
 
 
-async def guess(ctx, show: Literal["word", "def"], usage: str):
+async def guess(ctx, show: Literal["word", "def"], usage: str = ""):
     lang = preferences.get(str(ctx.author.id), "language")
+    if not usage:
+        usage = preferences.get(str(ctx.author.id), "usage")
 
     word, response = jasima.get_random_word(min_usage=usage)
     embed = guess_embed_response(word, lang, response, show)
@@ -102,7 +103,9 @@ def embed_response(word, lang, response, embedtype):
         else "(en) {}".format(response["def"]["en"])
     )
     usage = response["usage_category"] if "usage_category" in response else "unknown"
-    embed.add_field(name="usage", value=f"{usage} ({response['book'].replace('none', 'no book')})")
+    embed.add_field(
+        name="usage", value=f"{usage} ({response['book'].replace('none', 'no book')})"
+    )
 
     if embedtype == "concise":
         embed.add_field(name="description", value=description)
