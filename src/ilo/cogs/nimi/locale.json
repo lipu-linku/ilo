@@ -10,5 +10,7 @@
 	"guess-usage": "The minimum recognition of the returned word.",
 
 	"prefs-language": "Set the language that dictionary definitions will use",
-	"prefs-language-option": "The language you want to use."
+	"prefs-language-option": "The language you want to use.",
+	"prefs-usage": "Set the minimum word usage for autocomplete and command response.",
+	"prefs-usage-option": "Minimum usage for words in autocomplete"
 }
