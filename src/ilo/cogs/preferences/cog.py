@@ -47,7 +47,7 @@ def build_subcommand(prefs, name, description, option):
 
 def build_autocomplete(options: list[str]):
     def autocompleter(ctx: AutocompleteContext):
-        return list(filter(lambda x: x.lower().startswith(ctx.value.lower()), options))
+        return startswith_filter(ctx.value.lower(), options)
 
     return autocompleter
 

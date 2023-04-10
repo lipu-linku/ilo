@@ -20,10 +20,14 @@ def load_file(file_path, file_name):
         return list(f.readlines())
 
 
+def startswith_filter(s: str, opts: list[str]):
+    return list(filter(lambda x: x.lower().startswith(s.lower()), opts))
+
+
 async def word_autocomplete(ctx: AutocompleteContext):
     usage: str = preferences.get(str(ctx.interaction.user.id), "usage")
     words = jasima.get_words_min_usage_filter(usage)
-    return list(filter(lambda x: x.lower().startswith(ctx.value.lower()), words))
+    return startswith_filter(ctx.value.lower(), words)
 
 
 class Locale:
