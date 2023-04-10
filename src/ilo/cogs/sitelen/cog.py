@@ -6,7 +6,7 @@ from ilo.cog_utils import Locale, load_file
 from ilo.fonts import fonts
 from ilo.preferences import preferences
 from ilo.preferences import Template
-from ilo import sitelen
+from ilo import sitelen, jasima
 
 
 class CogSitelen(Cog):
@@ -14,7 +14,15 @@ class CogSitelen(Cog):
         self.bot = bot
         preferences.register(Template(self.locale, "fontsize", 72, validation=fontsize_validation))
         preferences.register(Template(self.locale, "color", "ffffff", validation=colour_validation))
-        preferences.register(Template(self.locale, "font", "linja sike", {font: font for font in fonts}))
+        preferences.register(
+            Template(
+                self.locale,
+                "font",
+                "nasin sitelen pu mono",
+                {font: font for font in fonts},
+                validation=font_validation,
+            )
+        )
 
     locale = Locale(__file__)
 
@@ -85,6 +93,10 @@ def colour_validation(value):
     if not is_colour(value):
         return "The string has to be a valid hexadecimal rgb colour, e.g. `2288ff`."
     return True
+
+
+def font_validation(value: str) -> bool | str:
+    return value in jasima.FONTS or "Invalid font selected."
 
 
 def is_colour(value):

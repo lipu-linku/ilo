@@ -1,48 +1,40 @@
 import re
 
-from discord.ext.commands import Cog
+from discord import AutocompleteContext, Option, OptionChoice
 from discord.commands import SlashCommandGroup
-from discord import Option
-from discord import OptionChoice
+from discord.ext.commands import Cog
 
-from ilo.cog_utils import Locale
+from ilo.cog_utils import Locale, startswith_filter
 from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
 
 RESPONSES = {
-  "set": "{key}: **{value}** (default: {default})\n",
-  "invalid": "{key}: {value}. The value is invalid, **{default}** (default) is used instead.\n",
-  "unset": "{key}: {default} (by default)\n"
+    "set": "{key}: **{value}** (default: {default})\n",
+    "invalid": "{key}: {value}. The value is invalid, **{default}** (default) is used instead.\n",
+    "unset": "{key}: {default} (by default)\n",
 }
 
 
-def to_choices(dictionary):
-    return [OptionChoice(name=k, value=v) for k, v in dictionary.items()]
-
-
-def to_chunks(sequence, n):
-    return [sequence[i : i + n] for i in range(0, len(sequence), n)]
-
-
 def build_subcommands(prefs, template):
-    if template.choices is None:
-        option = Option(template.option_type, template.option_desc)
-        build_subcommand(prefs, template.name, template.description, option)
-    else:
-        choices = to_chunks(to_choices(template.choices), CHOICE_SIZE)
-        for index, chunk in enumerate(choices):
-            option = Option(template.option_type, template.option_desc, choices=chunk)
-            name = (
-                f"{template.name}_page{index+1}" if len(choices) > 1 else template.name
-            )
-            build_subcommand(prefs, name, template.description, option)
+    autocompleter = build_autocomplete(template.choices) if template.choices else None
+    option = Option(
+        template.option_type,
+        template.option_desc,
+        autocomplete=autocompleter,
+    )
+    build_subcommand(prefs, template.name, template.description, option)
 
 
 def build_subcommand(prefs, name, description, option):
     @prefs.command(name=name, description=description)
     async def preference_subcommand(self, ctx, preference: option):
-        template = preferences.templates[re.sub("_page\d*", "", ctx.command.name)]
+        template = preferences.templates[re.sub(r"_page\d*", "", ctx.command.name)]
+        if template.choices and isinstance(
+            template.choices, dict
+        ):  # must be before validation
+            preference = template.choices.get(preference)
+
         validation = template.validation(preference)
         if validation is not True:
             await ctx.respond(validation)
@@ -53,6 +45,17 @@ def build_subcommand(prefs, name, description, option):
                 template.name, ctx.author.display_name, preference
             )
         )
+
+
+def build_autocomplete(options: list[str]):
+    def autocompleter(ctx: AutocompleteContext):
+        return startswith_filter(ctx.value.lower(), options)
+
+    return autocompleter
+
+
+async def prefs_autocomplete(ctx: AutocompleteContext):
+    return startswith_filter(ctx.value.lower(), preferences.templates.keys())
 
 
 class CogPreferences(Cog):
@@ -91,3 +94,24 @@ class CogPreferences(Cog):
         await ctx.respond(
             "Reset all preferences for **{}**.".format(ctx.author.display_name)
         )
+
+    @prefs.command(name="show", description=locale["show"])
+    async def show(
+        self,
+        ctx,
+        preference: Option(str, name="preference", autocomplete=prefs_autocomplete),
+    ):
+        if template := preferences.templates.get(preference):
+            if c := template.choices:  # we know it's a dict
+                await ctx.respond(format_opts(c.keys()), ephemeral=True)
+            else:
+                await ctx.respond(
+                    "No specific choices for that preference", ephemeral=True
+                )
+                # TODO: some of them are open ended like font size and color
+            return
+        await ctx.respond("That preference doesn't exist.", ephemeral=True)
+
+
+def format_opts(opts: list):
+    return "\n".join(opts)

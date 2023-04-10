@@ -24,8 +24,14 @@ if not LOG_LEVEL:
 
 LOG_LEVEL_INT = getattr(logging, LOG_LEVEL.upper())
 
+DEBUG_GUILDS = [
+    int(n) for n in os.environ["DEBUG_GUILDS"].split(",") if n and n.isdigit()
+]
+
+
 bot = bridge.Bot(
-    command_prefix=commands.when_mentioned_or("/")
+    command_prefix=commands.when_mentioned_or("/"),
+    debug_guilds=DEBUG_GUILDS,
     # intents=Intents.all(),
 )
 
