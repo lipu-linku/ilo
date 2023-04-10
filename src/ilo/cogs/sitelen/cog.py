@@ -18,7 +18,7 @@ class CogSitelen(Cog):
             Template(
                 self.locale,
                 "font",
-                "linja sike",
+                "nasin sitelen pu mono",
                 {font: font for font in fonts},
                 validation=font_validation,
             )
