@@ -21,7 +21,7 @@ USAGE_MAP = {
     "obscure": 0,
 }
 
-USAGES = USAGE_MAP.keys()
+USAGES = list(USAGE_MAP.keys())
 
 
 def get_site(link):
@@ -84,3 +84,7 @@ def get_words_min_usage_filter(usage: str):
 
 
 bundle = json.loads(get_site(JSON_LINK))
+
+LANGUAGES = list(bundle["languages"].keys())
+FONTS = list(bundle["fonts"].keys())
+WORDS = list(bundle["data"].keys())
