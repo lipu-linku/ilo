@@ -105,7 +105,9 @@ class CogPreferences(Cog):
             if c := template.choices:  # we know it's a dict
                 await ctx.respond(format_opts(c.keys()), ephemeral=True)
             else:
-                await ctx.respond("No specific for that preference", ephemeral=True)
+                await ctx.respond(
+                    "No specific choices for that preference", ephemeral=True
+                )
                 # TODO: some of them are open ended like font size and color
             return
         await ctx.respond("That preference doesn't exist.", ephemeral=True)
