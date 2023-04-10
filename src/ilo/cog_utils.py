@@ -19,15 +19,36 @@ def load_file(file_path, file_name):
         return list(f.readlines())
 
 
+def is_subsequence(s: str, opt: str) -> bool:
+    s_idx, opt_idx = 0, 0
+    s_len, opt_len = len(s), len(opt)
+
+    while s_idx < s_len and opt_idx < opt_len:
+        if s[s_idx].lower() == opt[opt_idx].lower():
+            s_idx += 1
+        opt_idx += 1
+
+    return s_idx == s_len
+
+
+def fuzzy_filter(s: str, opts: list[str]) -> list[str]:
+    return [opt for opt in opts if is_subsequence(s, opt)]
+
+
 def startswith_filter(s: str, opts: list[str]):
-    return list(filter(lambda x: x.lower().startswith(s.lower()), opts))
+    s = s.lower()
+    return list(filter(lambda x: x.lower().startswith(s), opts))
+
+
+def autocomplete_filter(s: str, opts: list[str]):
+    return fuzzy_filter(s, opts)
 
 
 async def word_autocomplete(ctx: AutocompleteContext):
     # we could pre-compute the usages to save some time
     usage: str = preferences.get(str(ctx.interaction.user.id), "usage")
     words = jasima.get_words_min_usage_filter(usage)
-    return startswith_filter(ctx.value.lower(), words)
+    return autocomplete_filter(ctx.value, words)
 
 
 class Locale:

@@ -4,7 +4,7 @@ from discord import AutocompleteContext, Option, OptionChoice
 from discord.commands import SlashCommandGroup
 from discord.ext.commands import Cog
 
-from ilo.cog_utils import Locale, startswith_filter
+from ilo.cog_utils import Locale, autocomplete_filter, startswith_filter
 from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
@@ -49,13 +49,13 @@ def build_subcommand(prefs, name, description, option):
 
 def build_autocomplete(options: list[str]):
     def autocompleter(ctx: AutocompleteContext):
-        return startswith_filter(ctx.value.lower(), options)
+        return autocomplete_filter(ctx.value, options)
 
     return autocompleter
 
 
 async def prefs_autocomplete(ctx: AutocompleteContext):
-    return startswith_filter(ctx.value.lower(), preferences.templates.keys())
+    return autocomplete_filter(ctx.value.lower(), preferences.templates.keys())
 
 
 class CogPreferences(Cog):
