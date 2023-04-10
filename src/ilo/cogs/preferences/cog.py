@@ -16,30 +16,14 @@ RESPONSES = {
 }
 
 
-def to_choices(dictionary):
-    return [OptionChoice(name=k, value=v) for k, v in dictionary.items()]
-
-
-def to_chunks(sequence, n):
-    return [sequence[i : i + n] for i in range(0, len(sequence), n)]
-
-
 def build_subcommands(prefs, template):
-    if template.choices is None:
-        option = Option(template.option_type, template.option_desc)
-        build_subcommand(prefs, template.name, template.description, option)
-    else:
-        # choices = to_chunks(to_choices(template.choices), CHOICE_SIZE)
-        # for index, chunk in enumerate(choices):
-        option = Option(
-            template.option_type,
-            template.option_desc,
-            autocomplete=build_autocomplete(template.choices),
-        )
-        # name = (
-        #     f"{template.name}_page{index+1}" if len(choices) > 1 else template.name
-        # )
-        build_subcommand(prefs, template.name, template.description, option)
+    autocompleter = build_autocomplete(template.choices) if template.choices else None
+    option = Option(
+        template.option_type,
+        template.option_desc,
+        autocomplete=autocompleter,
+    )
+    build_subcommand(prefs, template.name, template.description, option)
 
 
 def build_subcommand(prefs, name, description, option):
