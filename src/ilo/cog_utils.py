@@ -22,9 +22,10 @@ def load_file(file_path, file_name):
 def is_subsequence(s: str, opt: str) -> bool:
     s_idx, opt_idx = 0, 0
     s_len, opt_len = len(s), len(opt)
+    s, opt = s.lower(), opt.lower()
 
     while s_idx < s_len and opt_idx < opt_len:
-        if s[s_idx].lower() == opt[opt_idx].lower():
+        if s[s_idx] == opt[opt_idx]:
             s_idx += 1
         opt_idx += 1
 
