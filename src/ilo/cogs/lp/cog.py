@@ -16,6 +16,11 @@ class CogLp(Cog):
     async def slash_lp(self, ctx, word):
         await lp(ctx, word)
 
+    @locale.command("lukapona")
+    @locale.option("lukapona-word", autocomplete=word_autocomplete)
+    async def slash_lukapona(self, ctx, word):
+        await lp(ctx, word)
+
 
 async def lp(ctx, word):
     response = jasima.get_word_entry(word)
