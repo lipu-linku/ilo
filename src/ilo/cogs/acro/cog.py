@@ -26,8 +26,8 @@ async def acro(ctx, text):
 
 
 acro_choices = {
-	"only pu words": "pu",
-	"pu and ku suli words": "ku suli",
-	"all pu, ku suli and ku lili words": "ku lili",
-	"all words": "all"
+    "only pu words": "pu",
+    "pu and ku suli words": "ku suli",
+    "all pu, ku suli and ku lili words": "ku lili",
+    "all words": "all",
 }

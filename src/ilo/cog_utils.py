@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from typing import List
 
 from discord import AutocompleteContext
 from discord.commands import option as pycord_option
@@ -25,6 +24,7 @@ def startswith_filter(s: str, opts: list[str]):
 
 
 async def word_autocomplete(ctx: AutocompleteContext):
+    # we could pre-compute the usages to save some time
     usage: str = preferences.get(str(ctx.interaction.user.id), "usage")
     words = jasima.get_words_min_usage_filter(usage)
     return startswith_filter(ctx.value.lower(), words)

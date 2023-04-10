@@ -158,9 +158,12 @@ class NimiButton(Button):
         if buttontype == "expand":
             embed = embed_response(word, lang, jasima.get_word_entry(word), "verbose")
             view = NimiView("minimise", word, lang)
-        if buttontype == "minimise":
+        elif buttontype == "minimise":
             embed = embed_response(word, lang, jasima.get_word_entry(word), "concise")
             view = NimiView("expand", word, lang)
+        else:
+            await interaction.response.edit_message("Something went wrong!")
+            return
         await interaction.response.edit_message(embed=embed, view=view)
 
 

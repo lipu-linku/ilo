@@ -1,19 +1,23 @@
 import io
-from discord.ext.commands import Cog
-from discord import File
 
+from discord import File
+from discord.ext.commands import Cog
+
+from ilo import jasima, sitelen
 from ilo.cog_utils import Locale, load_file
 from ilo.fonts import fonts
-from ilo.preferences import preferences
-from ilo.preferences import Template
-from ilo import sitelen, jasima
+from ilo.preferences import Template, preferences
 
 
 class CogSitelen(Cog):
     def __init__(self, bot):
         self.bot = bot
-        preferences.register(Template(self.locale, "fontsize", 72, validation=fontsize_validation))
-        preferences.register(Template(self.locale, "color", "ffffff", validation=colour_validation))
+        preferences.register(
+            Template(self.locale, "fontsize", 72, validation=fontsize_validation)
+        )
+        preferences.register(
+            Template(self.locale, "color", "ffffff", validation=colour_validation)
+        )
         preferences.register(
             Template(
                 self.locale,

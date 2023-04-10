@@ -12,7 +12,7 @@ class CogPrompt(Cog):
     locale = Locale(__file__)
 
     @locale.command("prompt")
-    @locale.option("prompt-translate", default=True) # choices are implied
+    @locale.option("prompt-translate", default=True)  # choices are implied
     async def slash_prompt(self, ctx, translate: bool):
         await prompt(ctx, translate)
 
@@ -26,7 +26,7 @@ async def prompt(ctx, translate: bool):
     translate = translate and (lang != "tok")
     if translate:
         translation = all_sents[lang] if lang in all_sents else all_sents["en"]
-        tok_prompt  += f"\n||{translation}||"
+        tok_prompt += f"\n||{translation}||"
     await ctx.respond(tok_prompt)
 
 
