@@ -48,10 +48,9 @@ class CogNimi(Cog):
     # imo guess is a special case of nimi
     @locale.command("guess")
     @locale.option("guess-show", choices=["word", "def"])
-    @locale.option("guess-usage", choices=jasima.USAGES)
-    async def slash_guess(self, ctx, show: str = "def", usage: str = ""):
+    async def slash_guess(self, ctx, show: str = "def"):
         assert show in ("word", "def")
-        await guess(ctx, show, usage)
+        await guess(ctx, show)
 
 
 async def nimi(ctx, word):
@@ -66,10 +65,9 @@ async def nimi(ctx, word):
     await ctx.respond(embed=embed, view=view)
 
 
-async def guess(ctx, show: Literal["word", "def"], usage: str = ""):
+async def guess(ctx, show: Literal["word", "def"]):
     lang = preferences.get(str(ctx.author.id), "language")
-    if not usage:
-        usage = preferences.get(str(ctx.author.id), "usage")
+    usage = preferences.get(str(ctx.author.id), "usage")
 
     word, response = jasima.get_random_word(min_usage=usage)
     embed = guess_embed_response(word, lang, response, show)
