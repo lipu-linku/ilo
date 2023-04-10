@@ -94,8 +94,10 @@ def colour_validation(value):
         return "The string has to be a valid hexadecimal rgb colour, e.g. `2288ff`."
     return True
 
-def font_validation(value: str) -> bool:
-    return value in jasima.FONTS
+
+def font_validation(value: str) -> bool | str:
+    return value in jasima.FONTS or "Invalid font selected."
+
 
 def is_colour(value):
     try:

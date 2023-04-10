@@ -175,9 +175,9 @@ def build_etymology(response):
     return etymology
 
 
-def language_validation(lang: str) -> bool:
-    return lang in jasima.LANGUAGES
+def language_validation(value: str) -> bool | str:
+    return value in jasima.LANGUAGES or "Selected language not available."
 
 
-def usage_validation(usage: str) -> bool:
-    return usage in jasima.USAGES
+def usage_validation(value: str) -> bool | str:
+    return value in jasima.USAGES or "Selected usage not valid."
