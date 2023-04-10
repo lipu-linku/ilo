@@ -96,7 +96,7 @@ def colour_validation(value):
 
 
 def font_validation(value: str) -> bool | str:
-    return value in jasima.FONTS or "Invalid font selected."
+    return value in fonts or "Invalid font selected."
 
 
 def is_colour(value):
