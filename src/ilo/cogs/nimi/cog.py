@@ -16,7 +16,11 @@ class CogNimi(Cog):
         self.bot = bot
         preferences.register(
             Template(
-                self.locale, "language", "en", jasima.get_languages_for_slash_commands()
+                self.locale,
+                "language",
+                "en",
+                jasima.get_languages_for_slash_commands(),
+                validation=language_validation,
             )
         )
         preferences.register(
@@ -25,6 +29,7 @@ class CogNimi(Cog):
                 "usage",
                 "widespread",
                 jasima.get_usages_for_slash_commands(),
+                validation=usage_validation,
             )
         )
 
@@ -168,3 +173,11 @@ def build_etymology(response):
     if "etymology" in response:
         etymology += " " + response["etymology"]
     return etymology
+
+
+def language_validation(lang: str) -> bool:
+    return lang in jasima.LANGUAGES
+
+
+def usage_validation(usage: str) -> bool:
+    return usage in jasima.USAGES
