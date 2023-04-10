@@ -29,13 +29,14 @@ def build_subcommands(prefs, template):
 def build_subcommand(prefs, name, description, option):
     @prefs.command(name=name, description=description)
     async def preference_subcommand(self, ctx, preference: option):
-        template = preferences.templates[re.sub("_page\d*", "", ctx.command.name)]
+        template = preferences.templates[re.sub(r"_page\d*", "", ctx.command.name)]
+        if template.choices and isinstance(template.choices, dict): # must be before validation
+            preference = template.choices.get(preference)
+
         validation = template.validation(preference)
         if validation is not True:
             await ctx.respond(validation)
             return
-        if template.choices and isinstance(template.choices, dict):
-            preference = template.choices[preference]  # just languages
         preferences.set(str(ctx.author.id), template.name, preference)
         await ctx.respond(
             "Set {} preference for **{}** to **{}**.".format(
