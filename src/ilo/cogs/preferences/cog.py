@@ -4,15 +4,15 @@ from discord import AutocompleteContext, Option, OptionChoice
 from discord.commands import SlashCommandGroup
 from discord.ext.commands import Cog
 
-from ilo.cog_utils import Locale
+from ilo.cog_utils import Locale, startswith_filter
 from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
 
 RESPONSES = {
-  "set": "{key}: **{value}** (default: {default})\n",
-  "invalid": "{key}: {value}. The value is invalid, **{default}** (default) is used instead.\n",
-  "unset": "{key}: {default} (by default)\n"
+    "set": "{key}: **{value}** (default: {default})\n",
+    "invalid": "{key}: {value}. The value is invalid, **{default}** (default) is used instead.\n",
+    "unset": "{key}: {default} (by default)\n",
 }
 
 
@@ -30,7 +30,9 @@ def build_subcommand(prefs, name, description, option):
     @prefs.command(name=name, description=description)
     async def preference_subcommand(self, ctx, preference: option):
         template = preferences.templates[re.sub(r"_page\d*", "", ctx.command.name)]
-        if template.choices and isinstance(template.choices, dict): # must be before validation
+        if template.choices and isinstance(
+            template.choices, dict
+        ):  # must be before validation
             preference = template.choices.get(preference)
 
         validation = template.validation(preference)
@@ -50,6 +52,10 @@ def build_autocomplete(options: list[str]):
         return startswith_filter(ctx.value.lower(), options)
 
     return autocompleter
+
+
+async def prefs_autocomplete(ctx: AutocompleteContext):
+    return startswith_filter(ctx.value.lower(), preferences.templates.keys())
 
 
 class CogPreferences(Cog):
@@ -88,3 +94,22 @@ class CogPreferences(Cog):
         await ctx.respond(
             "Reset all preferences for **{}**.".format(ctx.author.display_name)
         )
+
+    @prefs.command(name="show", description=locale["show"])
+    async def show(
+        self,
+        ctx,
+        preference: Option(str, name="preference", autocomplete=prefs_autocomplete),
+    ):
+        if template := preferences.templates.get(preference):
+            if c := template.choices:  # we know it's a dict
+                await ctx.respond(format_opts(c.keys()), ephemeral=True)
+            else:
+                await ctx.respond("No specific for that preference", ephemeral=True)
+                # TODO: some of them are open ended like font size and color
+            return
+        await ctx.respond("That preference doesn't exist.", ephemeral=True)
+
+
+def format_opts(opts: list):
+    return "\n".join(opts)
