@@ -4,6 +4,7 @@ from discord.ext.commands import Cog
 
 from ilo.cog_utils import Locale, load_file
 
+
 class CogBorgle(Cog):
     def __init__(self, bot):
         self.bot = bot
