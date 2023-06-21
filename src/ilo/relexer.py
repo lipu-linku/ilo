@@ -55,20 +55,16 @@ def relex_word_en(word: str) -> str:
     return word
 
 
-def __clean_etym(etym: str, multiple: bool = False) -> str:
-    n = 1 if multiple else 0
-    return __get_nth_word(etym, n)
-
-
 def relex_word_etym(word: str) -> str:
-    found = bundle.get(word)
-    if not found:
+    if not (found := bundle.get(word)):
         return word
-    etymology = found.get("etymology")
-    if not etymology or etymology in ETYM_UNK:
+    if not (etym_data := found.get("etymology_data")):
         return word
-    source = found["source_language"]
-    candidate = __clean_etym(etymology, source.startswith("multiple"))
+    if not (etym_words := etym_data.get("words")):
+        return word
+
+    # remove strip when lipu-linku/jasima/pull/4 is merged
+    candidate = etym_words.split(";")[0].strip()
     return candidate
 
 
