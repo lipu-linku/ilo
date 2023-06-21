@@ -24,6 +24,7 @@ EN_SPECIAL_CASES = {
     "su": "reserved",
     "u": "reserved",
 }
+ETYM_UNK = {"∅", "?", "unknown"}
 
 
 def __filter_only_alpha(text: str) -> str:
@@ -64,7 +65,7 @@ def relex_word_etym(word: str) -> str:
     if not found:
         return word
     etymology = found.get("etymology")
-    if not etymology or etymology in {"∅", "?", "unknown"}:
+    if not etymology or etymology in ETYM_UNK:
         return word
     source = found["source_language"]
     candidate = __clean_etym(etymology, source.startswith("multiple"))
