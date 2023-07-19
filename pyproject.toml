@@ -10,6 +10,7 @@ dependencies = [
 ]
 requires-python = ">=3.8"
 license = { text = "GPL-3.0" }
+
 [project.optional-dependencies]
 [tool.isort]
 profile = "black"
@@ -34,13 +35,9 @@ dev = [
     "flake9>=3.8.3.post2",
 ]
 
-
 [tool.pyright]
-include = ["src"]
-exclude = ["**/__pycache__"]
-ignore = []
-defineConstant = { DEBUG = true }
-stubPath = ""
-
-reportMissingImports = true
-reportMissingTypeStubs = false
+include = ["public"]
+exclude = ["**/__pycache__", "__pypackages__", ".venv"]
+venvPath = "."
+venv = ".venv"
+executionEnvironments = [{ root = "." }]

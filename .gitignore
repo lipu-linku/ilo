@@ -1,5 +1,16 @@
-.env
+# python
 __pycache__
+
+# pdm
 __pypackages__
-userdata/
+.venv
 .pdm.toml
+.pdm-python
+*.egg-info
+
+# pyenv
+.python-version
+
+# bot deps/artifacts
+.env
+userdata/
