@@ -35,13 +35,17 @@ class CogSitelen(Cog):
 
     @locale.command("sp")
     @locale.option("sp-text")
-    async def slash_sp(self, ctx, text):
-        await sp(ctx, text)
+    @locale.option("sp-font", autocomplete=font_autocomplete)
+    async def slash_sp(self, ctx: ApplicationContext, text: str, font: str = ""):
+        await sp(ctx, text, font)
 
     @locale.command("sitelenpona")
     @locale.option("sitelenpona-text")
-    async def slash_sitelenpona(self, ctx, text):
-        await sp(ctx, text)
+    @locale.option("sitelenpona-font")
+    async def slash_sitelenpona(
+        self, ctx: ApplicationContext, text: str, font: str = ""
+    ):
+        await sp(ctx, text, font)
 
     @locale.command("ss")
     @locale.option("ss-text")

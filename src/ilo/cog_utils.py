@@ -8,6 +8,7 @@ from discord.ext.bridge import bridge_command as pycord_bridge_command
 from discord.ext.commands import Cog as PycordCog
 
 from ilo import jasima
+from ilo.fonts import fonts
 from ilo.preferences import Template, preferences
 
 
@@ -50,6 +51,10 @@ async def word_autocomplete(ctx: AutocompleteContext):
     usage: str = preferences.get(str(ctx.interaction.user.id), "usage")
     words = jasima.get_words_min_usage_filter(usage)
     return autocomplete_filter(ctx.value, words)
+
+
+async def font_autocomplete(ctx: AutocompleteContext):
+    return autocomplete_filter(ctx.value, list(fonts.keys()))
 
 
 class Locale:

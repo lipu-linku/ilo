@@ -1,9 +1,11 @@
 {
 	"sp": "Get sitelen pona of a toki pona phrase",
 	"sp-text": "The phrase you want to convert to sitelen pona.",
+	"sp-font": "The font you want to use (overrides your settings)",
 
 	"sitelenpona": "Get sitelen pona of a toki pona phrase",
 	"sitelenpona-text": "The phrase you want to convert to sitelen pona.",
+	"sitelenpona-font": "The font you want to use (overrides your settings)",
 
 	"ss": "Get the sitelen sitelen of a toki pona phrase",
 	"ss-text": "The phrase you want to convert to sitelen sitelen.",
