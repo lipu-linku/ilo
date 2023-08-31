@@ -1,11 +1,14 @@
 import io
+from typing import Optional, Tuple
 
 from discord import File
+from discord.commands.context import ApplicationContext
 from discord.ext.commands import Cog
 
-from ilo import jasima, sitelen
-from ilo.cog_utils import Locale, load_file
+from ilo import sitelen
+from ilo.cog_utils import Locale, font_autocomplete
 from ilo.fonts import fonts
+from ilo.jasima import DEFAULT_FONT, SITELEN_SITELEN_FONT
 from ilo.preferences import Template, preferences
 
 
@@ -22,7 +25,7 @@ class CogSitelen(Cog):
             Template(
                 self.locale,
                 "font",
-                "nasin sitelen pu mono",
+                DEFAULT_FONT,
                 {font: font for font in fonts},
                 validation=font_validation,
             )
@@ -42,43 +45,43 @@ class CogSitelen(Cog):
 
     @locale.command("ss")
     @locale.option("ss-text")
-    async def slash_ss(self, ctx, text):
+    async def slash_ss(self, ctx: ApplicationContext, text: str):
         await ss(ctx, text)
 
     @locale.command("sitelensitelen")
     @locale.option("sitelensitelen-text")
-    async def slash_sitelensitelen(self, ctx, text):
+    async def slash_sitelensitelen(self, ctx: ApplicationContext, text: str):
         await ss(ctx, text)
 
     @locale.command("preview")
     @locale.option("preview-text")
-    async def slash_preview(self, ctx, text):
+    async def slash_preview(self, ctx: ApplicationContext, text: str):
         await preview(ctx, text)
 
 
-def unescape_newline(text: str):
+def unescape_newline(text: str) -> str:
     return text.replace("\\n", "\n")
 
 
-async def sp(ctx, text):
+async def sp(ctx: ApplicationContext, text: str, font: str = ""):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
-    font = preferences.get(str(ctx.author.id), "font")
+    font = font or preferences.get(str(ctx.author.id), "font")
     color = preferences.get(str(ctx.author.id), "color")
     text = unescape_newline(text)
     image = io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     await ctx.respond(file=File(image, filename="a.png"))
 
 
-async def ss(ctx, text):
+async def ss(ctx: ApplicationContext, text: str):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     color = preferences.get(str(ctx.author.id), "color")
-    font = "sitelen Latin (ss)"
+    font = SITELEN_SITELEN_FONT
     text = unescape_newline(text)
     image = io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
     await ctx.respond(file=File(image, filename="a.png"))
 
 
-async def preview(ctx, text):
+async def preview(ctx: ApplicationContext, text: str):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     color = preferences.get(str(ctx.author.id), "color")
     images = []
@@ -87,13 +90,13 @@ async def preview(ctx, text):
     await ctx.respond(file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png"))
 
 
-def fontsize_validation(value):
+def fontsize_validation(value: int) -> bool | str:
     if not (value <= 500 and value >= 14):
         return "Font size is limited to the range from 14 to 500."
     return True
 
 
-def colour_validation(value):
+def colour_validation(value: int) -> bool | str:
     if not is_colour(value):
         return "The string has to be a valid hexadecimal rgb colour, e.g. `2288ff`."
     return True
@@ -103,7 +106,7 @@ def font_validation(value: str) -> bool | str:
     return value in fonts or "Invalid font selected."
 
 
-def is_colour(value):
+def is_colour(value) -> Optional[bool]:
     try:
         value = rgb_tuple(value)
         if len(value) == 3:
@@ -112,5 +115,5 @@ def is_colour(value):
         return False
 
 
-def rgb_tuple(value):
+def rgb_tuple(value) -> Tuple[int, int, int]:
     return tuple(bytes.fromhex(value))

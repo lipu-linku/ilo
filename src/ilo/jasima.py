@@ -88,3 +88,6 @@ bundle = json.loads(get_site(JSON_LINK))
 LANGUAGES = list(bundle["languages"].keys())
 FONTS = list(bundle["fonts"].keys())
 WORDS = list(bundle["data"].keys())
+
+SITELEN_SITELEN_FONT = "sitelen Latin (ss)"
+DEFAULT_FONT = "nasin sitelen pu mono"
