@@ -147,9 +147,24 @@ class NimiView(View):
             custom_id=f"{buttontype};{word};{lang}",
         )
         self.add_item(minmax)
-        url = "https://lipu-linku.github.io/?q={}".format(word)
-        moreinfo = Button(style=ButtonStyle.link, label="more info", url=url)
-        self.add_item(moreinfo)
+        self.add_item(Button(
+            style=ButtonStyle.link,
+            label="linku.la",
+            url=f"https://linku.la/?q={word}"
+        ))
+        self.add_item(Button(
+            style=ButtonStyle.link,
+            label="nimi.li",
+            url=f"https://nimi.li/{word}"
+        ))
+
+        if (jasima.get_word_entry(word)["usage_category"]
+                in ("core", "widespread", "common", "uncommon", "rare")):
+            self.add_item(Button(
+                style=ButtonStyle.link,
+                label="sona.pona.la",
+                url=f"https://sona.pona.la/wiki/{word}"
+            ))
 
 
 class NimiButton(Button):
