@@ -85,15 +85,6 @@ async def ss(ctx: ApplicationContext, text: str):
     await ctx.respond(file=File(image, filename="a.png"))
 
 
-async def preview(ctx: ApplicationContext, text: str):
-    fontsize = preferences.get(str(ctx.author.id), "fontsize")
-    color = preferences.get(str(ctx.author.id), "color")
-    images = []
-    for font in fonts:
-        images.append(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
-    await ctx.respond(file=File(io.BytesIO(sitelen.stitch(images)), filename="a.png"))
-
-
 def fontsize_validation(value: int) -> bool | str:
     if not (value <= 500 and value >= 14):
         return "Font size is limited to the range from 14 to 500."

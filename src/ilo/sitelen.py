@@ -26,27 +26,3 @@ def display(text, font_path, font_size, color):
     img_out = io.BytesIO()
     image.save(img_out, format="PNG")
     return img_out.getvalue()
-
-
-def stitch(images):
-    imgs = [Image.open(io.BytesIO(i)) for i in images]
-    max_img_width = max(i.width for i in imgs)
-
-    total_height = 0
-    for i, img in enumerate(imgs):
-        # If the image is larger than the minimum width, resize it
-        # if img.width > min_img_width:
-        #    imgs[i] = img.resize((min_img_width, int(img.height / img.width * min_img_width)), Image.ANTIALIAS)
-        total_height += imgs[i].height
-
-    # I have picked the mode of the first image to be generic. You may have other ideas
-    # Now that we know the total height of all of the resized images, we know the height of our final image
-    img_merge = Image.new(imgs[0].mode, (max_img_width, total_height))
-    y = 0
-    for img in imgs:
-        img_merge.paste(img, (round((max_img_width - img.width) / 2), y))
-
-        y += img.height
-    img_out = io.BytesIO()
-    img_merge.save(img_out, format="PNG")
-    return img_out.getvalue()
