@@ -3,7 +3,7 @@ import random
 import urllib.request
 from typing import List, Tuple
 
-JSON_LINK = "https://lipu-linku.github.io/jasima/data.json"
+JSON_LINK = "https://raw.githubusercontent.com/lipu-linku/jasima/main/data.json"
 
 help_message = "The word you requested, ***{}***, is not in the database I use. Make sure you didn't misspell it, or talk to kala Asi if this word really is missing."
 multiple_words_message = "The phrase you requested, ***{}***, contains multiple words. I am but a simple dictionary and can only do words one at a time."
