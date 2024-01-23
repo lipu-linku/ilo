@@ -109,6 +109,9 @@ def embed_response(word, lang, response, embedtype):
     embed.add_field(
         name="usage", value=f"{usage} ({response['book'].replace('none', 'no book')})"
     )
+    embed.set_thumbnail(
+        url=f"https://raw.githubusercontent.com/lipu-linku/ijo/main/sitelenpona/sitelen-seli-kiwen/ssk-{word}.png",
+    )
 
     if embedtype == "concise":
         embed.add_field(name="description", value=description)
