@@ -12,7 +12,6 @@ dependencies = [
 requires-python = ">=3.9"
 license = { text = "GPL-3.0" }
 
-[project.optional-dependencies]
 [tool.isort]
 profile = "black"
 multi_line_output = 3
