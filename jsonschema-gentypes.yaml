@@ -1,0 +1,73 @@
+headers: >
+  # Generated from the JSON schema of sona Linku
+callbacks:
+  - - black
+  - - isort
+generate:
+  - source: sona/schemas/generated/word.json
+    destination: src/sona/word.py
+    root_name: Word
+    python_version: '3.9'
+  - source: sona/schemas/generated/words.json
+    destination: src/sona/words.py
+    root_name: Words
+    python_version: '3.9'
+  - source: sona/schemas/generated/sandbox.json
+    destination: src/sona/sandbox.py
+    root_name: Sandbox
+    python_version: '3.9'
+
+  - source: sona/schemas/generated/definition_translation.json
+    destination: src/sona/definition_translation.py
+    root_name: DefinitionTranslation
+    python_version: '3.9'
+  - source: sona/schemas/generated/commentary_translation.json
+    destination: src/sona/commentary_translation.py
+    root_name: CommentaryTranslation
+    python_version: '3.9'
+  - source: sona/schemas/generated/etymology_translation.json
+    destination: src/sona/etymology_translation.py
+    root_name: EtymologyTranslation
+    python_version: '3.9'
+  - source: sona/schemas/generated/sitelen_pona_translation.json
+    destination: src/sona/sitelen_pona_translation.py
+    root_name: SitelenPonaTranslation
+    python_version: '3.9'
+
+  - source: sona/schemas/generated/sign.json
+    destination: src/sona/sign.py
+    root_name: Sign
+    python_version: '3.9'
+  - source: sona/schemas/generated/signs.json
+    destination: src/sona/signs.py
+    root_name: Signs
+    python_version: '3.9'
+
+  - source: sona/schemas/generated/fingerspelling.json
+    destination: src/sona/fingerspelling.py
+    root_name: Fingerspelling
+    python_version: '3.9'
+  - source: sona/schemas/generated/fingerspelling_sign.json
+    destination: src/sona/fingerspelling_sign.py
+    root_name: FingerspellingSign
+    python_version: '3.9'
+
+  - source: sona/schemas/generated/parameters_translation.json
+    destination: src/sona/parameters_translation.py
+    root_name: ParametersTranslation
+    python_version: '3.9'
+  - source: sona/schemas/generated/icon_translation.json
+    destination: src/sona/icon_translation.py
+    root_name: IconTranslation
+    python_version: '3.9'
+
+
+  - source: sona/schemas/generated/font.json
+    destination: src/sona/font.py
+    root_name: Font
+    python_version: '3.9'
+  - source: sona/schemas/generated/fonts.json
+    destination: src/sona/fonts.py
+    root_name: Fonts
+    python_version: '3.9'
+
