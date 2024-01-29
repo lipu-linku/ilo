@@ -1,6 +1,6 @@
 # no support for 3.11 in cchardet (from py-cord[speed])
 FROM python:3.10-slim AS builder
-RUN python -m pip install pdm
+RUN python -m pip install --no-cache-dir pdm
 RUN pdm config python.use_venv false
 
 COPY pyproject.toml pdm.lock /project/
