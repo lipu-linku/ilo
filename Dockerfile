@@ -18,7 +18,7 @@ RUN apt-get update -y && \
 ENV PYTHONPATH=/project/pkgs
 
 COPY src/ /project/pkgs/
-COPY ijo/nasinsitelen/ /project/fonts
+COPY ijo/nasinsitelen/ /project/ijo/nasinsitelen
 # this is a volume oops
 # COPY userdata/ /project/userdata
 
