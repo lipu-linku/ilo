@@ -1,0 +1,3 @@
+[submodule "ijo"]
+	path = ijo
+	url = https://github.com/lipu-linku/ijo.git
