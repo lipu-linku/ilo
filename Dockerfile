@@ -19,8 +19,6 @@ ENV PYTHONPATH=/project/pkgs
 
 COPY src/ /project/pkgs/
 COPY ijo/nasinsitelen/ /project/ijo/nasinsitelen
-# this is a volume oops
-# COPY userdata/ /project/userdata
 
 # this will change most often
 COPY --from=builder /project/__pypackages__/3.10/lib /project/pkgs
