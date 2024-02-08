@@ -4,7 +4,12 @@
 from typing import Dict, List, Required, TypedDict
 
 Signs = Dict[str, "_SignsAdditionalproperties"]
-""" A raw data object containing information about Luka Pona signs """
+"""
+A raw data object containing information about Luka Pona signs
+
+propertyNames:
+  minLength: 1
+"""
 
 
 class _SignsAdditionalproperties(TypedDict, total=False):
@@ -111,11 +116,7 @@ class _SignsAdditionalpropertiesTranslationsAdditionalproperties(
     """ Required property """
 
     icons: Required[str]
-    """
-    minLength: 1
-
-    Required property
-    """
+    """ Required property """
 
 
 class _SignsAdditionalpropertiesTranslationsAdditionalpropertiesParameters(

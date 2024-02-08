@@ -4,7 +4,12 @@
 from typing import Dict, TypedDict
 
 ParametersTranslation = Dict[str, "_ParameterstranslationAdditionalproperties"]
-""" Partly localized descriptions of how a sign is signed. """
+"""
+Partly localized descriptions of how a sign is signed.
+
+propertyNames:
+  minLength: 1
+"""
 
 
 class _ParameterstranslationAdditionalproperties(TypedDict, total=False):

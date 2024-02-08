@@ -4,7 +4,12 @@
 from typing import Dict, List, Required, TypedDict
 
 Fingerspelling = Dict[str, "_FingerspellingAdditionalproperties"]
-""" A raw data object containing information about Luka Pona fingerspelling signs """
+"""
+A raw data object containing information about Luka Pona fingerspelling signs
+
+propertyNames:
+  minLength: 1
+"""
 
 
 class _FingerspellingAdditionalproperties(TypedDict, total=False):

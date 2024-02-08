@@ -71,3 +71,7 @@ generate:
     root_name: Fonts
     python_version: '3.9'
 
+  - source: sona/schemas/generated/languages.json
+    destination: src/sona/languages.py
+    root_name: Languages
+    python_version: '3.9'

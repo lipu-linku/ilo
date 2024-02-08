@@ -4,7 +4,12 @@
 from typing import Dict, List, Literal, Required, TypedDict, Union
 
 Sandbox = Dict[str, "_SandboxAdditionalproperties"]
-""" A raw data object containing dictionary info about Toki Pona sandbox """
+"""
+A raw data object containing dictionary info about Toki Pona sandbox
+
+propertyNames:
+  minLength: 1
+"""
 
 
 class _SandboxAdditionalproperties(TypedDict, total=False):
@@ -55,7 +60,12 @@ class _SandboxAdditionalproperties(TypedDict, total=False):
     """
 
     ku_data: Dict[str, "_SandboxAdditionalpropertiesKuDataAdditionalproperties"]
-    """ The usage data of the word as described in ku (the official Toki Pona dictionary) """
+    """
+    The usage data of the word as described in ku (the official Toki Pona dictionary)
+
+    propertyNames:
+      minLength: 1
+    """
 
     see_also: Required[List[str]]
     """
@@ -114,7 +124,7 @@ class _SandboxAdditionalproperties(TypedDict, total=False):
 
     usage: Required[Dict[str, "_SandboxAdditionalpropertiesUsageAdditionalproperties"]]
     """
-    The percentage of people in the Toki Pona community who recognize this word, according to surveys performed by the Linku Project
+    The percentage of people in the Toki Pona community who use this word, according to surveys performed by the Linku Project
 
     propertyNames:
       pattern: ^20\d{2}-(0[1-9]|1[0-2])$
@@ -193,6 +203,8 @@ class _SandboxAdditionalpropertiesEtymologyItem(TypedDict, total=False):
 
 _SandboxAdditionalpropertiesKuDataAdditionalproperties = Union[int, float]
 """
+The percentage of ku survey respondents who report this translation as accurate to their usage.
+
 minimum: 0
 maximum: 100
 """
@@ -368,9 +380,9 @@ _SandboxAdditionalpropertiesUsageCategory = Union[
 """ The word's usage category, according to a survey performed by the Linku Project """
 _SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_CORE: Literal["core"] = "core"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_WIDESPREAD: Literal[
+_SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_WIDESPREAD: Literal["widespread"] = (
     "widespread"
-] = "widespread"
+)
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
 _SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_COMMON: Literal["common"] = "common"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""

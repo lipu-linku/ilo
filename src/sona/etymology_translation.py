@@ -4,7 +4,12 @@
 from typing import Dict, List, Required, TypedDict
 
 EtymologyTranslation = Dict[str, List["_EtymologytranslationAdditionalpropertiesItem"]]
-""" Localized etymological values for Toki Pona words """
+"""
+Localized etymological values for Toki Pona words
+
+propertyNames:
+  minLength: 1
+"""
 
 
 class _EtymologytranslationAdditionalpropertiesItem(TypedDict, total=False):

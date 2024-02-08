@@ -52,7 +52,12 @@ class Word(TypedDict, total=False):
     """
 
     ku_data: Dict[str, "_WordKuDataAdditionalproperties"]
-    """ The usage data of the word as described in ku (the official Toki Pona dictionary) """
+    """
+    The usage data of the word as described in ku (the official Toki Pona dictionary)
+
+    propertyNames:
+      minLength: 1
+    """
 
     see_also: Required[List[str]]
     """
@@ -111,7 +116,7 @@ class Word(TypedDict, total=False):
 
     usage: Required[Dict[str, "_WordUsageAdditionalproperties"]]
     """
-    The percentage of people in the Toki Pona community who recognize this word, according to surveys performed by the Linku Project
+    The percentage of people in the Toki Pona community who use this word, according to surveys performed by the Linku Project
 
     propertyNames:
       pattern: ^20\d{2}-(0[1-9]|1[0-2])$
@@ -181,6 +186,8 @@ class _WordEtymologyItem(TypedDict, total=False):
 
 _WordKuDataAdditionalproperties = Union[int, float]
 """
+The percentage of ku survey respondents who report this translation as accurate to their usage.
+
 minimum: 0
 maximum: 100
 """

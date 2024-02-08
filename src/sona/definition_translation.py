@@ -4,7 +4,12 @@
 from typing import Dict
 
 DefinitionTranslation = Dict[str, "_DefinitiontranslationAdditionalproperties"]
-""" Localized definitions of Toki Pona words """
+"""
+Localized definitions of Toki Pona words
+
+propertyNames:
+  minLength: 1
+"""
 
 
 _DefinitiontranslationAdditionalproperties = str

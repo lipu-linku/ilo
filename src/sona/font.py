@@ -138,15 +138,15 @@ _FONTWRITINGSYSTEM_SYLLABARY: Literal["syllabary"] = "syllabary"
 """The values for the 'the writing system this font uses as its script' enum"""
 _FONTWRITINGSYSTEM_LOGOGRAPHY: Literal["logography"] = "logography"
 """The values for the 'the writing system this font uses as its script' enum"""
-_FONTWRITINGSYSTEM_TOKIPONIDO_ALPHABET: Literal[
+_FONTWRITINGSYSTEM_TOKIPONIDO_ALPHABET: Literal["tokiponido alphabet"] = (
     "tokiponido alphabet"
-] = "tokiponido alphabet"
+)
 """The values for the 'the writing system this font uses as its script' enum"""
-_FONTWRITINGSYSTEM_TOKIPONIDO_SYLLABARY: Literal[
+_FONTWRITINGSYSTEM_TOKIPONIDO_SYLLABARY: Literal["tokiponido syllabary"] = (
     "tokiponido syllabary"
-] = "tokiponido syllabary"
+)
 """The values for the 'the writing system this font uses as its script' enum"""
-_FONTWRITINGSYSTEM_TOKIPONIDO_LOGOGRAPHY: Literal[
+_FONTWRITINGSYSTEM_TOKIPONIDO_LOGOGRAPHY: Literal["tokiponido logography"] = (
     "tokiponido logography"
-] = "tokiponido logography"
+)
 """The values for the 'the writing system this font uses as its script' enum"""

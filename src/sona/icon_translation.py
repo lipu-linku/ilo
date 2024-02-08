@@ -3,9 +3,10 @@
 
 from typing import Dict
 
-IconTranslation = Dict[str, "_IcontranslationAdditionalproperties"]
-""" Localized descriptions of the thing a sign represents. """
+IconTranslation = Dict[str, str]
+"""
+Localized descriptions of the thing a sign represents.
 
-
-_IcontranslationAdditionalproperties = str
-""" minLength: 1 """
+propertyNames:
+  minLength: 1
+"""

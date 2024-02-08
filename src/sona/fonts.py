@@ -131,13 +131,13 @@ _FontsAdditionalpropertiesWritingSystem = Union[
     Literal["tokiponido logography"],
 ]
 """ the writing system this font uses as its script """
-_FONTSADDITIONALPROPERTIESWRITINGSYSTEM_SITELEN_PONA: Literal[
+_FONTSADDITIONALPROPERTIESWRITINGSYSTEM_SITELEN_PONA: Literal["sitelen pona"] = (
     "sitelen pona"
-] = "sitelen pona"
+)
 """The values for the 'the writing system this font uses as its script' enum"""
-_FONTSADDITIONALPROPERTIESWRITINGSYSTEM_SITELEN_SITELEN: Literal[
+_FONTSADDITIONALPROPERTIESWRITINGSYSTEM_SITELEN_SITELEN: Literal["sitelen sitelen"] = (
     "sitelen sitelen"
-] = "sitelen sitelen"
+)
 """The values for the 'the writing system this font uses as its script' enum"""
 _FONTSADDITIONALPROPERTIESWRITINGSYSTEM_ALPHABET: Literal["alphabet"] = "alphabet"
 """The values for the 'the writing system this font uses as its script' enum"""
