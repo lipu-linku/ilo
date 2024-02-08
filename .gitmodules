@@ -1,6 +1,6 @@
-[submodule "fonts"]
-	path = fonts
-	url = https://github.com/lipu-linku/nasin-sitelen.git
+[submodule "ijo"]
+	path = ijo
+	url = https://github.com/lipu-linku/ijo.git
 [submodule "sona"]
 	path = sona
-	url = git@github.com:lipu-linku/sona
+	url = https://github.com/lipu-linku/sona.git

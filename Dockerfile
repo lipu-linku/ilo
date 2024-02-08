@@ -18,9 +18,7 @@ RUN apt-get update -y && \
 ENV PYTHONPATH=/project/pkgs
 
 COPY src/ /project/pkgs/
-COPY fonts/ /project/fonts
-# this is a volume oops
-# COPY userdata/ /project/userdata
+COPY ijo/nasinsitelen/ /project/ijo/nasinsitelen
 
 # this will change most often
 COPY --from=builder /project/__pypackages__/3.10/lib /project/pkgs
