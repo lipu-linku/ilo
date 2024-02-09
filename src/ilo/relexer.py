@@ -1,10 +1,10 @@
 import re
 from collections.abc import Callable
 
-from ilo.jasima import bundle, get_word_entry
+from ilo.data import WORDS
+from ilo.data import WORDS_DATA as bundle
+from ilo.data import Dict, get_word_data
 from ilo.tokenizer import SENT_DELIMITERS, tokenize
-
-bundle = bundle["data"]
 
 SYMBOL_RE = r"[^a-zA-Z]*"
 SYMBOL_RE = re.compile(SYMBOL_RE)
@@ -21,51 +21,46 @@ EN_SPECIAL_CASES = {
     "lu": "reserved",
     "nu": "reserved",
     "pu": "interact with Toki Pona: The Language of Good",
-    "su": "reserved",
+    "su": "interact with a book from the illustrated story book series that began with The Wonderful Wizard of Oz, produced by Sonja Lang",
     "u": "reserved",
 }
 ETYM_UNK = {"∅", "?", "unknown"}
 
 
-def __filter_only_alpha(text: str) -> str:
-    return re.sub(SYMBOL_RE, "", text)
-
-
-def __get_nth_word(defin: str, n: int = 0) -> str:
-    return defin.split(" ")[n]
+def __get_highest_scoring(word: str, ku_data: Dict[str, int]):
+    score = 0
+    for k, v in ku_data.items():
+        if v > score:
+            word, score = k, v
+    return word
 
 
 def relex_word_en(word: str) -> str:
     """
     Relex a given word with the following priority order:
     1. special cases
-    2. first word of ku data
-    3. first word of definition
-    4. original input (do nothing)
+    2. highest scoring word of ku data
+    3. original input (do nothing)
 
     This is not reasonable to reverse at present. jasima needs a relex column.
     """
-    found = bundle.get(word)
+    found = get_word_data(word)
     if not found:
         return word
     if word in EN_SPECIAL_CASES:
         return EN_SPECIAL_CASES[word]
-    fetch_from = found.get("ku_data") or found["def"]["en"] if found else word
-    word = __filter_only_alpha(__get_nth_word(fetch_from))
+    if "ku_data" in found:  # TODO: typing garbagefire
+        return __get_highest_scoring(word, found["ku_data"])
     return word
 
 
 def relex_word_etym(word: str) -> str:
-    if not (found := bundle.get(word)):
+    found = get_word_data(word)
+    if not found:
         return word
-    if not (etym_data := found.get("etymology_data")):
+    if not (etymology := found.get("etymology")):
         return word
-    if not (etym_words := etym_data.get("words")):
-        return word
-
-    # remove strip when lipu-linku/jasima/pull/4 is merged
-    candidate = etym_words.split(";")[0].strip()
-    return candidate
+    return etymology[0].get("word") or word
 
 
 def __sent_relex(input: str, relex_func: Callable) -> str:

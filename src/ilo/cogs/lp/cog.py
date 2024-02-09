@@ -1,8 +1,9 @@
 from discord.commands import option, slash_command
 from discord.ext.commands import Cog
 
-from ilo import jasima
 from ilo.cog_utils import Locale, load_file, word_autocomplete
+from ilo.data import get_lukapona_data
+from ilo.strings import handle_word_query
 
 
 class CogLp(Cog):
@@ -23,12 +24,13 @@ class CogLp(Cog):
 
 
 async def lp(ctx, word):
-    response = jasima.get_word_entry(word)
+    response = handle_word_query(word)
+    # TODO: luka pona data is no longer with words
+
     if isinstance(response, str):
         await ctx.respond(response)
         return
-    if "luka_pona" in response:
-        if "gif" in response["luka_pona"]:
-            await ctx.respond(response["luka_pona"]["gif"])
-            return
+    if gif := response.get("video", {}).get("gif"):
+        await ctx.respond(gif)
+        return
     await ctx.respond(f"No luka pona available for **{word}**")

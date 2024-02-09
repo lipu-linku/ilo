@@ -1,12 +1,11 @@
-from typing import Literal, Optional
+from typing import Literal
 
-import discord
 from discord import ButtonStyle, Embed
 from discord.ext.commands import Cog
 from discord.ui import Button, View
 
-from ilo import jasima
-from ilo.cog_utils import Locale, load_file, word_autocomplete
+from ilo import data, strings
+from ilo.cog_utils import Locale, word_autocomplete
 from ilo.cogs.nimi.colour import colours
 from ilo.preferences import Template, preferences
 
@@ -19,7 +18,7 @@ class CogNimi(Cog):
                 self.locale,
                 "language",
                 "en",
-                jasima.get_languages_for_slash_commands(),
+                data.get_languages_for_slash_commands(),
                 validation=language_validation,
             )
         )
@@ -28,7 +27,7 @@ class CogNimi(Cog):
                 self.locale,
                 "usage",
                 "widespread",
-                jasima.get_usages_for_slash_commands(),
+                data.get_usages_for_slash_commands(),
                 validation=usage_validation,
             )
         )
@@ -56,7 +55,7 @@ class CogNimi(Cog):
 async def nimi(ctx, word):
     lang = preferences.get(str(ctx.author.id), "language")
 
-    response = jasima.get_word_entry(word)
+    response = strings.handle_word_query(word)
     if isinstance(response, str):
         await ctx.respond(response)
         return
@@ -68,8 +67,9 @@ async def nimi(ctx, word):
 async def guess(ctx, show: Literal["word", "def"]):
     lang = preferences.get(str(ctx.author.id), "language")
     usage = preferences.get(str(ctx.author.id), "usage")
+    # assert usage in data.USAGES
 
-    word, response = jasima.get_random_word(min_usage=usage)
+    word, response = data.get_random_word(min_usage=usage)
     embed = guess_embed_response(word, lang, response, show)
     await ctx.respond(embed=embed)
 
@@ -150,34 +150,37 @@ class NimiView(View):
             custom_id=f"{buttontype};{word};{lang}",
         )
         self.add_item(minmax)
-        self.add_item(Button(
-            style=ButtonStyle.link,
-            label="linku.la",
-            url=f"https://linku.la/?q={word}"
-        ))
-        self.add_item(Button(
-            style=ButtonStyle.link,
-            label="nimi.li",
-            url=f"https://nimi.li/{word}"
-        ))
-
-        if (jasima.get_word_entry(word)["usage_category"]
-                in ("core", "widespread", "common", "uncommon", "rare")):
-            self.add_item(Button(
+        self.add_item(
+            Button(
                 style=ButtonStyle.link,
-                label="sona.pona.la",
-                url=f"https://sona.pona.la/wiki/{word}"
-            ))
+                label="linku.la",
+                url=f"https://linku.la/?q={word}",
+            )
+        )
+        self.add_item(
+            Button(
+                style=ButtonStyle.link, label="nimi.li", url=f"https://nimi.li/{word}"
+            )
+        )
+
+        if (word_data := data.get_word_data(word)) and "sona_pona" in word_data:
+            self.add_item(
+                Button(
+                    style=ButtonStyle.link,
+                    label="sona.pona.la",
+                    url=word_data["sona_pona"],
+                )
+            )
 
 
 class NimiButton(Button):
     async def callback(self, interaction):
         buttontype, word, lang = self.custom_id.split(";")
         if buttontype == "expand":
-            embed = embed_response(word, lang, jasima.get_word_entry(word), "verbose")
+            embed = embed_response(word, lang, data.get_word_data(word), "verbose")
             view = NimiView("minimise", word, lang)
         elif buttontype == "minimise":
-            embed = embed_response(word, lang, jasima.get_word_entry(word), "concise")
+            embed = embed_response(word, lang, data.get_word_data(word), "concise")
             view = NimiView("expand", word, lang)
         else:
             await interaction.response.edit_message("Something went wrong!")
