@@ -1,17 +1,7 @@
-import re
 from collections.abc import Callable
 
-from ilo.data import WORDS
-from ilo.data import WORDS_DATA as bundle
-from ilo.data import Dict, get_word_data
+from ilo.data import Dict, deep_get_word_data, get_word_data
 from ilo.tokenizer import SENT_DELIMITERS, tokenize
-
-SYMBOL_RE = r"[^a-zA-Z]*"
-SYMBOL_RE = re.compile(SYMBOL_RE)
-
-ETYM_RE = r"^(?P<word>.+) (?:‘(?P<definition>.*)’)?(?:\((?P<alttext>.*)\))?"
-# TODO: incomplete, waiting on consistent format in jasima
-MULTI_ETYM_RE = rf""
 
 EN_SPECIAL_CASES = {
     "li": "is",
@@ -24,7 +14,6 @@ EN_SPECIAL_CASES = {
     "su": "interact with a book from the illustrated story book series that began with The Wonderful Wizard of Oz, produced by Sonja Lang",
     "u": "reserved",
 }
-ETYM_UNK = {"∅", "?", "unknown"}
 
 
 def __get_highest_scoring(word: str, ku_data: Dict[str, int]):
@@ -42,7 +31,7 @@ def relex_word_en(word: str) -> str:
     2. highest scoring word of ku data
     3. original input (do nothing)
 
-    This is not reasonable to reverse at present. jasima needs a relex column.
+    This is not reasonable to reverse at present. sona would need a relex column.
     """
     found = get_word_data(word)
     if not found:
@@ -55,12 +44,7 @@ def relex_word_en(word: str) -> str:
 
 
 def relex_word_etym(word: str) -> str:
-    found = get_word_data(word)
-    if not found:
-        return word
-    if not (etymology := found.get("etymology")):
-        return word
-    return etymology[0].get("word") or word
+    return deep_get_word_data(word, "etymology", 0, "word") or word
 
 
 def __sent_relex(input: str, relex_func: Callable) -> str:

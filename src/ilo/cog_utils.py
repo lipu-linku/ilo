@@ -54,7 +54,7 @@ async def word_autocomplete(ctx: AutocompleteContext) -> List[str]:
 
 
 async def font_autocomplete(ctx: AutocompleteContext) -> List[str]:
-    return autocomplete_filter(ctx.value, data.FONTS_FOR_AUTOCOMPLETE)
+    return autocomplete_filter(ctx.value, list(data.USABLE_FONTS.keys()))
 
 
 class Locale:

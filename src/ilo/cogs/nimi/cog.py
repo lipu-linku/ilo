@@ -18,7 +18,7 @@ class CogNimi(Cog):
                 self.locale,
                 "language",
                 "en",
-                data.get_languages_for_slash_commands(),
+                data.LANGUAGES_FOR_PREFS,
                 validation=language_validation,
             )
         )
@@ -27,7 +27,7 @@ class CogNimi(Cog):
                 self.locale,
                 "usage",
                 "widespread",
-                data.get_usages_for_slash_commands(),
+                data.USAGES_FOR_PREFS,
                 validation=usage_validation,
             )
         )
@@ -78,7 +78,7 @@ def spoiler_wrap(s: str) -> str:
     return f"|| {s} ||"
 
 
-def guess_embed_response(word, lang, response, show: Literal["word", "def"]):
+def guess_embed_response(word: str, lang: str, response, show: Literal["word", "def"]):
     embed = Embed()
     embed.title = response["word"]
     if show != "word":
@@ -96,48 +96,58 @@ def guess_embed_response(word, lang, response, show: Literal["word", "def"]):
     return embed
 
 
-def embed_response(word, lang, response, embedtype):
+def embed_response(
+    word: str,
+    lang: str,
+    response,
+    embedtype: Literal["concise", "verbose"],
+):
     embed = Embed()
     embed.title = response["word"]
-    embed.colour = colours[response["usage_category"]]
-    description = (
-        response["def"][lang]
-        if lang in response["def"]
-        else "(en) {}".format(response["def"]["en"])
-    )
+    embed.colour = colours[response.get("usage_category", "obscure")]
+    description = data.deep_get(response, "translations", lang, "definitions")
+    # TODO: REPLACEME with `definition`
     usage = response["usage_category"] if "usage_category" in response else "unknown"
     embed.add_field(
         name="usage", value=f"{usage} ({response['book'].replace('none', 'no book')})"
     )
+
     embed.set_thumbnail(
         url=f"https://raw.githubusercontent.com/lipu-linku/ijo/main/sitelenpona/sitelen-seli-kiwen/{word}.png",
     )
+    # embed.set_thumbnail( # TODO: not final, but REPLACEME
+    #     url=data.deep_get(response, "representations", "sitelen_pona_svg", 0)
+    # )
 
     if embedtype == "concise":
         embed.add_field(name="description", value=description)
 
     if embedtype == "verbose":
         embed.add_field(name="description", value=description, inline=False)
-        if "etymology" in response or "source_language" in response:
+        etym_untrans = response.get("etymology")
+        etym_trans = data.deep_get(response, "translations", lang, "etymology")
+        if etym_untrans and etym_trans:
             embed.add_field(
-                name="etymology", value=build_etymology(response), inline=False
+                name="etymology",
+                value=strings.format_etymology(etym_untrans, etym_trans),
+                inline=False,
             )
         if "ku_data" in response:
             embed.add_field(
                 name="ku data",
-                value="{} [(source)](http://tokipona.org/nimi_pu.txt)".format(
-                    response["ku_data"]
+                value="{}\n[(source one)](http://tokipona.org/nimi_pu.txt), [(source two)](http://tokipona.org/nimi_pi_pu_ala.txt)".format(
+                    strings.format_ku_data(response["ku_data"])
                 ),
                 inline=False,
             )
-        if "commentary" in response:
-            embed.add_field(
-                name="commentary", value=response["commentary"], inline=False
-            )
+        commentary = data.deep_get(response, "translations", lang, "commentary")
+        if commentary:
+            embed.add_field(name="commentary", value=commentary, inline=False)
 
-    if response["book"] not in ("pu", "ku suli"):
+    if response["usage_category"] not in ("core", "widespread"):
+        # these words may have `see_also` but don't need it
         if "see_also" in response:
-            embed.add_field(name="see also", value=response["see_also"])
+            embed.add_field(name="see also", value=", ".join(response["see_also"]))
     return embed
 
 
@@ -155,6 +165,7 @@ class NimiView(View):
                 style=ButtonStyle.link,
                 label="linku.la",
                 url=f"https://linku.la/?q={word}",
+                # url=f"https://linku.la/words/{word}",
             )
         )
         self.add_item(
@@ -188,18 +199,9 @@ class NimiButton(Button):
         await interaction.response.edit_message(embed=embed, view=view)
 
 
-def build_etymology(response):
-    etymology = "←"
-    if "source_language" in response:
-        etymology += " " + response["source_language"]
-    if "etymology" in response:
-        etymology += " " + response["etymology"]
-    return etymology
-
-
 def language_validation(value: str) -> bool | str:
-    return value in jasima.LANGUAGES or "Selected language not available."
+    return value in data.LANGUAGE_DATA or "Selected language not available."
 
 
 def usage_validation(value: str) -> bool | str:
-    return value in jasima.USAGES or "Selected usage not valid."
+    return value in data.Usage.__members__ or "Selected usage not valid."

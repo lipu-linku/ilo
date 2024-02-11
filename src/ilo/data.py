@@ -2,7 +2,8 @@ import json
 import os
 import random
 import urllib.request
-from typing import Dict, List, Optional, Tuple
+from enum import Enum
+from typing import Callable, Dict, Iterable, List, Optional, Tuple, TypeAlias
 
 from sona.fingerspelling import Fingerspelling
 from sona.fingerspelling_sign import FingerspellingSign
@@ -14,33 +15,15 @@ from sona.signs import Signs
 from sona.word import Word
 from sona.words import Words
 
+JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | str | int | float | bool | None
+
+API_URL = "https://api.linku.la/"
+
 WORDS_LINK = "https://api.linku.la/v1/words?lang=*"
 LANGUAGES_LINK = "https://api.linku.la/v1/languages"
 FONTS_LINK = "https://api.linku.la/v1/fonts"
-SIGNS_LINK = "https://api.linku.la/v1/luka_pona/signs"
-FINGERSPELLING_LINK = "https://api.linku.la/v1/luka_pona/fingerspelling"
-
-help_message = "The word you requested, ***{}***, is not in the database I use. Make sure you didn't misspell it, or talk to kala Asi if this word really is missing."
-multiple_words_message = "The phrase you requested, ***{}***, contains multiple words. I am but a simple dictionary and can only do words one at a time."
-exception_nonspecific = "Something failed and I'm not sure what. Please tell kala Asi."
-
-USAGE_MAP = {  # TODO: do not hardcode? serve from api?
-    "core": 90,
-    "widespread": 70,
-    "common": 50,
-    "uncommon": 20,
-    "rare": 10,
-    "obscure": 0,
-}
-
-USAGES = list(USAGE_MAP.keys())
-SITELEN_SITELEN_FONT = "sitelen Latin (ss)"
-DEFAULT_FONT = "nasin sitelen pu mono"
-
-# TODO:
-# - rework all functions here to use the api
-# - find all `jasima` and replace it with `data`
-# - find all `bundle` and replace it with a function from `data`
+SIGNS_LINK = "https://api.linku.la/v1/luka_pona/signs?lang=*"
+FINGERSPELLING_LINK = "https://api.linku.la/v1/luka_pona/fingerspelling?lang=*"
 
 
 HEADERS = {  # pretend to be Chrome 120 for our api (thanks cloudflare)
@@ -60,35 +43,60 @@ LANGUAGE_DATA: Languages = json.loads(get_site(LANGUAGES_LINK))
 SIGNS_DATA: Signs = json.loads(get_site(SIGNS_LINK))
 FINGERSPELLING_DATA: Fingerspelling = json.loads(get_site(FINGERSPELLING_LINK))
 
+# sign data needs to be searched by `definition` for LpCog
+# the default key is the ID, which is an adaptation of its gloss
+SIGNS_DATA_BY_WORD: Dict[str, Sign] = {
+    v["definition"]: v for _, v in SIGNS_DATA.items()
+}
 
-# Fonts need to be inverted to `name` for user purposes;
-# from there, the user only needs the filename, since it's for preferences
+
+# font data needs to be filtered to usable fonts
 FONTDIR = "ijo/nasinsitelen/"
 USABLE_FONTS = {
     font: os.path.join(FONTDIR, fontdata["filename"])
     for font, fontdata in FONTS_DATA.items()
     if "filename" in fontdata
+    and os.path.exists(os.path.join(FONTDIR, fontdata["filename"]))
 }
-USABLE_FONTS = {k: v for k, v in USABLE_FONTS.items() if os.path.exists(v)}
+assert USABLE_FONTS, (
+    "No usable fonts found! Is something wrong with the fontdir? %s" % FONTDIR
+)
 
-# Luka pona data needs to be inverted to `definition` for the LpCog
-LUKAPONA_DATA_BY_WORD: Dict[str, Sign] = {
-    v["definition"]: v for _, v in SIGNS_DATA.items()
+
+class Usage(Enum):
+    core = 90
+    widespread = 70
+    common = 50
+    uncommon = 20
+    rare = 10
+    obscure = 0
+
+
+# map endonym or fallback english name to langcode
+# user will see name but pref will save as langcode
+LANGUAGES_FOR_PREFS = {
+    langdata["name"].get("endonym", langdata["name"]["en"]): langcode
+    for langcode, langdata in LANGUAGE_DATA.items()
 }
+USAGES_FOR_PREFS = {usage.name: usage.name for usage in Usage}
 
-LANGUAGES = list(LANGUAGE_DATA.keys())
-FONTS = list(FONTS_DATA.keys())
-FONTS_FOR_AUTOCOMPLETE = list(USABLE_FONTS)
+SITELEN_SITELEN_FONT = "sitelen Latin (ss)"
+DEFAULT_FONT = "nasin sitelen pu mono"
+
+# TODO:
+# - rework all functions here to use the api
+# - find all `jasima` and replace it with `data`
+
+
 WORDS = list(WORDS_DATA.keys())
 
 
 def get_word_data(word: str) -> Optional[Word]:
-    """Fetch a word from sona or return None."""
     return WORDS_DATA.get(word)
 
 
-def get_lukapona_data(word: str) -> Sign:
-    return LUKAPONA_DATA_BY_WORD[word]
+def get_lukapona_data(word: str) -> Optional[Sign]:
+    return SIGNS_DATA_BY_WORD.get(word)
 
 
 def get_random_word(min_usage: str = "widespread") -> Tuple[str, Word]:
@@ -97,33 +105,52 @@ def get_random_word(min_usage: str = "widespread") -> Tuple[str, Word]:
     return word, response
 
 
-def get_languages_for_slash_commands():
-    # TODO: make constant
-    lang_opts = dict()
-    for k, v in LANGUAGE_DATA.items():
-        names = v["name"]
-        name = names.get("endonym") or names["en"]
-        lang_opts[name] = k
-    return
-
-
-def get_usages_for_slash_commands() -> dict:  # it expects a dict for pref choices
-    return {usage: usage for usage in USAGE_MAP}
-
-
 def get_usage(word: str) -> int:
     """Given a word, return the usage of that word if it exists or 0"""
-    if word_data := WORDS_DATA.get(word):
-        if usages := word_data.get("usage"):  # in case a word has no usage
-            if last_usage := list(usages.values())[-1]:  # always last member
-                return last_usage
-    return 0
+    return deep_get_callable(WORDS_DATA, word, "usage", dict.values, list, -1) or 0
 
 
 def get_words_min_usage_filter(usage: str):
     """Make autocomplete better for word selection, prune to only words at or above selected usage"""
-    return [word for word in WORDS if get_usage(word) >= USAGE_MAP[usage]]
+    return [word for word in WORDS if get_usage(word) >= Usage[usage].value]
 
 
-def fetch_font_filename(fontname: str) -> str:
-    pass
+def deep_get(obj: JSON, *keys: int | str) -> JSON:
+    for key in keys:
+        if isinstance(obj, Dict) and isinstance(key, str):
+            obj = obj.get(key)
+        elif isinstance(obj, List) and isinstance(key, int):
+            obj = obj[key] if key < len(obj) else None
+        else:
+            # there is a key but no traversable obj
+            # or a key that is incompatible with the current obj
+            return None
+    return obj
+
+
+def deep_get_callable(
+    obj: JSON,
+    *keys: int | str | Callable[[JSON], JSON],
+) -> JSON:
+    for key in keys:
+        if isinstance(obj, Dict) and isinstance(key, str):
+            obj = obj.get(key)
+        elif isinstance(obj, List) and isinstance(key, int):
+            obj = obj[key] if key < len(obj) else None
+        elif isinstance(key, Callable):  # obj agnostic
+            obj = key(obj)
+        else:
+            return None
+    return obj
+
+
+def deep_get_word_data(*keys: int | str) -> JSON:
+    return deep_get(WORDS_DATA, *keys)  # type: ignore because `sona` is just more specific JSON
+
+
+def deep_get_sign_data(*keys: int | str) -> JSON:
+    return deep_get(SIGNS_DATA, *keys)
+
+
+def deep_get_sign_data_by_word(*keys: int | str) -> JSON:
+    return deep_get(SIGNS_DATA_BY_WORD, *keys)
