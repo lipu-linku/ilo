@@ -1,4 +1,4 @@
-from ilo import jasima
+from ilo import data
 
 templates_books = {
     "none": "{}",
@@ -16,10 +16,12 @@ books_allowed = {
 
 
 def respond(word, book_label):
-    data = jasima.bundle["data"]
-    data = sorted(data.values(), key=lambda x: books_order[x["book"]])
+    """
+    return a dictionary mapping single letters to the list of words starting with that letter
+    """
+    fetched = sorted(data.WORDS_DATA.values(), key=lambda x: books_order[x["book"]])
     responses = {}
-    for entry in data:
+    for entry in fetched:
         if entry["book"] in books_allowed[book_label]:
             w = entry["word"]
             if w[0].lower() not in responses:

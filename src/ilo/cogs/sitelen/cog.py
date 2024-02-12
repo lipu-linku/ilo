@@ -7,8 +7,7 @@ from discord.ext.commands import Cog
 
 from ilo import sitelen
 from ilo.cog_utils import Locale, font_autocomplete
-from ilo.fonts import fonts
-from ilo.jasima import DEFAULT_FONT, SITELEN_SITELEN_FONT
+from ilo.data import DEFAULT_FONT, SITELEN_SITELEN_FONT, USABLE_FONTS
 from ilo.preferences import Template, preferences
 
 
@@ -26,7 +25,7 @@ class CogSitelen(Cog):
                 self.locale,
                 "font",
                 DEFAULT_FONT,
-                {font: font for font in fonts},
+                {font: font for font in USABLE_FONTS},
                 validation=font_validation,
             )
         )
@@ -57,11 +56,6 @@ class CogSitelen(Cog):
     async def slash_sitelensitelen(self, ctx: ApplicationContext, text: str):
         await ss(ctx, text)
 
-    @locale.command("preview")
-    @locale.option("preview-text")
-    async def slash_preview(self, ctx: ApplicationContext, text: str):
-        await preview(ctx, text)
-
 
 def unescape_newline(text: str) -> str:
     return text.replace("\\n", "\n")
@@ -72,7 +66,9 @@ async def sp(ctx: ApplicationContext, text: str, font: str = ""):
     font = font or preferences.get(str(ctx.author.id), "font")
     color = preferences.get(str(ctx.author.id), "color")
     text = unescape_newline(text)
-    image = io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
+    image = io.BytesIO(
+        sitelen.display(text, USABLE_FONTS[font], fontsize, rgb_tuple(color))
+    )
     await ctx.respond(file=File(image, filename="a.png"))
 
 
@@ -81,7 +77,9 @@ async def ss(ctx: ApplicationContext, text: str):
     color = preferences.get(str(ctx.author.id), "color")
     font = SITELEN_SITELEN_FONT
     text = unescape_newline(text)
-    image = io.BytesIO(sitelen.display(text, fonts[font], fontsize, rgb_tuple(color)))
+    image = io.BytesIO(
+        sitelen.display(text, USABLE_FONTS[font], fontsize, rgb_tuple(color))
+    )
     await ctx.respond(file=File(image, filename="a.png"))
 
 
@@ -98,7 +96,7 @@ def colour_validation(value: int) -> bool | str:
 
 
 def font_validation(value: str) -> bool | str:
-    return value in fonts or "Invalid font selected."
+    return value in USABLE_FONTS or "Invalid font selected."
 
 
 def is_colour(value) -> Optional[bool]:

@@ -5,7 +5,7 @@ import re
 from discord.ext.commands import Cog
 
 from ilo.cog_utils import Locale, load_file
-from ilo.jasima import bundle
+from ilo.data import get_word_data
 
 
 class CogSe(Cog):
@@ -46,11 +46,13 @@ def clean_string(string):
     return clean_string
 
 
-def sitelen_emosi(word):
-    entries = bundle["data"]
-    if word in entries:
-        if "sitelen_emosi" in entries[word]:
-            return entries[word]["sitelen_emosi"]
+def sitelen_emosi(word: str):
+    word_data = get_word_data(word)
+    if word_data:
+        sitelen = word_data["representations"].get("sitelen_emosi")
+        if sitelen:
+            return sitelen
+
     chars = []
     for letter in word:
         chars.append(extraemoji[letter])

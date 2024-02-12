@@ -1,8 +1,8 @@
-from discord.commands import option, slash_command
 from discord.ext.commands import Cog
 
-from ilo import jasima
-from ilo.cog_utils import Locale, load_file, word_autocomplete
+from ilo import data
+from ilo.cog_utils import Locale, word_autocomplete
+from ilo.strings import handle_sign_query
 
 
 class CogLp(Cog):
@@ -23,12 +23,12 @@ class CogLp(Cog):
 
 
 async def lp(ctx, word):
-    response = jasima.get_word_entry(word)
+    response = handle_sign_query(word)
+
     if isinstance(response, str):
         await ctx.respond(response)
         return
-    if "luka_pona" in response:
-        if "gif" in response["luka_pona"]:
-            await ctx.respond(response["luka_pona"]["gif"])
-            return
+    if gif := data.deep_get(response, "video", "gif"):
+        await ctx.respond(gif)
+        return
     await ctx.respond(f"No luka pona available for **{word}**")

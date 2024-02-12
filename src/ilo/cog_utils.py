@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Dict, List
 
 from discord import AutocompleteContext
 from discord.commands import option as pycord_option
@@ -7,12 +8,11 @@ from discord.commands import slash_command as pycord_slash_command
 from discord.ext.bridge import bridge_command as pycord_bridge_command
 from discord.ext.commands import Cog as PycordCog
 
-from ilo import jasima
-from ilo.fonts import fonts
+from ilo import data
 from ilo.preferences import Template, preferences
 
 
-def load_file(file_path, file_name):
+def load_file(file_path, file_name) -> List[str] | Dict:
     path = Path(file_path).parent / file_name
     with open(path, encoding="utf-8") as f:
         if path.suffix == ".json":
@@ -33,28 +33,28 @@ def is_subsequence(s: str, opt: str) -> bool:
     return s_idx == s_len
 
 
-def fuzzy_filter(s: str, opts: list[str]) -> list[str]:
+def fuzzy_filter(s: str, opts: list[str]) -> List[str]:
     return [opt for opt in opts if is_subsequence(s, opt)]
 
 
-def startswith_filter(s: str, opts: list[str]):
+def startswith_filter(s: str, opts: list[str]) -> List[str]:
     s = s.lower()
     return list(filter(lambda x: x.lower().startswith(s), opts))
 
 
-def autocomplete_filter(s: str, opts: list[str]):
+def autocomplete_filter(s: str, opts: list[str]) -> List[str]:
     return fuzzy_filter(s, opts)
 
 
-async def word_autocomplete(ctx: AutocompleteContext):
+async def word_autocomplete(ctx: AutocompleteContext) -> List[str]:
     # we could pre-compute the usages to save some time
     usage: str = preferences.get(str(ctx.interaction.user.id), "usage")
-    words = jasima.get_words_min_usage_filter(usage)
+    words = data.get_words_min_usage_filter(usage)
     return autocomplete_filter(ctx.value, words)
 
 
-async def font_autocomplete(ctx: AutocompleteContext):
-    return autocomplete_filter(ctx.value, list(fonts.keys()))
+async def font_autocomplete(ctx: AutocompleteContext) -> List[str]:
+    return autocomplete_filter(ctx.value, list(data.USABLE_FONTS.keys()))
 
 
 class Locale:

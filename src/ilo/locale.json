@@ -1,0 +1,6 @@
+{
+  "missing_word": "The word you requested, ***{}***, is not in the database I use. Make sure you didn't misspell it, or talk to kala Asi if this word really is missing.",
+  "multiple_words": "The phrase you requested, ***{}***, contains multiple words. I am but a simple dictionary and can only do words one at a time.",
+  "sheets_fail": "Something's wrong, I think I failed to reach the API. Please tell kala Asi.",
+  "unknown_error": "Something failed and I'm not sure what. Please tell kala Asi."
+}
