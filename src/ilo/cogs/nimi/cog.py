@@ -105,7 +105,7 @@ def embed_response(
     embed = Embed()
     embed.title = response["word"]
     embed.colour = colours[response.get("usage_category", "obscure")]
-    description = data.deep_get(response, "translations", lang, "definitions")
+    description = data.deep_get(response, "translations", lang, "definition")
     # TODO: REPLACEME with `definition`
     usage = response["usage_category"] if "usage_category" in response else "unknown"
     embed.add_field(
