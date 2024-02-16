@@ -15,6 +15,15 @@ propertyNames:
 class _WordsAdditionalproperties(TypedDict, total=False):
     """General info on a Toki Pona word"""
 
+    id: Required[str]
+    """
+    A unique identifier for the word. Usually the word but may have an integer added in case of a word with multiple definitions (like "we")
+
+    minLength: 1
+
+    Required property
+    """
+
     author_verbatim: Required[str]
     """
     The author's original definition, taken verbatim in their words
@@ -74,19 +83,11 @@ class _WordsAdditionalproperties(TypedDict, total=False):
     Required property
     """
 
-    sona_pona: str
-    """
-    A link to the word's page on sona.pona.la, a Toki Pona wiki. May redirect for words with references but no dedicated page.
+    resources: "_WordsAdditionalpropertiesResources"
+    """ Non-Linku resources related to the specific word, such as wiki links. """
 
-    format: uri
-    """
-
-    representations: Required["_WordsAdditionalpropertiesRepresentations"]
-    """
-    Ways of representing this word in the real world, via text/computers
-
-    Required property
-    """
+    representations: "_WordsAdditionalpropertiesRepresentations"
+    """ Ways of representing this word in the real world, via text/computers """
 
     source_language: Required[str]
     """
@@ -245,81 +246,51 @@ class _WordsAdditionalpropertiesPuVerbatim(TypedDict, total=False):
 class _WordsAdditionalpropertiesRepresentations(TypedDict, total=False):
     """Ways of representing this word in the real world, via text/computers"""
 
-    sitelen_emosi: Required["_WordsAdditionalpropertiesRepresentationsSitelenEmosi"]
+    sitelen_emosi: str
     """
     The sitelen emosi representation of this word, a script for writing Toki Pona using emoji
 
-    Aggregation type: anyOf
-
-    Required property
+    pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$
     """
 
-    sitelen_pona: Required[List[str]]
-    """
-    A list of sitelen Lasina representations of this word, to be converted into sitelen pona glyphs
+    ligatures: List["_WordsAdditionalpropertiesRepresentationsLigaturesItem"]
+    """ A list of sitelen Lasina representations of the word, used by ligature fonts to visually convert latin characters into sitelen pona """
 
-    Required property
-    """
-
-    sitelen_sitelen: Required["_WordsAdditionalpropertiesRepresentationsSitelenSitelen"]
+    sitelen_sitelen: str
     """
     A URL pointing to an image of this word's sitelen sitelen hieroglyphic block
 
-    Aggregation type: anyOf
-
-    Required property
+    format: uri
     """
 
-    ucsur: Required["_WordsAdditionalpropertiesRepresentationsUcsur"]
+    ucsur: str
     """
     The word's UCSUR codepoint, as defined in https://www.kreativekorp.com/ucsur/charts/sitelen.html
 
-    Aggregation type: anyOf
-
-    Required property
+    pattern: ^U\+[\da-fA-F]{4,6}$
     """
 
 
-_WordsAdditionalpropertiesRepresentationsSitelenEmosi = Union[
-    "_WordsAdditionalpropertiesRepresentationsSitelenEmosiAnyof0", Literal[""]
-]
-"""
-The sitelen emosi representation of this word, a script for writing Toki Pona using emoji
-
-Aggregation type: anyOf
-"""
+_WordsAdditionalpropertiesRepresentationsLigaturesItem = str
+""" minLength: 1 """
 
 
-_WordsAdditionalpropertiesRepresentationsSitelenEmosiAnyof0 = str
-""" pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$ """
+class _WordsAdditionalpropertiesResources(TypedDict, total=False):
+    """Non-Linku resources related to the specific word, such as wiki links."""
 
+    sona_pona: str
+    """
+    A link to the word's page on sona.pona.la, a Toki Pona wiki. May redirect for words with references but no dedicated page.
 
-_WordsAdditionalpropertiesRepresentationsSitelenSitelen = Union[
-    "_WordsAdditionalpropertiesRepresentationsSitelenSitelenAnyof0", Literal[""]
-]
-"""
-A URL pointing to an image of this word's sitelen sitelen hieroglyphic block
+    format: uri
+    """
 
-Aggregation type: anyOf
-"""
+    lipamanka_semantic: str
+    """
+    A link to lipamanka's description of the word's semantic space.
 
-
-_WordsAdditionalpropertiesRepresentationsSitelenSitelenAnyof0 = str
-""" format: uri """
-
-
-_WordsAdditionalpropertiesRepresentationsUcsur = Union[
-    "_WordsAdditionalpropertiesRepresentationsUcsurAnyof0", Literal[""]
-]
-"""
-The word's UCSUR codepoint, as defined in https://www.kreativekorp.com/ucsur/charts/sitelen.html
-
-Aggregation type: anyOf
-"""
-
-
-_WordsAdditionalpropertiesRepresentationsUcsurAnyof0 = str
-""" pattern: ^U\+[\da-fA-F]{4,6}$ """
+    format: uri
+    """
 
 
 class _WordsAdditionalpropertiesTranslationsAdditionalproperties(
@@ -328,7 +299,7 @@ class _WordsAdditionalpropertiesTranslationsAdditionalproperties(
     commentary: Required[str]
     """ Required property """
 
-    definitions: Required[str]
+    definition: Required[str]
     """
     minLength: 1
 

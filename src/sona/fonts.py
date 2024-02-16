@@ -10,6 +10,15 @@ Fonts = Dict[str, "_FontsAdditionalproperties"]
 class _FontsAdditionalproperties(TypedDict, total=False):
     """Info on a font for Toki Pona"""
 
+    id: Required[str]
+    """
+    The font's unique ID, identifying it among other fonts
+
+    minLength: 1
+
+    Required property
+    """
+
     creator: Required[List[str]]
     """
     a list of this font's creators

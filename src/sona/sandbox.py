@@ -15,6 +15,15 @@ propertyNames:
 class _SandboxAdditionalproperties(TypedDict, total=False):
     """General info on a Toki Pona word"""
 
+    id: Required[str]
+    """
+    A unique identifier for the word. Usually the word but may have an integer added in case of a word with multiple definitions (like "we")
+
+    minLength: 1
+
+    Required property
+    """
+
     author_verbatim: Required[str]
     """
     The author's original definition, taken verbatim in their words
@@ -74,19 +83,11 @@ class _SandboxAdditionalproperties(TypedDict, total=False):
     Required property
     """
 
-    sona_pona: str
-    """
-    A link to the word's page on sona.pona.la, a Toki Pona wiki. May redirect for words with references but no dedicated page.
+    resources: "_SandboxAdditionalpropertiesResources"
+    """ Non-Linku resources related to the specific word, such as wiki links. """
 
-    format: uri
-    """
-
-    representations: Required["_SandboxAdditionalpropertiesRepresentations"]
-    """
-    Ways of representing this word in the real world, via text/computers
-
-    Required property
-    """
+    representations: "_SandboxAdditionalpropertiesRepresentations"
+    """ Ways of representing this word in the real world, via text/computers """
 
     source_language: Required[str]
     """
@@ -245,83 +246,51 @@ class _SandboxAdditionalpropertiesPuVerbatim(TypedDict, total=False):
 class _SandboxAdditionalpropertiesRepresentations(TypedDict, total=False):
     """Ways of representing this word in the real world, via text/computers"""
 
-    sitelen_emosi: Required["_SandboxAdditionalpropertiesRepresentationsSitelenEmosi"]
+    sitelen_emosi: str
     """
     The sitelen emosi representation of this word, a script for writing Toki Pona using emoji
 
-    Aggregation type: anyOf
-
-    Required property
+    pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$
     """
 
-    sitelen_pona: Required[List[str]]
-    """
-    A list of sitelen Lasina representations of this word, to be converted into sitelen pona glyphs
+    ligatures: List["_SandboxAdditionalpropertiesRepresentationsLigaturesItem"]
+    """ A list of sitelen Lasina representations of the word, used by ligature fonts to visually convert latin characters into sitelen pona """
 
-    Required property
-    """
-
-    sitelen_sitelen: Required[
-        "_SandboxAdditionalpropertiesRepresentationsSitelenSitelen"
-    ]
+    sitelen_sitelen: str
     """
     A URL pointing to an image of this word's sitelen sitelen hieroglyphic block
 
-    Aggregation type: anyOf
-
-    Required property
+    format: uri
     """
 
-    ucsur: Required["_SandboxAdditionalpropertiesRepresentationsUcsur"]
+    ucsur: str
     """
     The word's UCSUR codepoint, as defined in https://www.kreativekorp.com/ucsur/charts/sitelen.html
 
-    Aggregation type: anyOf
-
-    Required property
+    pattern: ^U\+[\da-fA-F]{4,6}$
     """
 
 
-_SandboxAdditionalpropertiesRepresentationsSitelenEmosi = Union[
-    "_SandboxAdditionalpropertiesRepresentationsSitelenEmosiAnyof0", Literal[""]
-]
-"""
-The sitelen emosi representation of this word, a script for writing Toki Pona using emoji
-
-Aggregation type: anyOf
-"""
+_SandboxAdditionalpropertiesRepresentationsLigaturesItem = str
+""" minLength: 1 """
 
 
-_SandboxAdditionalpropertiesRepresentationsSitelenEmosiAnyof0 = str
-""" pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$ """
+class _SandboxAdditionalpropertiesResources(TypedDict, total=False):
+    """Non-Linku resources related to the specific word, such as wiki links."""
 
+    sona_pona: str
+    """
+    A link to the word's page on sona.pona.la, a Toki Pona wiki. May redirect for words with references but no dedicated page.
 
-_SandboxAdditionalpropertiesRepresentationsSitelenSitelen = Union[
-    "_SandboxAdditionalpropertiesRepresentationsSitelenSitelenAnyof0", Literal[""]
-]
-"""
-A URL pointing to an image of this word's sitelen sitelen hieroglyphic block
+    format: uri
+    """
 
-Aggregation type: anyOf
-"""
+    lipamanka_semantic: str
+    """
+    A link to lipamanka's description of the word's semantic space.
 
-
-_SandboxAdditionalpropertiesRepresentationsSitelenSitelenAnyof0 = str
-""" format: uri """
-
-
-_SandboxAdditionalpropertiesRepresentationsUcsur = Union[
-    "_SandboxAdditionalpropertiesRepresentationsUcsurAnyof0", Literal[""]
-]
-"""
-The word's UCSUR codepoint, as defined in https://www.kreativekorp.com/ucsur/charts/sitelen.html
-
-Aggregation type: anyOf
-"""
-
-
-_SandboxAdditionalpropertiesRepresentationsUcsurAnyof0 = str
-""" pattern: ^U\+[\da-fA-F]{4,6}$ """
+    format: uri
+    """
 
 
 class _SandboxAdditionalpropertiesTranslationsAdditionalproperties(
@@ -330,7 +299,7 @@ class _SandboxAdditionalpropertiesTranslationsAdditionalproperties(
     commentary: Required[str]
     """ Required property """
 
-    definitions: Required[str]
+    definition: Required[str]
     """
     minLength: 1
 
