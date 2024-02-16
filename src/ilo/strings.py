@@ -49,13 +49,9 @@ def handle_sign_query(query: str) -> str | Sign:
 
 
 def clip_for_embed(to_embed: str):
-    LOG.error(to_embed)
-    LOG.error(len(to_embed))
     if len(to_embed) > MAX_EMBED_SIZE:
         to_embed = to_embed[:CLIPPED_EMBED_SIZE]
         to_embed += "…"
-    LOG.error(to_embed)
-    LOG.error(len(to_embed))
     return to_embed
 
 
