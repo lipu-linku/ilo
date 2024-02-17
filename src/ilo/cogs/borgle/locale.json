@@ -1,7 +1,9 @@
 {
 	"borgle": "Convert toki pona to plorcly borglar",
 	"borgle-text": "The text you want to convert.",
+	"borgle-spoiler": "Whether or not to hide the text with a spoiler.",
 
 	"deborgle": "Convert plorcly borglar to toki pona",
-	"deborgle-text": "The text you want to convert."
+	"deborgle-text": "The text you want to convert.",
+	"deborgle-spoiler": "Whether or not to hide the text with a spoiler."
 }
