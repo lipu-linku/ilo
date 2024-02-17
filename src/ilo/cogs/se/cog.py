@@ -7,6 +7,7 @@ from discord.ext.commands import Cog
 
 from ilo.cog_utils import Locale, load_file
 from ilo.data import get_word_data
+from ilo.strings import spoiler_text
 
 
 class CogSe(Cog):
@@ -35,8 +36,7 @@ async def se(ctx: ApplicationContext, string: str, spoiler: bool = False):
     response = " ".join(list(map(sitelen_emosi, string.split())))
 
     if spoiler:
-        # TODO: 1. move to cog utils for reuse 2. inspect response for spoiler bars?
-        response = f"||{response}||"
+        response = spoiler_text(response)
     await ctx.respond(response)
 
 
