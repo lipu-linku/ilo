@@ -2,6 +2,7 @@
 
 import re
 
+from discord import ApplicationContext
 from discord.ext.commands import Cog
 
 from ilo.cog_utils import Locale, load_file
@@ -16,11 +17,12 @@ class CogSe(Cog):
 
     @locale.command("se")
     @locale.option("se-text")
-    async def slash_se(self, ctx, text):
-        await se(ctx, text)
+    @locale.option("se-spoiler")
+    async def slash_se(self, ctx: ApplicationContext, text: str, spoiler: bool = False):
+        await se(ctx, text, spoiler)
 
 
-async def se(ctx, string):
+async def se(ctx: ApplicationContext, string: str, spoiler: bool = False):
     if len(string) > 500:
         response = (
             "Message is too long. Please try to keep messages below 500 characters."
@@ -31,10 +33,14 @@ async def se(ctx, string):
         response = "Resulting string is empty. Please provide a proper input."
 
     response = " ".join(list(map(sitelen_emosi, string.split())))
+
+    if spoiler:
+        # TODO: 1. move to cog utils for reuse 2. inspect response for spoiler bars?
+        response = f"||{response}||"
     await ctx.respond(response)
 
 
-def clean_string(string):
+def clean_string(string: str):
     clean_string = re.findall(r"([a-zA-Z: .?!])", string)
     clean_string = "".join(clean_string)
     clean_string = re.sub(r"(:)+", " : ", clean_string)
