@@ -40,7 +40,7 @@ class CogSitelen(Cog):
 
     @locale.command("sitelenpona")
     @locale.option("sitelenpona-text")
-    @locale.option("sitelenpona-font")
+    @locale.option("sitelenpona-font", autocomplete=font_autocomplete)
     async def slash_sitelenpona(
         self, ctx: ApplicationContext, text: str, font: str = ""
     ):
