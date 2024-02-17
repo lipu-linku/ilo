@@ -1,7 +1,10 @@
 {
 	"relex": "Relex a given toki pona sentence to English.",
 	"relex-text": "The phrase to relex into English.",
+	"relex-spoiler": "Whether or not to hide the text with a spoiler.",
 
 	"mama": "Relex a toki pona sentence to each word's etymology.",
-	"mama-text": "The phrase to relex into the etymology of the given words."
+	"mama-text": "The phrase to relex into the etymology of the given words.",
+	"mama-spoiler": "Whether or not to hide the text with a spoiler."
+
 }
