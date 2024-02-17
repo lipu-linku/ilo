@@ -49,12 +49,12 @@ class CogSitelen(Cog):
     @locale.command("ss")
     @locale.option("ss-text")
     async def slash_ss(self, ctx: ApplicationContext, text: str):
-        await ss(ctx, text)
+        await sp(ctx, text, SITELEN_SITELEN_FONT)
 
     @locale.command("sitelensitelen")
     @locale.option("sitelensitelen-text")
     async def slash_sitelensitelen(self, ctx: ApplicationContext, text: str):
-        await ss(ctx, text)
+        await sp(ctx, text, SITELEN_SITELEN_FONT)
 
 
 def unescape_newline(text: str) -> str:
@@ -72,15 +72,6 @@ async def sp(ctx: ApplicationContext, text: str, font: str = ""):
     await ctx.respond(file=File(image, filename="a.png"))
 
 
-async def ss(ctx: ApplicationContext, text: str):
-    fontsize = preferences.get(str(ctx.author.id), "fontsize")
-    color = preferences.get(str(ctx.author.id), "color")
-    font = SITELEN_SITELEN_FONT
-    text = unescape_newline(text)
-    image = io.BytesIO(
-        sitelen.display(text, USABLE_FONTS[font], fontsize, rgb_tuple(color))
-    )
-    await ctx.respond(file=File(image, filename="a.png"))
 
 
 def fontsize_validation(value: int) -> bool | str:
