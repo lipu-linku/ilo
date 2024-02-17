@@ -35,33 +35,52 @@ class CogSitelen(Cog):
     @locale.command("sp")
     @locale.option("sp-text")
     @locale.option("sp-font", autocomplete=font_autocomplete)
-    async def slash_sp(self, ctx: ApplicationContext, text: str, font: str = ""):
-        await sp(ctx, text, font)
+    @locale.option("sp-spoiler")
+    async def slash_sp(
+        self,
+        ctx: ApplicationContext,
+        text: str,
+        font: str = "",
+        spoiler: bool = False,
+    ):
+        await sp(ctx, text, font, spoiler)
 
     @locale.command("sitelenpona")
     @locale.option("sitelenpona-text")
     @locale.option("sitelenpona-font", autocomplete=font_autocomplete)
+    @locale.option("sitelenpona-spoiler")
     async def slash_sitelenpona(
-        self, ctx: ApplicationContext, text: str, font: str = ""
+        self,
+        ctx: ApplicationContext,
+        text: str,
+        font: str = "",
+        spoiler: bool = False,
     ):
-        await sp(ctx, text, font)
+        await sp(ctx, text, font, spoiler)
 
     @locale.command("ss")
     @locale.option("ss-text")
-    async def slash_ss(self, ctx: ApplicationContext, text: str):
-        await sp(ctx, text, SITELEN_SITELEN_FONT)
+    @locale.option("ss-spoiler")
+    async def slash_ss(self, ctx: ApplicationContext, text: str, spoiler: bool = False):
+        await sp(ctx, text, SITELEN_SITELEN_FONT, spoiler)
 
     @locale.command("sitelensitelen")
     @locale.option("sitelensitelen-text")
-    async def slash_sitelensitelen(self, ctx: ApplicationContext, text: str):
-        await sp(ctx, text, SITELEN_SITELEN_FONT)
+    @locale.option("sitelensitelen-spoiler")
+    async def slash_sitelensitelen(
+        self,
+        ctx: ApplicationContext,
+        text: str,
+        spoiler: bool = False,
+    ):
+        await sp(ctx, text, SITELEN_SITELEN_FONT, spoiler)
 
 
 def unescape_newline(text: str) -> str:
     return text.replace("\\n", "\n")
 
 
-async def sp(ctx: ApplicationContext, text: str, font: str = ""):
+async def sp(ctx: ApplicationContext, text: str, font: str = "", spoiler: bool = False):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     font = font or preferences.get(str(ctx.author.id), "font")
     color = preferences.get(str(ctx.author.id), "color")
@@ -69,9 +88,11 @@ async def sp(ctx: ApplicationContext, text: str, font: str = ""):
     image = io.BytesIO(
         sitelen.display(text, USABLE_FONTS[font], fontsize, rgb_tuple(color))
     )
-    await ctx.respond(file=File(image, filename="a.png"))
 
-
+    filename = "a.png"
+    if spoiler:
+        filename = f"SPOILER_{filename}"
+    await ctx.respond(file=File(image, filename=filename))
 
 
 def fontsize_validation(value: int) -> bool | str:
