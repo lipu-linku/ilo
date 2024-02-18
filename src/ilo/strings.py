@@ -89,3 +89,7 @@ def format_etymology(
     print(len(formatted))
     print(formatted)
     return clip_for_embed(formatted)
+
+
+def spoiler_text(text: str):
+    return f"||{text}||"

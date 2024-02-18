@@ -1,4 +1,5 @@
 {
 	"se": "Convert your text to sitelen Emosi",
-	"se-text": "The text you want to convert to sitelen sitelen."
+	"se-text": "The text you want to convert to sitelen sitelen.",
+  "se-spoiler": "Whether or not to hide the text with a spoiler."
 }

@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from ilo.cogs.nimi.cog import Literal
 
 from ilo.data import Dict, deep_get_word_data, get_word_data
 from ilo.tokenizer import SENT_DELIMITERS, tokenize
@@ -77,5 +78,5 @@ RELEX_FUNC_MAP = {"en": relex_sent_en, "etym": relex_sent_etym}
 
 
 # mostly for Discord's benefit
-def relex(input: str, method: str):
+def relex(input: str, method: Literal["en", "etym"]):
     return RELEX_FUNC_MAP[method](input)
