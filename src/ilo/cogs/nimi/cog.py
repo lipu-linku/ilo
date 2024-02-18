@@ -174,12 +174,13 @@ class NimiView(View):
             )
         )
 
-        if (word_data := data.get_word_data(word)) and "sona_pona" in word_data:
+        word_data = data.get_word_data(word)
+        if sonapona_link := data.deep_get(word_data, "resources", "sona_pona"):
             self.add_item(
                 Button(
                     style=ButtonStyle.link,
                     label="sona.pona.la",
-                    url=word_data["sona_pona"],
+                    url=sonapona_link,
                 )
             )
 
