@@ -23,9 +23,9 @@ class CogLp(Cog):
 
 
 async def lp(ctx, word):
-    response = handle_sign_query(word)
+    success, response = handle_sign_query(word)
 
-    if isinstance(response, str):
+    if not success:
         await ctx.respond(response)
         return
     if gif := data.deep_get(response, "video", "gif"):

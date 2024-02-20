@@ -1,10 +1,11 @@
 import logging
 from itertools import zip_longest
-from typing import Any, Callable, Dict, cast
+from typing import Any, Callable, Dict, Tuple, cast
 
 from ilo import data
 from ilo.cog_utils import load_file
-from ilo.data import get_word_data
+from ilo.cogs.nimi.cog import Literal
+from ilo.data import USABLE_FONTS, get_word_data
 from sona.sign import Sign
 from sona.word import Word
 
@@ -27,21 +28,31 @@ def __coalesce_resp(
     searchfunc: Callable[[str], Any],
     *args: Any,
     **kwargs: Any,
-) -> str | Any:
+) -> Tuple[bool, Any]:
     if len(query.split()) > 1:
-        return STRINGS["multiple_words"].format(query)
+        return False, STRINGS["multiple_words"].format(query)
 
     resp = searchfunc(query, *args, **kwargs)
     if not resp:
-        return STRINGS["missing_word"].format(query)
-    return resp
+        return False, STRINGS["missing_word"].format(query)
+    return True, resp
 
 
-def handle_word_query(query: str) -> str | Word:
+def handle_font_fetch(query: str) -> Tuple[bool, str]:
+    if query not in USABLE_FONTS:
+        return False, STRINGS["missing_font"].format(query)
+    return True, USABLE_FONTS["font"]
+
+
+def handle_word_query(
+    query: str,
+) -> Tuple[Literal[True], Word] | Tuple[Literal[False], str]:
     return __coalesce_resp(query, get_word_data)
 
 
-def handle_sign_query(query: str) -> str | Sign:
+def handle_sign_query(
+    query: str,
+) -> Tuple[Literal[True], Word] | Tuple[Literal[False], str]:
     return __coalesce_resp(query, data.get_lukapona_data)
 
 

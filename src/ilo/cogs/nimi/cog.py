@@ -56,8 +56,8 @@ class CogNimi(Cog):
 async def nimi(ctx, word):
     lang = preferences.get(str(ctx.author.id), "language")
 
-    response = strings.handle_word_query(word)
-    if isinstance(response, str):
+    success, response = strings.handle_word_query(word)
+    if not success:
         await ctx.respond(response)
         return
     embed = embed_response(word, lang, response, "concise")
