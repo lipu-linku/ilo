@@ -7,6 +7,7 @@ from discord.ui import Button, View
 from ilo import data, strings
 from ilo.cog_utils import Locale, word_autocomplete
 from ilo.cogs.nimi.colour import colours
+from ilo.data import deep_get
 from ilo.preferences import Template, preferences
 
 
@@ -46,10 +47,10 @@ class CogNimi(Cog):
 
     # imo guess is a special case of nimi
     @locale.command("guess")
-    @locale.option("guess-show", choices=["word", "def"])
-    async def slash_guess(self, ctx, show: str = "def"):
-        assert show in ("word", "def")
-        await guess(ctx, show)
+    @locale.option("guess-hide", choices=["word", "def"])
+    async def slash_guess(self, ctx, hide: str = "def"):
+        assert hide in ("word", "def")
+        await guess(ctx, hide)
 
 
 async def nimi(ctx, word):
@@ -64,13 +65,13 @@ async def nimi(ctx, word):
     await ctx.respond(embed=embed, view=view)
 
 
-async def guess(ctx, show: Literal["word", "def"]):
+async def guess(ctx, hide: Literal["word", "def"]):
     lang = preferences.get(str(ctx.author.id), "language")
     usage = preferences.get(str(ctx.author.id), "usage")
     # assert usage in data.USAGES
 
     word, response = data.get_random_word(min_usage=usage)
-    embed = guess_embed_response(word, lang, response, show)
+    embed = guess_embed_response(word, lang, response, hide)
     await ctx.respond(embed=embed)
 
 
@@ -78,21 +79,18 @@ def spoiler_wrap(s: str) -> str:
     return f"|| {s} ||"
 
 
-def guess_embed_response(word: str, lang: str, response, show: Literal["word", "def"]):
+def guess_embed_response(word: str, lang: str, response, hide: Literal["word", "def"]):
     embed = Embed()
     embed.title = response["word"]
-    if show != "word":
+    if hide == "word":
         embed.title = spoiler_wrap(embed.title)
 
     embed.colour = colours[response["usage_category"]]
-    description = (
-        response["def"][lang]
-        if lang in response["def"]
-        else "(en) {}".format(response["def"]["en"])
-    )
-    if show != "def":
-        description = spoiler_wrap(description)
-    embed.add_field(name="description", value=description)
+    definition = deep_get(response, "translations", lang, "definition")
+
+    if hide == "def":
+        definition = spoiler_wrap(definition)
+    embed.add_field(name="definition", value=definition)
     return embed
 
 
