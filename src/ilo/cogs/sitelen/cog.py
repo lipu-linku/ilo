@@ -80,6 +80,16 @@ def unescape_newline(text: str) -> str:
     return text.replace("\\n", "\n")
 
 
+def text_to_filename(text: str) -> str:
+    text = text.lower()
+    text = text.replace(" ", "_")
+    text = "".join(char for char in text if char.isalnum() or char == "_")
+
+    text = text[:50]
+    # NOTE: this is a semi-arbitrary practical-for-enduser thing
+    return text
+
+
 async def sp(ctx: ApplicationContext, text: str, font: str = "", spoiler: bool = False):
     fontsize = preferences.get(str(ctx.author.id), "fontsize")
     font = font or preferences.get(str(ctx.author.id), "font")
@@ -89,7 +99,7 @@ async def sp(ctx: ApplicationContext, text: str, font: str = "", spoiler: bool =
         sitelen.display(text, USABLE_FONTS[font], fontsize, rgb_tuple(color))
     )
 
-    filename = "a.png"
+    filename = text_to_filename(text) + ".png"
     if spoiler:
         filename = f"SPOILER_{filename}"
     await ctx.respond(file=File(image, filename=filename))
