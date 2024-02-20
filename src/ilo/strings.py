@@ -29,11 +29,11 @@ def __coalesce_resp(
     **kwargs: Any,
 ) -> str | Any:
     if len(query.split()) > 1:
-        return STRINGS["multiple_words"]
+        return STRINGS["multiple_words"].format(query)
 
     resp = searchfunc(query, *args, **kwargs)
     if not resp:
-        return STRINGS["missing_word"]
+        return STRINGS["missing_word"].format(query)
     return resp
 
 
