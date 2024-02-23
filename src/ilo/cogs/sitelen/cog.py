@@ -102,7 +102,7 @@ async def sp(ctx: ApplicationContext, text: str, font: str = "", spoiler: bool =
     filename = text_to_filename(text) + ".png"
     if spoiler:
         filename = f"SPOILER_{filename}"
-    await ctx.respond(file=File(image, filename=filename))
+    await ctx.respond(file=File(image, filename=filename, description=text))
 
 
 def fontsize_validation(value: int) -> bool | str:
