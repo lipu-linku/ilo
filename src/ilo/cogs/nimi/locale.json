@@ -1,16 +1,21 @@
 {
-	"nimi": "Get the translation of a toki pona word",
-	"nimi-word": "The word you want to get the translation of.",
+  "nimi": "Get the translation of a toki pona word",
+  "nimi-word": "The word you want to get the translation of.",
 
-	"n": "Get the translation of a toki pona word",
-	"n-word": "The word you want to get the translation of.",
+  "n": "Get the translation of a toki pona word",
+  "n-word": "The word you want to get the translation of.",
 
-	"guess": "Get a random word or definition of a word to figure out.",
-	"guess-hide": "Hide the word or definition.",
-	"guess-usage": "The minimum recognition of the returned word.",
+  "guess": "Get a random word or definition of a word to figure out.",
+  "guess-hide": "Hide the word or definition.",
+  "guess-usage": "The minimum recognition of the returned word.",
 
-	"prefs-language": "Set the language that dictionary definitions will use",
-	"prefs-language-option": "The language you want to use.",
-	"prefs-usage": "Set the minimum word usage for autocomplete and command response.",
-	"prefs-usage-option": "Minimum usage for words in autocomplete"
+  "prefs-language": "Set the language that dictionary definitions will use",
+  "prefs-language-option": "The language you want to use.",
+  "prefs-language-invalid": "The language ***{}*** is not available.",
+  "prefs-language-pref-invalid": "The language ***{}*** is in your preferences but is not available. Setting the default; please try again.",
+
+  "prefs-usage": "Set the minimum word usage for autocomplete and command response.",
+  "prefs-usage-option": "Minimum usage for words in autocomplete",
+  "prefs-usage-invalid": "The usage category ***{}*** is not available.",
+  "prefs-usage-pref-invalid": "The usage category ***{}*** is in your preferences but is not available. Setting the default; please try again."
 }
