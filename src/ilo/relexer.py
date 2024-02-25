@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from ilo.cogs.nimi.cog import Literal
+from typing import Literal
 
 from ilo.data import Dict, deep_get_word_data, get_word_data
 from ilo.tokenizer import SENT_DELIMITERS, tokenize

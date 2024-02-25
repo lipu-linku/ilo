@@ -1,11 +1,11 @@
 from typing import Literal
 
-from discord import ButtonStyle, Embed
+from discord import ApplicationContext, ButtonStyle, Embed
 from discord.ext.commands import Cog
 from discord.ui import Button, View
 
 from ilo import data, strings
-from ilo.cog_utils import Locale, word_autocomplete
+from ilo.cog_utils import Locale, handle_pref_error, word_autocomplete
 from ilo.cogs.nimi.colour import colours
 from ilo.data import deep_get
 from ilo.preferences import Template, preferences
@@ -20,59 +20,69 @@ class CogNimi(Cog):
                 "language",
                 "en",
                 data.LANGUAGES_FOR_PREFS,
-                validation=language_validation,
+                validation=is_valid_language,
             )
         )
         preferences.register(
             Template(
                 self.locale,
                 "usage",
-                "widespread",
+                "common",
                 data.USAGES_FOR_PREFS,
-                validation=usage_validation,
+                validation=is_valid_usage_category,
             )
         )
 
     locale = Locale(__file__)
 
+    # @locale.option(
+    #     "nimi-language",  # TODO: just make it available elsewhere
+    #     autocomplete=build_autocomplete(
+    #         preferences.templates["language"].choices.keys()
+    #     ),
+    # )
     @locale.command("nimi")
     @locale.option("nimi-word", autocomplete=word_autocomplete)
-    async def slash_nimi(self, ctx, word):
-        await nimi(ctx, word)
+    @locale.option("nimi-hide")
+    async def slash_nimi(self, ctx: ApplicationContext, word: str, hide: bool = True):
+        await nimi(ctx, word, hide)
 
     @locale.command("n")
     @locale.option("n-word", autocomplete=word_autocomplete)
-    async def slash_n(self, ctx, word):
-        await nimi(ctx, word)
+    @locale.option("n-hide")
+    async def slash_n(self, ctx: ApplicationContext, word: str, hide: bool = True):
+        await nimi(ctx, word, hide)
 
     # imo guess is a special case of nimi
     @locale.command("guess")
-    @locale.option("guess-hide", choices=["word", "def"])
-    async def slash_guess(self, ctx, hide: str = "def"):
-        assert hide in ("word", "def")
-        await guess(ctx, hide)
+    @locale.option("guess-which", choices=["word", "def"])
+    @locale.option("guess-hide")
+    async def slash_guess(self, ctx, which: str = "def", hide: bool = True):
+        assert which in ("word", "def")
+        await guess(ctx, which, hide)
 
 
-async def nimi(ctx, word):
-    lang = preferences.get(str(ctx.author.id), "language")
+async def nimi(ctx: ApplicationContext, word: str, hide: bool = True):
+    lang = await handle_pref_error(ctx, str(ctx.author.id), "language")
 
     success, response = strings.handle_word_query(word)
     if not success:
-        await ctx.respond(response)
+        await ctx.respond(response, ephemeral=True)
         return
+
     embed = embed_response(word, lang, response, "concise")
     view = NimiView("expand", word, lang)
-    await ctx.respond(embed=embed, view=view)
+    await ctx.respond(embed=embed, view=view, ephemeral=hide)
+    # TODO: controllable ephemeral
 
 
-async def guess(ctx, hide: Literal["word", "def"]):
-    lang = preferences.get(str(ctx.author.id), "language")
-    usage = preferences.get(str(ctx.author.id), "usage")
-    # assert usage in data.USAGES
+async def guess(ctx, which: Literal["word", "def"], hide: bool = True):
+    lang = await handle_pref_error(ctx, str(ctx.author.id), "language")
+    usage = await handle_pref_error(ctx, str(ctx.author.id), "usage")
 
     word, response = data.get_random_word(min_usage=usage)
-    embed = guess_embed_response(word, lang, response, hide)
-    await ctx.respond(embed=embed)
+    embed = guess_embed_response(word, lang, response, which)
+    await ctx.respond(embed=embed, ephemeral=hide)
 
 
 def spoiler_wrap(s: str) -> str:
@@ -142,7 +152,7 @@ def embed_response(
         if commentary:
             embed.add_field(name="commentary", value=commentary, inline=False)
 
-    if response["usage_category"] not in ("core", "widespread"):
+    if response["usage_category"] != "core":
         # these words may have `see_also` but don't need it
         if "see_also" in response:
             embed.add_field(name="see also", value=", ".join(response["see_also"]))
@@ -172,13 +182,15 @@ class NimiView(View):
             )
         )
 
+        # for rname, link in word_data.get("resources", {}).items():
         word_data = data.get_word_data(word)
-        if sonapona_link := data.deep_get(word_data, "resources", "sona_pona"):
+        link = deep_get(word_data, "resources", "sona_pona")
+        if link:
             self.add_item(
                 Button(
                     style=ButtonStyle.link,
                     label="sona.pona.la",
-                    url=sonapona_link,
+                    url=link,
                 )
             )
 
@@ -198,9 +210,9 @@ class NimiButton(Button):
         await interaction.response.edit_message(embed=embed, view=view)
 
 
-def language_validation(value: str) -> bool | str:
-    return value in data.LANGUAGE_DATA or "Selected language not available."
+def is_valid_language(value: str) -> bool:
+    return value in data.LANGUAGE_DATA
 
 
-def usage_validation(value: str) -> bool | str:
-    return value in data.Usage.__members__ or "Selected usage not valid."
+def is_valid_usage_category(value: str) -> bool:
+    return value in data.UsageCategory.__members__

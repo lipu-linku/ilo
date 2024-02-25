@@ -27,7 +27,7 @@ FINGERSPELLING_LINK = "https://api.linku.la/v1/luka_pona/fingerspelling?lang=*"
 
 
 HEADERS = {  # pretend to be Chrome 120 for our api (thanks cloudflare)
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.3"
+    "User-Agent": "ilo Linku"
 }
 
 
@@ -63,13 +63,12 @@ assert USABLE_FONTS, (
 )
 
 
-class Usage(Enum):
+class UsageCategory(Enum):
     core = 90
-    widespread = 70
-    common = 50
-    uncommon = 20
-    rare = 10
-    obscure = 0
+    common = 60
+    uncommon = 30
+    obscure = 2
+    sandbox = 0
 
 
 # map endonym or fallback english name to langcode
@@ -78,7 +77,7 @@ LANGUAGES_FOR_PREFS = {
     langdata["name"].get("endonym", langdata["name"]["en"]): langcode
     for langcode, langdata in LANGUAGE_DATA.items()
 }
-USAGES_FOR_PREFS = {usage.name: usage.name for usage in Usage}
+USAGES_FOR_PREFS = {usage.name: usage.name for usage in UsageCategory}
 
 SITELEN_SITELEN_FONT = "sitelen Latin (ss)"
 DEFAULT_FONT = "nasin sitelen pu mono"
@@ -99,7 +98,7 @@ def get_lukapona_data(word: str) -> Optional[Sign]:
     return SIGNS_DATA_BY_WORD.get(word)
 
 
-def get_random_word(min_usage: str = "widespread") -> Tuple[str, Word]:
+def get_random_word(min_usage: str = "common") -> Tuple[str, Word]:
     word = random.choice(get_words_min_usage_filter(min_usage))
     response = get_word_data(word)
     return word, response
@@ -112,7 +111,7 @@ def get_usage(word: str) -> int:
 
 def get_words_min_usage_filter(usage: str):
     """Make autocomplete better for word selection, prune to only words at or above selected usage"""
-    return [word for word in WORDS if get_usage(word) >= Usage[usage].value]
+    return [word for word in WORDS if get_usage(word) >= UsageCategory[usage].value]
 
 
 def deep_get(obj: JSON, *keys: int | str) -> JSON:

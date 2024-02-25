@@ -1,28 +1,22 @@
 import logging
 from itertools import zip_longest
-from typing import Any, Callable, Dict, Tuple, cast
+from typing import Any, Callable, Dict, Literal, Tuple, cast
 
 from ilo import data
 from ilo.cog_utils import load_file
-from ilo.cogs.nimi.cog import Literal
-from ilo.data import USABLE_FONTS, get_word_data
-from sona.sign import Sign
+from ilo.data import get_word_data
 from sona.word import Word
 
 LOG = logging.getLogger()
 
-# Strings
-
 STRINGS: Dict = cast(Dict, load_file(__file__, "locale.json"))
 
-MAX_EMBED_SIZE = 1024
 MAX_EMBED_SIZE = 900
 # this is to fly under the requirement
 CLIPPED_EMBED_SIZE = 750
 
+
 ### coalescing to human readable response
-
-
 def __coalesce_resp(
     query: str,
     searchfunc: Callable[[str], Any],
@@ -36,12 +30,6 @@ def __coalesce_resp(
     if not resp:
         return False, STRINGS["missing_word"].format(query)
     return True, resp
-
-
-def handle_font_fetch(query: str) -> Tuple[bool, str]:
-    if query not in USABLE_FONTS:
-        return False, STRINGS["missing_font"].format(query)
-    return True, USABLE_FONTS["font"]
 
 
 def handle_word_query(
