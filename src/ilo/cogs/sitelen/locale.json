@@ -26,17 +26,20 @@
   "sitelensitelen-spoiler": "Whether or not to hide the image with a spoiler",
 
   "prefs-fontsize": "Set the font size that sitelen pona will be displayed as",
-  "prefs-fontsize-invalid": "The fontsize ***{}*** is not in the range 14 to 500.",
-  "prefs-fontsize-pref-invalid": "The fontsize ***{}*** is in your preferences but is not valid. Setting the default; please try again.",
+  "prefs-fontsize-fallback": "The fontsize ***{}*** is not in the range 14 to 500. Using the default ***{}***.",
+  "prefs-fontsize-pref-invalid": "The fontsize ***{}*** is in your preferences but not in the range 14 to 500. Using the default ***{}***.",
+  "prefs-fontsize-choice-invalid": "The fontsize ***{}*** is not in the range 14 to 500. Did not update preferences.",
   "prefs-fontsize-option": "The font size you want to use.",
 
   "prefs-font": "Choose the font that sitelen pona will be displayed as",
-  "prefs-font-invalid": "Couldn't find the font ***{}***.",
-  "prefs-font-pref-invalid": "The font ***{}*** is in your preferences but is not available. Assigning the default; please try again.",
+  "prefs-font-fallback": "The font ***{}*** is not available. Using the default ***{}***.",
+  "prefs-font-pref-invalid": "The font ***{}*** is in your preferences but is not available. Using the default ***{}***.",
+  "prefs-font-choice-invalid": "The font ***{}*** is not available. Did not update preferences.",
   "prefs-font-option": "The font you want to use.",
 
   "prefs-color": "Set the text color that /sp and other commands will use",
-  "prefs-color-invalid": "The color ***{}*** must be a hexadecimal RGB color e.g. `2288ff`",
-  "prefs-color-pref-invalid": "The color ***{}*** is in your preferences but is not valid. Setting the default; please try again.",
+  "prefs-color-fallback": "The color ***{}*** is not a hexadecimal RGB color e.g. `2288ff`. Using the default ***{}***.",
+  "prefs-color-pref-invalid": "The color ***{}*** is in your preferences but is not a valid hexadecimal RGB color. Using the default ***{}***.",
+  "prefs-color-choice-invalid": "The color ***{}*** is not a hexadecimal RGB color e.g. `2288ff`. Did not update preferences.",
   "prefs-color-option": "The text color you want to use."
 }

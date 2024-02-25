@@ -4,6 +4,7 @@
 
   "prefs-acro": "Choose the book set of words that will be included in /acro",
   "prefs-acro-option": "The book you want to use.",
-  "prefs-acro-invalid": "The book ***{}*** is not available.",
-  "prefs-acro-pref-invalid": "The book ***{}*** is in your preferences but is not available. Setting the default; please try again."
+  "prefs-acro-fallback": "The book ***{}*** is not available. Using the default ***{}***.",
+  "prefs-acro-pref-invalid": "The book ***{}*** is in your preferences but is not available. Setting the default; please try again.",
+  "prefs-acro-choice-invalid": "The book ***{}*** is not available. Did not update preferences."
 }
