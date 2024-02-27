@@ -132,9 +132,9 @@ async def sp(
     image = io.BytesIO(sitelen.display(text, font, fontsize, rgb_tuple(color)))
 
     filename = text_to_filename(text) + ".png"
-    if spoiler:
-        filename = f"SPOILER_{filename}"
-    await ctx.respond(file=File(image, filename=filename, description=text))
+    await ctx.respond(
+        file=File(image, filename=filename, description=text, spoiler=spoiler)
+    )
 
 
 def rgb_tuple(value: str) -> Tuple[int, int, int]:
