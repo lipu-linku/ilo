@@ -110,6 +110,13 @@ class _SandboxAdditionalproperties(TypedDict, total=False):
     Required property
     """
 
+    deprecated: Required[bool]
+    """
+    Whether or not the word is considered deprecated by its author.
+
+    Required property
+    """
+
     etymology: Required[List["_SandboxAdditionalpropertiesEtymologyItem"]]
     """
     Unlocalized etymological values regarding this word's origin
@@ -253,6 +260,13 @@ class _SandboxAdditionalpropertiesRepresentations(TypedDict, total=False):
     pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$
     """
 
+    sitelen_jelo: List["_SandboxAdditionalpropertiesRepresentationsSitelenJeloItem"]
+    """
+    One or more example emojis for how the word can be written in sitelen jelo
+
+    minItems: 1
+    """
+
     ligatures: List["_SandboxAdditionalpropertiesRepresentationsLigaturesItem"]
     """ A list of sitelen Lasina representations of the word, used by ligature fonts to visually convert latin characters into sitelen pona """
 
@@ -273,6 +287,10 @@ class _SandboxAdditionalpropertiesRepresentations(TypedDict, total=False):
 
 _SandboxAdditionalpropertiesRepresentationsLigaturesItem = str
 """ minLength: 1 """
+
+
+_SandboxAdditionalpropertiesRepresentationsSitelenJeloItem = str
+""" pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$ """
 
 
 class _SandboxAdditionalpropertiesResources(TypedDict, total=False):
@@ -340,24 +358,19 @@ maximum: 100
 
 _SandboxAdditionalpropertiesUsageCategory = Union[
     Literal["core"],
-    Literal["widespread"],
     Literal["common"],
     Literal["uncommon"],
-    Literal["rare"],
     Literal["obscure"],
+    Literal["sandbox"],
 ]
 """ The word's usage category, according to a survey performed by the Linku Project """
 _SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_CORE: Literal["core"] = "core"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_WIDESPREAD: Literal["widespread"] = (
-    "widespread"
-)
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
 _SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_COMMON: Literal["common"] = "common"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
 _SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_UNCOMMON: Literal["uncommon"] = "uncommon"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_RARE: Literal["rare"] = "rare"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
 _SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_OBSCURE: Literal["obscure"] = "obscure"
+"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
+_SANDBOXADDITIONALPROPERTIESUSAGECATEGORY_SANDBOX: Literal["sandbox"] = "sandbox"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
