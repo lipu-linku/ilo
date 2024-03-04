@@ -1,9 +1,9 @@
 {
 	"nimi": "Get the translation of a toki pona word",
-	"nimi-word": "The word you want to get the translation of.",
+	"nimi-query": "The word you want to get the translation of.",
 
 	"n": "Get the translation of a toki pona word",
-	"n-word": "The word you want to get the translation of.",
+	"n-query": "The word you want to get the translation of.",
 
 	"guess": "Get a random word or definition of a word to figure out.",
 	"guess-show": "Show the word or definition.",

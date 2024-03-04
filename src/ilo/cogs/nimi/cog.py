@@ -35,14 +35,14 @@ class CogNimi(Cog):
     locale = Locale(__file__)
 
     @locale.command("nimi")
-    @locale.option("nimi-word", autocomplete=word_autocomplete)
-    async def slash_nimi(self, ctx, word):
-        await nimi(ctx, word)
+    @locale.option("nimi-query", autocomplete=word_autocomplete)
+    async def slash_nimi(self, ctx, query):
+        await nimi(ctx, query)
 
     @locale.command("n")
-    @locale.option("n-word", autocomplete=word_autocomplete)
-    async def slash_n(self, ctx, word):
-        await nimi(ctx, word)
+    @locale.option("n-query", autocomplete=word_autocomplete)
+    async def slash_n(self, ctx, query):
+        await nimi(ctx, query)
 
     # imo guess is a special case of nimi
     @locale.command("guess")
@@ -52,15 +52,15 @@ class CogNimi(Cog):
         await guess(ctx, show)
 
 
-async def nimi(ctx, word):
+async def nimi(ctx, query):
     lang = preferences.get(str(ctx.author.id), "language")
 
-    response = strings.handle_word_query(word)
+    response = strings.handle_word_query(query)
     if isinstance(response, str):
         await ctx.respond(response)
         return
-    embed = embed_response(word, lang, response, "concise")
-    view = NimiView("expand", word, lang)
+    embed = embed_response(query, lang, response, "concise")
+    view = NimiView("expand", query, lang)
     await ctx.respond(embed=embed, view=view)
 
 
