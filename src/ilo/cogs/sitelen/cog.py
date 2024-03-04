@@ -131,9 +131,15 @@ async def sp(
     text = unescape_newline(text)
     image = io.BytesIO(sitelen.display(text, font, fontsize, rgb_tuple(color)))
 
+    alt_text = f"{ctx.author.display_name} said: {text}"
     filename = text_to_filename(text) + ".png"
     await ctx.respond(
-        file=File(image, filename=filename, description=text, spoiler=spoiler)
+        file=File(
+            fp=image,
+            filename=filename,
+            description=alt_text,
+            spoiler=spoiler,
+        )
     )
 
 
