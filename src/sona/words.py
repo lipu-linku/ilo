@@ -110,6 +110,13 @@ class _WordsAdditionalproperties(TypedDict, total=False):
     Required property
     """
 
+    deprecated: Required[bool]
+    """
+    Whether or not the word is considered deprecated by its author.
+
+    Required property
+    """
+
     etymology: Required[List["_WordsAdditionalpropertiesEtymologyItem"]]
     """
     Unlocalized etymological values regarding this word's origin
@@ -253,6 +260,13 @@ class _WordsAdditionalpropertiesRepresentations(TypedDict, total=False):
     pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$
     """
 
+    sitelen_jelo: List["_WordsAdditionalpropertiesRepresentationsSitelenJeloItem"]
+    """
+    One or more example emojis for how the word can be written in sitelen jelo
+
+    minItems: 1
+    """
+
     ligatures: List["_WordsAdditionalpropertiesRepresentationsLigaturesItem"]
     """ A list of sitelen Lasina representations of the word, used by ligature fonts to visually convert latin characters into sitelen pona """
 
@@ -273,6 +287,10 @@ class _WordsAdditionalpropertiesRepresentations(TypedDict, total=False):
 
 _WordsAdditionalpropertiesRepresentationsLigaturesItem = str
 """ minLength: 1 """
+
+
+_WordsAdditionalpropertiesRepresentationsSitelenJeloItem = str
+""" pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$ """
 
 
 class _WordsAdditionalpropertiesResources(TypedDict, total=False):
@@ -338,22 +356,19 @@ maximum: 100
 
 _WordsAdditionalpropertiesUsageCategory = Union[
     Literal["core"],
-    Literal["widespread"],
     Literal["common"],
     Literal["uncommon"],
-    Literal["rare"],
     Literal["obscure"],
+    Literal["sandbox"],
 ]
 """ The word's usage category, according to a survey performed by the Linku Project """
 _WORDSADDITIONALPROPERTIESUSAGECATEGORY_CORE: Literal["core"] = "core"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_WORDSADDITIONALPROPERTIESUSAGECATEGORY_WIDESPREAD: Literal["widespread"] = "widespread"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
 _WORDSADDITIONALPROPERTIESUSAGECATEGORY_COMMON: Literal["common"] = "common"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
 _WORDSADDITIONALPROPERTIESUSAGECATEGORY_UNCOMMON: Literal["uncommon"] = "uncommon"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_WORDSADDITIONALPROPERTIESUSAGECATEGORY_RARE: Literal["rare"] = "rare"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
 _WORDSADDITIONALPROPERTIESUSAGECATEGORY_OBSCURE: Literal["obscure"] = "obscure"
+"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
+_WORDSADDITIONALPROPERTIESUSAGECATEGORY_SANDBOX: Literal["sandbox"] = "sandbox"
 """The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""

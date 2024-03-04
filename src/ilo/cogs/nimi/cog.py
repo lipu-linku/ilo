@@ -42,16 +42,16 @@ class CogNimi(Cog):
     #     ),
     # )
     @locale.command("nimi")
-    @locale.option("nimi-word", autocomplete=word_autocomplete)
+    @locale.option("nimi-query", autocomplete=word_autocomplete)
     @locale.option("nimi-hide")
-    async def slash_nimi(self, ctx: ApplicationContext, word: str, hide: bool = True):
-        await nimi(ctx, word, hide)
+    async def slash_nimi(self, ctx: ApplicationContext, query: str, hide: bool = True):
+        await nimi(ctx, query, hide)
 
     @locale.command("n")
-    @locale.option("n-word", autocomplete=word_autocomplete)
+    @locale.option("n-query", autocomplete=word_autocomplete)
     @locale.option("n-hide")
-    async def slash_n(self, ctx: ApplicationContext, word: str, hide: bool = True):
-        await nimi(ctx, word, hide)
+    async def slash_n(self, ctx: ApplicationContext, query: str, hide: bool = True):
+        await nimi(ctx, query, hide)
 
     # imo guess is a special case of nimi
     @locale.command("guess")
@@ -62,16 +62,16 @@ class CogNimi(Cog):
         await guess(ctx, which, hide)
 
 
-async def nimi(ctx: ApplicationContext, word: str, hide: bool = True):
+async def nimi(ctx: ApplicationContext, query: str, hide: bool = True):
     lang = await handle_pref_error(ctx, str(ctx.author.id), "language")
 
-    success, response = strings.handle_word_query(word)
+    success, response = strings.handle_word_query(query)
     if not success:
         await ctx.respond(response, ephemeral=True)
         return
 
-    embed = embed_response(word, lang, response, "concise")
-    view = NimiView("expand", word, lang)
+    embed = embed_response(query, lang, response, "concise")
+    view = NimiView("expand", query, lang)
     await ctx.respond(embed=embed, view=view, ephemeral=hide)
     # TODO: controllable ephemeral
 
