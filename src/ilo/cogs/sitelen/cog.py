@@ -39,6 +39,7 @@ class CogSitelen(Cog):
     @locale.option("sp-fontsize")
     @locale.option("sp-color")
     @locale.option("sp-spoiler")
+    @locale.option("sp-hide")
     async def slash_sp(
         self,
         ctx: ApplicationContext,
@@ -47,8 +48,9 @@ class CogSitelen(Cog):
         fontsize: int = 0,
         color: str = "",
         spoiler: bool = False,
+        hide: bool = False,
     ):
-        await sp(ctx, text, font, fontsize, color, spoiler)
+        await sp(ctx, text, font, fontsize, color, spoiler, hide)
 
     @locale.command("sitelenpona")
     @locale.option("sitelenpona-text")
@@ -56,6 +58,7 @@ class CogSitelen(Cog):
     @locale.option("sitelenpona-fontsize")
     @locale.option("sitelenpona-color")
     @locale.option("sitelenpona-spoiler")
+    @locale.option("sitelenpona-hide")
     async def slash_sitelenpona(
         self,
         ctx: ApplicationContext,
@@ -64,14 +67,16 @@ class CogSitelen(Cog):
         fontsize: int = 0,
         color: str = "",
         spoiler: bool = False,
+        hide: bool = False,
     ):
-        await sp(ctx, text, font, fontsize, color, spoiler)
+        await sp(ctx, text, font, fontsize, color, spoiler, hide)
 
     @locale.command("ss")
     @locale.option("ss-text")
     @locale.option("ss-fontsize")
     @locale.option("ss-color")
     @locale.option("ss-spoiler")
+    @locale.option("ss-hide")
     async def slash_ss(
         self,
         ctx: ApplicationContext,
@@ -79,14 +84,16 @@ class CogSitelen(Cog):
         fontsize: int = 0,
         color: str = "",
         spoiler: bool = False,
+        hide: bool = False,
     ):
-        await sp(ctx, text, SITELEN_SITELEN_FONT, fontsize, color, spoiler)
+        await sp(ctx, text, SITELEN_SITELEN_FONT, fontsize, color, spoiler, hide)
 
     @locale.command("sitelensitelen")
     @locale.option("sitelensitelen-text")
     @locale.option("sitelensitelen-fontsize")
     @locale.option("sitelensitelen-color")
     @locale.option("sitelensitelen-spoiler")
+    @locale.option("sitelensitelen-hide")
     async def slash_sitelensitelen(
         self,
         ctx: ApplicationContext,
@@ -94,8 +101,9 @@ class CogSitelen(Cog):
         fontsize: int = 0,
         color: str = "",
         spoiler: bool = False,
+        hide: bool = False,
     ):
-        await sp(ctx, text, SITELEN_SITELEN_FONT, fontsize, color, spoiler)
+        await sp(ctx, text, SITELEN_SITELEN_FONT, fontsize, color, spoiler, hide)
 
 
 def unescape_newline(text: str) -> str:
@@ -119,6 +127,7 @@ async def sp(
     fontsize: int = 0,
     color: str = "",
     spoiler: bool = False,
+    hide: bool = False,
 ):
     user_id = str(ctx.author.id)
 
@@ -139,7 +148,8 @@ async def sp(
             filename=filename,
             description=alt_text,
             spoiler=spoiler,
-        )
+        ), 
+        ephemeral=hide,
     )
 
 
