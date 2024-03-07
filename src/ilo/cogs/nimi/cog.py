@@ -113,7 +113,7 @@ def embed_response(
     embed = Embed()
     embed.title = response["word"]
     embed.colour = colours[response.get("usage_category", "obscure")]
-    description = data.deep_get(response, "translations", lang, "definition")
+    definition = data.deep_get(response, "translations", lang, "definition")
     # TODO: REPLACEME with `definition`
     usage = response["usage_category"] if "usage_category" in response else "unknown"
     embed.add_field(
@@ -128,10 +128,10 @@ def embed_response(
     # )
 
     if embedtype == "concise":
-        embed.add_field(name="description", value=description)
+        embed.add_field(name="definition", value=definition)
 
     if embedtype == "verbose":
-        embed.add_field(name="description", value=description, inline=False)
+        embed.add_field(name="definition", value=definition, inline=False)
         etym_untrans = response.get("etymology")
         etym_trans = data.deep_get(response, "translations", lang, "etymology")
         if etym_untrans and etym_trans:
