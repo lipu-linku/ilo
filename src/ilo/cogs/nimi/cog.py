@@ -127,18 +127,17 @@ def embed_response(
     #     url=data.deep_get(response, "representations", "sitelen_pona_svg", 0)
     # )
 
-    if embedtype == "concise":
-        embed.add_field(name="definition", value=definition)
+    inline = embedtype == "concise"
+    embed.add_field(name="definition", value=definition, inline=inline)
 
     if embedtype == "verbose":
-        embed.add_field(name="definition", value=definition, inline=False)
         etym_untrans = response.get("etymology")
         etym_trans = data.deep_get(response, "translations", lang, "etymology")
         if etym_untrans and etym_trans:
             embed.add_field(
                 name="etymology",
                 value=strings.format_etymology(etym_untrans, etym_trans),
-                inline=False,
+                inline=inline,
             )
         if "ku_data" in response:
             embed.add_field(
@@ -146,16 +145,18 @@ def embed_response(
                 value="{}\n[(source one)](http://tokipona.org/nimi_pu.txt), [(source two)](http://tokipona.org/nimi_pi_pu_ala.txt)".format(
                     strings.format_ku_data(response["ku_data"])
                 ),
-                inline=False,
+                inline=inline,
             )
         commentary = data.deep_get(response, "translations", lang, "commentary")
         if commentary:
-            embed.add_field(name="commentary", value=commentary, inline=False)
+            embed.add_field(name="commentary", value=commentary, inline=inline)
 
     if response["usage_category"] != "core":
         # these words may have `see_also` but don't need it
         if "see_also" in response:
-            embed.add_field(name="see also", value=", ".join(response["see_also"]))
+            embed.add_field(
+                name="see also", value=", ".join(response["see_also"]), inline=inline
+            )
     return embed
 
 
