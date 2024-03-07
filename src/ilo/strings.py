@@ -72,12 +72,15 @@ def format_etymology(
 ):
     etyms_formatted = []
     for etymu, etymt in zip_longest(etym_untrans, etym_trans):
-        lang = etymt["language"]
-        word = etymu["word"]
+        lang = etymt["language"]  # always defined
+        word = etymu.get("word")
         alt = etymu.get("alt")
-        defin = etymt["definition"]
+        defin = etymt.get("definition")
 
-        etym_formatted = f"{lang}: {word}"
+        etym_formatted = f"{lang}"
+
+        if word:
+            etym_formatted += f": {word}"
         if alt:
             etym_formatted += f" ({alt})"
         if defin:
