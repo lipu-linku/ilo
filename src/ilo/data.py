@@ -26,8 +26,22 @@ SIGNS_LINK = "https://api.linku.la/v1/luka_pona/signs?lang=*"
 FINGERSPELLING_LINK = "https://api.linku.la/v1/luka_pona/fingerspelling?lang=*"
 
 
+def generate_useragent():
+    # lazily make a modern os+browser useragent to cachebust Cloudflare
+    operating_systems = [
+        "Windows NT 10.0; Win64; x64",
+        "X11; Linux x86_64",
+        "Linux; Android 10; K",
+    ]
+    os = random.choice(operating_systems)
+    version = 122 + random.randint(-12, 0)
+
+    return f"Mozilla/5.0 ({os}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{version}.0.0.0 Safari/537.36"
+
+
 HEADERS = {  # pretend to be Chrome 120 for our api (thanks cloudflare)
-    "User-Agent": "ilo Linku"
+    "User-Agent": generate_useragent(),
+    "Cache-Control": "no-cache",
 }
 
 
