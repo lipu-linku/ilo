@@ -20,6 +20,7 @@ JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | str | int | float | bool | 
 API_URL = "https://api.linku.la/"
 
 WORDS_LINK = "https://api.linku.la/v1/words?lang=*"
+SANDBOX_LINK = "https://api.linku.la/v1/sandbox?lang=*"
 LANGUAGES_LINK = "https://api.linku.la/v1/languages"
 FONTS_LINK = "https://api.linku.la/v1/fonts"
 SIGNS_LINK = "https://api.linku.la/v1/luka_pona/signs?lang=*"
@@ -52,6 +53,7 @@ def get_site(url: str) -> bytes:
 
 
 WORDS_DATA: Words = json.loads(get_site(WORDS_LINK))
+SANDBOX_DATA = json.loads(get_site(SANDBOX_LINK))
 FONTS_DATA: Fonts = json.loads(get_site(FONTS_LINK))
 LANGUAGE_DATA: Languages = json.loads(get_site(LANGUAGES_LINK))
 SIGNS_DATA: Signs = json.loads(get_site(SIGNS_LINK))
@@ -95,6 +97,11 @@ USAGES_FOR_PREFS = {usage.name: usage.name for usage in UsageCategory}
 
 SITELEN_SITELEN_FONT = "sitelen Latin (ss)"
 DEFAULT_FONT = "nasin sitelen pu mono"
+DEFAULT_FONTSIZE = 72
+DEFAULT_COLOR = "ffffff"
+DEFAULT_BGSTYLE = "outline"
+DEFAULT_LANGUAGE = "en"
+DEFAULT_USAGE_CATEGORY = "common"
 
 # TODO:
 # - rework all functions here to use the api
@@ -102,10 +109,15 @@ DEFAULT_FONT = "nasin sitelen pu mono"
 
 
 WORDS = list(WORDS_DATA.keys())
+SANDBOX_WORDS = list(SANDBOX_DATA.keys())
 
 
 def get_word_data(word: str) -> Optional[Word]:
     return WORDS_DATA.get(word)
+
+
+def get_sandbox_data(word: str) -> Optional[JSON]:
+    return SANDBOX_DATA.get(word)
 
 
 def get_lukapona_data(word: str) -> Optional[Sign]:

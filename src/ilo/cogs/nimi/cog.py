@@ -4,11 +4,12 @@ from discord import ApplicationContext, ButtonStyle, Embed
 from discord.ext.commands import Cog
 from discord.ui import Button, View
 
+from ilo import cog_utils as utils
 from ilo import data, strings
-from ilo.cog_utils import Locale, handle_pref_error, word_autocomplete
 from ilo.cogs.nimi.colour import colours
-from ilo.data import deep_get
 from ilo.preferences import Template, preferences
+
+language_autocomplete = utils.build_autocomplete(data.LANGUAGES_FOR_PREFS)
 
 
 class CogNimi(Cog):
@@ -16,54 +17,62 @@ class CogNimi(Cog):
         self.bot = bot
         preferences.register(
             Template(
-                self.locale,
-                "language",
-                "en",
-                data.LANGUAGES_FOR_PREFS,
-                validation=is_valid_language,
+                locale=self.locale,
+                name="language",
+                default=data.DEFAULT_LANGUAGE,
+                choices=data.LANGUAGES_FOR_PREFS,
+                validation=utils.is_valid_language,
             )
         )
+
         preferences.register(
             Template(
                 self.locale,
                 "usage",
-                "common",
+                data.DEFAULT_USAGE_CATEGORY,
                 data.USAGES_FOR_PREFS,
-                validation=is_valid_usage_category,
+                validation=utils.is_valid_usage_category,
             )
         )
 
-    locale = Locale(__file__)
+    locale = utils.Locale(__file__)
 
-    # @locale.option(
-    #     "nimi-language",  # TODO: just make it available elsewhere
-    #     autocomplete=build_autocomplete(
-    #         preferences.templates["language"].choices.keys()
-    #     ),
-    # )
     @locale.command("nimi")
-    @locale.option("nimi-query", autocomplete=word_autocomplete)
+    @locale.option("nimi-query", autocomplete=utils.word_autocomplete)
+    @locale.option("nimi-language", autocomplete=language_autocomplete)
     @locale.option("nimi-hide")
-    async def slash_nimi(self, ctx: ApplicationContext, query: str, hide: bool = True):
-        await nimi(ctx, query, hide)
+    async def slash_nimi(
+        self, ctx: ApplicationContext, query: str, language: str = "", hide: bool = True
+    ):
+        await nimi(ctx, query, language, hide)
 
     @locale.command("n")
-    @locale.option("n-query", autocomplete=word_autocomplete)
+    @locale.option("n-query", autocomplete=utils.word_autocomplete)
+    @locale.option("n-language", autocomplete=language_autocomplete)
     @locale.option("n-hide")
-    async def slash_n(self, ctx: ApplicationContext, query: str, hide: bool = True):
-        await nimi(ctx, query, hide)
+    async def slash_n(
+        self, ctx: ApplicationContext, query: str, language: str = "", hide: bool = True
+    ):
+        await nimi(ctx, query, language, hide)
 
     # imo guess is a special case of nimi
     @locale.command("guess")
     @locale.option("guess-which", choices=["word", "def"])
+    @locale.option("guess-language", autocomplete=language_autocomplete)
     @locale.option("guess-hide")
-    async def slash_guess(self, ctx, which: str = "def", hide: bool = True):
+    async def slash_guess(
+        self, ctx, which: str = "def", language: str = "", hide: bool = True
+    ):
         assert which in ("word", "def")
-        await guess(ctx, which, hide)
+        await guess(ctx, which, language, hide)
 
 
-async def nimi(ctx: ApplicationContext, query: str, hide: bool = True):
-    lang = await handle_pref_error(ctx, str(ctx.author.id), "language")
+async def nimi(
+    ctx: ApplicationContext, query: str, language: str = "", hide: bool = True
+):
+    # this feeds user's mistake back when we fail to find
+    language = data.LANGUAGES_FOR_PREFS.get(language, language)
+    lang = await utils.handle_pref_error(ctx, str(ctx.author.id), "language", language)
 
     success, response = strings.handle_word_query(query)
     if not success:
@@ -76,9 +85,12 @@ async def nimi(ctx: ApplicationContext, query: str, hide: bool = True):
     # TODO: controllable ephemeral
 
 
-async def guess(ctx, which: Literal["word", "def"], hide: bool = True):
-    lang = await handle_pref_error(ctx, str(ctx.author.id), "language")
-    usage = await handle_pref_error(ctx, str(ctx.author.id), "usage")
+async def guess(
+    ctx, which: Literal["word", "def"], language: str = "", hide: bool = True
+):
+    lang = await utils.handle_pref_error(ctx, str(ctx.author.id), "language", language)
+    lang = data.LANGUAGES_FOR_PREFS[lang]
+    usage = await utils.handle_pref_error(ctx, str(ctx.author.id), "usage")
 
     word, response = data.get_random_word(min_usage=usage)
     embed = guess_embed_response(word, lang, response, which)
@@ -96,7 +108,7 @@ def guess_embed_response(word: str, lang: str, response, hide: Literal["word", "
         embed.title = spoiler_wrap(embed.title)
 
     embed.colour = colours[response["usage_category"]]
-    definition = deep_get(response, "translations", lang, "definition")
+    definition = data.deep_get(response, "translations", lang, "definition")
 
     if hide == "def":
         definition = spoiler_wrap(definition)
@@ -185,7 +197,7 @@ class NimiView(View):
 
         # for rname, link in word_data.get("resources", {}).items():
         word_data = data.get_word_data(word)
-        link = deep_get(word_data, "resources", "sona_pona")
+        link = data.deep_get(word_data, "resources", "sona_pona")
         if link:
             self.add_item(
                 Button(
@@ -209,11 +221,3 @@ class NimiButton(Button):
             await interaction.response.edit_message("Something went wrong!")
             return
         await interaction.response.edit_message(embed=embed, view=view)
-
-
-def is_valid_language(value: str) -> bool:
-    return value in data.LANGUAGE_DATA
-
-
-def is_valid_usage_category(value: str) -> bool:
-    return value in data.UsageCategory.__members__

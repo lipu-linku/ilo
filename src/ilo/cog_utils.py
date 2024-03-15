@@ -1,6 +1,8 @@
 import json
+import logging
+import re
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Literal, Tuple
 
 from discord import ApplicationContext, AutocompleteContext
 from discord.commands import option as pycord_option
@@ -8,6 +10,11 @@ from discord.ext.bridge import bridge_command as pycord_bridge_command
 
 from ilo import data
 from ilo.preferences import preferences
+
+LOG = logging.getLogger("ilo")
+
+VALID_STYLES = ["outline", "background"]
+Style = Literal["outline"] | Literal["background"]
 
 
 async def handle_pref_error(
@@ -22,12 +29,42 @@ async def handle_pref_error(
     return value
 
 
+def is_valid_language(value: str) -> bool:
+    return value in data.LANGUAGE_DATA
+
+
+def is_valid_usage_category(value: str) -> bool:
+    return value in data.UsageCategory.__members__
+
+
+def is_valid_font(value: str) -> bool:
+    return value in data.USABLE_FONTS
+
+
+def is_valid_fontsize(value: int) -> bool:
+    return 14 <= value <= 500
+
+
+def is_valid_color(value: str) -> bool:
+    if re.match(r"^[0-9a-fA-F]{6}$", value):
+        return True
+    return False
+
+
+def is_valid_bgstyle(style: Style) -> bool:
+    return style in VALID_STYLES
+
+
 def load_file(file_path, file_name) -> List[str] | Dict:
     path = Path(file_path).parent / file_name
     with open(path, encoding="utf-8") as f:
         if path.suffix == ".json":
             return json.load(f)
         return list(f.readlines())
+
+
+def rgb_tuple(value: str) -> Tuple[int, int, int]:
+    return tuple(bytes.fromhex(value))
 
 
 def is_subsequence(s: str, opt: str) -> bool:

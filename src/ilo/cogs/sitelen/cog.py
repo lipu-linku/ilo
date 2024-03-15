@@ -1,18 +1,12 @@
 import io
-import re
-from typing import Literal, Tuple
 
 from discord import File
 from discord.commands.context import ApplicationContext
 from discord.ext.commands import Cog
 
-from ilo import sitelen
-from ilo.cog_utils import Locale, font_autocomplete, handle_pref_error
-from ilo.data import DEFAULT_FONT, SITELEN_SITELEN_FONT, USABLE_FONTS
+from ilo import cog_utils as utils
+from ilo import data, sitelen
 from ilo.preferences import Template, preferences
-
-VALID_STYLES = ["outline", "background"]
-Style = Literal["outline"] | Literal["background"]
 
 
 class CogSitelen(Cog):
@@ -22,45 +16,56 @@ class CogSitelen(Cog):
             Template(
                 locale=self.locale,
                 name="fontsize",
-                default=72,
-                validation=is_valid_fontsize,
+                default=data.DEFAULT_FONTSIZE,
+                validation=utils.is_valid_fontsize,
             )
         )
         preferences.register(
             Template(
                 locale=self.locale,
                 name="color",
-                default="ffffff",
-                validation=is_valid_color,
+                default=data.DEFAULT_COLOR,
+                validation=utils.is_valid_color,
             )
         )
         preferences.register(
             Template(
                 locale=self.locale,
                 name="font",
-                default=DEFAULT_FONT,
-                choices={font: font for font in USABLE_FONTS},
-                validation=is_valid_font,
+                default=data.DEFAULT_FONT,
+                choices={font: font for font in data.USABLE_FONTS},
+                validation=utils.is_valid_font,
             )
         )
+
+        # FIXME: This will require breaking font preferences.
+        # Font data is stored by font name, what the user enters.
+        # But font names and directories/filenames are not necessarily static.
+        # Users should still select fonts by name, but we should store the font id.
+        # For comparison, languages already do this.
+        # In the nimi cog, we pass data.LANGUAGES_FOR_PREFS- no dict comprehension.
+        # NOTE: In the preferences list command, the user currently sees the langcode
+        # instead of the language name. For fonts, they see the font name because we
+        # store it. This should be fixed.
+
         preferences.register(
             Template(
                 locale=self.locale,
                 name="bgstyle",
-                default="outline",
-                choices={style: style for style in VALID_STYLES},
-                validation=is_valid_bgstyle,
+                default=data.DEFAULT_BGSTYLE,
+                choices={style: style for style in utils.VALID_STYLES},
+                validation=utils.is_valid_bgstyle,
             )
         )
 
-    locale = Locale(__file__)
+    locale = utils.Locale(__file__)
 
     @locale.command("sp")
     @locale.option("sp-text")
-    @locale.option("sp-font", autocomplete=font_autocomplete)
+    @locale.option("sp-font", autocomplete=utils.font_autocomplete)
     @locale.option("sp-fontsize")
     @locale.option("sp-color")
-    @locale.option("sp-bgstyle", choices=VALID_STYLES)
+    @locale.option("sp-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sp-spoiler")
     @locale.option("sp-hide")
     async def slash_sp(
@@ -78,10 +83,10 @@ class CogSitelen(Cog):
 
     @locale.command("sitelenpona")
     @locale.option("sitelenpona-text")
-    @locale.option("sitelenpona-font", autocomplete=font_autocomplete)
+    @locale.option("sitelenpona-font", autocomplete=utils.font_autocomplete)
     @locale.option("sitelenpona-fontsize")
     @locale.option("sitelenpona-color")
-    @locale.option("sitelenpona-bgstyle", choices=VALID_STYLES)
+    @locale.option("sitelenpona-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sitelenpona-spoiler")
     @locale.option("sitelenpona-hide")
     async def slash_sitelenpona(
@@ -101,7 +106,7 @@ class CogSitelen(Cog):
     @locale.option("ss-text")
     @locale.option("ss-fontsize")
     @locale.option("ss-color")
-    @locale.option("ss-bgstyle", choices=VALID_STYLES)
+    @locale.option("ss-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("ss-spoiler")
     @locale.option("ss-hide")
     async def slash_ss(
@@ -115,14 +120,21 @@ class CogSitelen(Cog):
         hide: bool = False,
     ):
         await sp(
-            ctx, text, SITELEN_SITELEN_FONT, fontsize, color, bgstyle, spoiler, hide
+            ctx,
+            text,
+            data.SITELEN_SITELEN_FONT,
+            fontsize,
+            color,
+            bgstyle,
+            spoiler,
+            hide,
         )
 
     @locale.command("sitelensitelen")
     @locale.option("sitelensitelen-text")
     @locale.option("sitelensitelen-fontsize")
     @locale.option("sitelensitelen-color")
-    @locale.option("sitelensitelen-bgstyle", choices=VALID_STYLES)
+    @locale.option("sitelensitelen-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sitelensitelen-spoiler")
     @locale.option("sitelensitelen-hide")
     async def slash_sitelensitelen(
@@ -136,7 +148,14 @@ class CogSitelen(Cog):
         hide: bool = False,
     ):
         await sp(
-            ctx, text, SITELEN_SITELEN_FONT, fontsize, color, bgstyle, spoiler, hide
+            ctx,
+            text,
+            data.SITELEN_SITELEN_FONT,
+            fontsize,
+            color,
+            bgstyle,
+            spoiler,
+            hide,
         )
 
 
@@ -160,22 +179,25 @@ async def sp(
     font: str = "",
     fontsize: int = 0,
     color: str = "",
-    bgstyle: Style = "outline",
+    bgstyle: str = "",
     spoiler: bool = False,
     hide: bool = False,
 ):
     user_id = str(ctx.author.id)
 
-    font = await handle_pref_error(ctx, user_id, "font", override=font)
-    font = USABLE_FONTS[font]  # TODO: font from preferences isn't a usable font
+    font = await utils.handle_pref_error(ctx, user_id, "font", override=font)
+    font = data.USABLE_FONTS[font]  # TODO: font from preferences isn't a usable font
 
-    fontsize = await handle_pref_error(ctx, user_id, "fontsize", override=fontsize)
-    color = await handle_pref_error(ctx, user_id, "color", override=color)
-
-    bgstyle = await handle_pref_error(ctx, user_id, "bgstyle", override=bgstyle)
+    fontsize = await utils.handle_pref_error(
+        ctx, user_id, "fontsize", override=fontsize
+    )
+    color = await utils.handle_pref_error(ctx, user_id, "color", override=color)
+    bgstyle = await utils.handle_pref_error(ctx, user_id, "bgstyle", override=bgstyle)
 
     text = unescape_newline(text)
-    image = io.BytesIO(sitelen.display(text, font, fontsize, rgb_tuple(color), bgstyle))
+    image = io.BytesIO(
+        sitelen.display(text, font, fontsize, utils.rgb_tuple(color), bgstyle)
+    )
 
     alt_text = f"{ctx.author.display_name} said: {text}"
     filename = text_to_filename(text) + ".png"
@@ -188,25 +210,3 @@ async def sp(
         ),
         ephemeral=hide,
     )
-
-
-def rgb_tuple(value: str) -> Tuple[int, int, int]:
-    return tuple(bytes.fromhex(value))
-
-
-def is_valid_font(value: str) -> bool:
-    return value in USABLE_FONTS
-
-
-def is_valid_fontsize(value: int) -> bool:
-    return 14 <= value <= 500
-
-
-def is_valid_color(value: str) -> bool:
-    if re.match(r"^[0-9a-fA-F]{6}$", value):
-        return True
-    return False
-
-
-def is_valid_bgstyle(style: Style) -> bool:
-    return style in VALID_STYLES
