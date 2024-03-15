@@ -5,7 +5,7 @@
   "sp-fontsize": "The size of font you want to use (overrides your settings)",
   "sp-color": "The font color you want to use (overrides your settings)",
   "sp-spoiler": "Whether or not to hide the image with a spoiler",
-  "sp-hide": "Whether to show the image to only you. Defaults to false.",
+  "sp-hide": "Whether to show the image to only you.",
 
   "sitelenpona": "Get sitelen pona of a toki pona phrase",
   "sitelenpona-text": "The phrase you want to convert to sitelen pona.",
@@ -13,21 +13,21 @@
   "sitelenpona-fontsize": "The size of font you want to use (overrides your settings)",
   "sitelenpona-color": "The font color you want to use (overrides your settings)",
   "sitelenpona-spoiler": "Whether or not to hide the image with a spoiler",
-  "sitelenpona-hide": "Whether to show the image to only you. Defaults to false.",
+  "sitelenpona-hide": "Whether to show the image to only you.",
 
   "ss": "Get the sitelen sitelen of a toki pona phrase",
   "ss-text": "The phrase you want to convert to sitelen sitelen.",
   "ss-fontsize": "The size of font you want to use (overrides your settings)",
   "ss-color": "The font color you want to use (overrides your settings)",
   "ss-spoiler": "Whether or not to hide the image with a spoiler",
-  "ss-hide": "Whether to show the image to only you. Defaults to false.",
+  "ss-hide": "Whether to show the image to only you.",
 
   "sitelensitelen": "Get the sitelen sitelen of a toki pona phrase",
   "sitelensitelen-text": "The phrase you want to convert to sitelen sitelen.",
   "sitelensitelen-fontsize": "The size of font you want to use (overrides your settings)",
   "sitelensitelen-color": "The font color you want to use (overrides your settings)",
   "sitelensitelen-spoiler": "Whether or not to hide the image with a spoiler",
-  "sitelensitelen-hide": "Whether to show the image to only you. Defaults to false.",
+  "sitelensitelen-hide": "Whether to show the image to only you.",
 
   "prefs-fontsize": "Set the font size that sitelen pona will be displayed as",
   "prefs-fontsize-fallback": "The fontsize ***{}*** is not in the range 14 to 500. Using the default ***{}***.",
