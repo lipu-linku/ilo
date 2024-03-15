@@ -88,8 +88,8 @@ async def nimi(
 async def guess(
     ctx, which: Literal["word", "def"], language: str = "", hide: bool = True
 ):
+    language = data.LANGUAGES_FOR_PREFS.get(language, language)
     lang = await utils.handle_pref_error(ctx, str(ctx.author.id), "language", language)
-    lang = data.LANGUAGES_FOR_PREFS[lang]
     usage = await utils.handle_pref_error(ctx, str(ctx.author.id), "usage")
 
     word, response = data.get_random_word(min_usage=usage)
