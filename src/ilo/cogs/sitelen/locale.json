@@ -6,6 +6,7 @@
   "sp-color": "The font color you want to use (overrides your settings)",
   "sp-spoiler": "Whether or not to hide the image with a spoiler",
   "sp-hide": "Whether to show the image to only you.",
+  "sp-bgstyle": "Select background or outline for your background style.",
 
   "sitelenpona": "Get sitelen pona of a toki pona phrase",
   "sitelenpona-text": "The phrase you want to convert to sitelen pona.",
@@ -14,6 +15,7 @@
   "sitelenpona-color": "The font color you want to use (overrides your settings)",
   "sitelenpona-spoiler": "Whether or not to hide the image with a spoiler",
   "sitelenpona-hide": "Whether to show the image to only you.",
+  "sitelenpona-bgstyle": "Select background or outline for your background style.",
 
   "ss": "Get the sitelen sitelen of a toki pona phrase",
   "ss-text": "The phrase you want to convert to sitelen sitelen.",
@@ -21,6 +23,7 @@
   "ss-color": "The font color you want to use (overrides your settings)",
   "ss-spoiler": "Whether or not to hide the image with a spoiler",
   "ss-hide": "Whether to show the image to only you.",
+  "ss-bgstyle": "Select background or outline for your background style.",
 
   "sitelensitelen": "Get the sitelen sitelen of a toki pona phrase",
   "sitelensitelen-text": "The phrase you want to convert to sitelen sitelen.",
@@ -28,6 +31,7 @@
   "sitelensitelen-color": "The font color you want to use (overrides your settings)",
   "sitelensitelen-spoiler": "Whether or not to hide the image with a spoiler",
   "sitelensitelen-hide": "Whether to show the image to only you.",
+  "sitelensitelen-bgstyle": "Select background or outline for your background style.",
 
   "prefs-fontsize": "Set the font size that sitelen pona will be displayed as",
   "prefs-fontsize-fallback": "The fontsize ***{}*** is not in the range 14 to 500. Using the default ***{}***.",
@@ -45,5 +49,11 @@
   "prefs-color-fallback": "The color ***{}*** is not a hexadecimal RGB color e.g. `2288ff`. Using the default ***{}***.",
   "prefs-color-pref-invalid": "The color ***{}*** is in your preferences but is not a valid hexadecimal RGB color. Using the default ***{}***.",
   "prefs-color-choice-invalid": "The color ***{}*** is not a hexadecimal RGB color e.g. `2288ff`. Did not update preferences.",
-  "prefs-color-option": "The text color you want to use."
+  "prefs-color-option": "The text color you want to use.",
+
+  "prefs-bgstyle": "Set the default background style, outline or background, for text.",
+  "prefs-bgstyle-fallback": "The bgstyle ***{}*** is not a valid style. Using the default ***{}***.",
+  "prefs-bgstyle-pref-invalid": "The bgstyle ***{}*** is in your preferences but not a valid style. Using the default ***{}***.",
+  "prefs-bgstyle-choice-invalid": "The bgstyle ***{}*** is not a valid style. Did not update preferences.",
+  "prefs-bgstyle-option": "The text bgstyle you want to use."
 }

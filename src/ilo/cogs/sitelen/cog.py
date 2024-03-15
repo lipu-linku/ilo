@@ -1,6 +1,6 @@
 import io
 import re
-from typing import Tuple
+from typing import Literal, Tuple
 
 from discord import File
 from discord.commands.context import ApplicationContext
@@ -11,23 +11,45 @@ from ilo.cog_utils import Locale, font_autocomplete, handle_pref_error
 from ilo.data import DEFAULT_FONT, SITELEN_SITELEN_FONT, USABLE_FONTS
 from ilo.preferences import Template, preferences
 
+VALID_STYLES = ["outline", "background"]
+Style = Literal["outline"] | Literal["background"]
+
 
 class CogSitelen(Cog):
     def __init__(self, bot):
         self.bot = bot
         preferences.register(
-            Template(self.locale, "fontsize", 72, validation=is_valid_fontsize)
-        )
-        preferences.register(
-            Template(self.locale, "color", "ffffff", validation=is_valid_color)
+            Template(
+                locale=self.locale,
+                name="fontsize",
+                default=72,
+                validation=is_valid_fontsize,
+            )
         )
         preferences.register(
             Template(
-                self.locale,
-                "font",
-                DEFAULT_FONT,
-                {font: font for font in USABLE_FONTS},
+                locale=self.locale,
+                name="color",
+                default="ffffff",
+                validation=is_valid_color,
+            )
+        )
+        preferences.register(
+            Template(
+                locale=self.locale,
+                name="font",
+                default=DEFAULT_FONT,
+                choices={font: font for font in USABLE_FONTS},
                 validation=is_valid_font,
+            )
+        )
+        preferences.register(
+            Template(
+                locale=self.locale,
+                name="bgstyle",
+                default="outline",
+                choices={style: style for style in VALID_STYLES},
+                validation=is_valid_bgstyle,
             )
         )
 
@@ -38,6 +60,7 @@ class CogSitelen(Cog):
     @locale.option("sp-font", autocomplete=font_autocomplete)
     @locale.option("sp-fontsize")
     @locale.option("sp-color")
+    @locale.option("sp-bgstyle", choices=VALID_STYLES)
     @locale.option("sp-spoiler")
     @locale.option("sp-hide")
     async def slash_sp(
@@ -47,16 +70,18 @@ class CogSitelen(Cog):
         font: str = "",
         fontsize: int = 0,
         color: str = "",
+        bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
     ):
-        await sp(ctx, text, font, fontsize, color, spoiler, hide)
+        await sp(ctx, text, font, fontsize, color, bgstyle, spoiler, hide)
 
     @locale.command("sitelenpona")
     @locale.option("sitelenpona-text")
     @locale.option("sitelenpona-font", autocomplete=font_autocomplete)
     @locale.option("sitelenpona-fontsize")
     @locale.option("sitelenpona-color")
+    @locale.option("sitelenpona-bgstyle", choices=VALID_STYLES)
     @locale.option("sitelenpona-spoiler")
     @locale.option("sitelenpona-hide")
     async def slash_sitelenpona(
@@ -66,15 +91,17 @@ class CogSitelen(Cog):
         font: str = "",
         fontsize: int = 0,
         color: str = "",
+        bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
     ):
-        await sp(ctx, text, font, fontsize, color, spoiler, hide)
+        await sp(ctx, text, font, fontsize, color, bgstyle, spoiler, hide)
 
     @locale.command("ss")
     @locale.option("ss-text")
     @locale.option("ss-fontsize")
     @locale.option("ss-color")
+    @locale.option("ss-bgstyle", choices=VALID_STYLES)
     @locale.option("ss-spoiler")
     @locale.option("ss-hide")
     async def slash_ss(
@@ -83,15 +110,19 @@ class CogSitelen(Cog):
         text: str,
         fontsize: int = 0,
         color: str = "",
+        bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
     ):
-        await sp(ctx, text, SITELEN_SITELEN_FONT, fontsize, color, spoiler, hide)
+        await sp(
+            ctx, text, SITELEN_SITELEN_FONT, fontsize, color, bgstyle, spoiler, hide
+        )
 
     @locale.command("sitelensitelen")
     @locale.option("sitelensitelen-text")
     @locale.option("sitelensitelen-fontsize")
     @locale.option("sitelensitelen-color")
+    @locale.option("sitelensitelen-bgstyle", choices=VALID_STYLES)
     @locale.option("sitelensitelen-spoiler")
     @locale.option("sitelensitelen-hide")
     async def slash_sitelensitelen(
@@ -100,10 +131,13 @@ class CogSitelen(Cog):
         text: str,
         fontsize: int = 0,
         color: str = "",
+        bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
     ):
-        await sp(ctx, text, SITELEN_SITELEN_FONT, fontsize, color, spoiler, hide)
+        await sp(
+            ctx, text, SITELEN_SITELEN_FONT, fontsize, color, bgstyle, spoiler, hide
+        )
 
 
 def unescape_newline(text: str) -> str:
@@ -126,6 +160,7 @@ async def sp(
     font: str = "",
     fontsize: int = 0,
     color: str = "",
+    bgstyle: Style = "outline",
     spoiler: bool = False,
     hide: bool = False,
 ):
@@ -137,8 +172,10 @@ async def sp(
     fontsize = await handle_pref_error(ctx, user_id, "fontsize", override=fontsize)
     color = await handle_pref_error(ctx, user_id, "color", override=color)
 
+    bgstyle = await handle_pref_error(ctx, user_id, "bgstyle", override=bgstyle)
+
     text = unescape_newline(text)
-    image = io.BytesIO(sitelen.display(text, font, fontsize, rgb_tuple(color)))
+    image = io.BytesIO(sitelen.display(text, font, fontsize, rgb_tuple(color), bgstyle))
 
     alt_text = f"{ctx.author.display_name} said: {text}"
     filename = text_to_filename(text) + ".png"
@@ -148,7 +185,7 @@ async def sp(
             filename=filename,
             description=alt_text,
             spoiler=spoiler,
-        ), 
+        ),
         ephemeral=hide,
     )
 
@@ -169,3 +206,7 @@ def is_valid_color(value: str) -> bool:
     if re.match(r"^[0-9a-fA-F]{6}$", value):
         return True
     return False
+
+
+def is_valid_bgstyle(style: Style) -> bool:
+    return style in VALID_STYLES
