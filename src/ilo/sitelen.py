@@ -9,6 +9,12 @@ TRANSPARENT = (0, 0, 0, 0)
 MINIMUM_BRIGHTNESS = 0x40
 
 
+def luminance(color: Tuple[int, int, int]) -> float:
+    # NOTE: normally luminance is 0.0-1.0, we are going 0.0-255.0
+    r, g, b = color
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
 def get_bg_stroke_colors(
     color: Tuple[int, int, int],
     bgstyle: Literal["outline"] | Literal["background"],
@@ -17,6 +23,7 @@ def get_bg_stroke_colors(
     stroke_color = BLACK
 
     # if (sum(color) / len(color)) < MINIMUM_BRIGHTNESS:
+    # if luminance(color) < MINIMUM_BRIGHTNESS:
     if all(map(lambda c: c < MINIMUM_BRIGHTNESS, color)):
         bg_color = WHITE
         stroke_color = WHITE
