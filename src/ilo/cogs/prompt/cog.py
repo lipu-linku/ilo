@@ -1,4 +1,5 @@
 import random
+
 from discord.ext.commands import Cog
 
 from ilo.cog_utils import Locale, load_file
@@ -22,7 +23,7 @@ async def prompt(ctx, translate: bool):
     tok_prompt = all_sents["tok"]
 
     # if user lang is tok, don't translate
-    lang = preferences.get(str(ctx.author.id), "language")
+    lang = preferences.get_or_default(str(ctx.author.id), "language")
     translate = translate and (lang != "tok")
     if translate:
         translation = all_sents[lang] if lang in all_sents else all_sents["en"]

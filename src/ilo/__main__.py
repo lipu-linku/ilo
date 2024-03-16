@@ -1,6 +1,8 @@
 import logging
 import os
+import uuid
 
+from discord import ApplicationContext
 from discord.ext import bridge, commands
 from dotenv import load_dotenv
 
@@ -42,6 +44,12 @@ bot = bridge.Bot(
 async def on_ready():
     for index, guild in enumerate(bot.guilds):
         print("{}) {}".format(index + 1, guild.name))
+
+
+@bot.event
+async def on_application_command_error(ctx: ApplicationContext, error: BaseException):
+    await ctx.respond(f"Something went wrong!\n{error}", ephemeral=True)
+    raise error  # ensure we get full stacktrace
 
 
 @bot.event

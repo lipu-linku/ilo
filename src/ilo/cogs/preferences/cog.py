@@ -4,7 +4,12 @@ from discord import AutocompleteContext, Option, OptionChoice
 from discord.commands import SlashCommandGroup
 from discord.ext.commands import Cog
 
-from ilo.cog_utils import Locale, autocomplete_filter, startswith_filter
+from ilo.cog_utils import (
+    Locale,
+    autocomplete_filter,
+    build_autocomplete,
+    startswith_filter,
+)
 from ilo.preferences import preferences
 
 CHOICE_SIZE = 25
@@ -29,6 +34,7 @@ def build_subcommands(prefs, template):
 def build_subcommand(prefs, name, description, option):
     @prefs.command(name=name, description=description)
     async def preference_subcommand(self, ctx, preference: option):
+        orig_pref = preference
         template = preferences.templates[re.sub(r"_page\d*", "", ctx.command.name)]
         if template.choices and isinstance(
             template.choices, dict
@@ -37,21 +43,13 @@ def build_subcommand(prefs, name, description, option):
 
         validation = template.validation(preference)
         if validation is not True:
-            await ctx.respond(validation)
-            return
+            await ctx.respond(template.invalid_choice.format(orig_pref), ephemeral=True)
+            return  # do not update preferences when a preference command fails
         preferences.set(str(ctx.author.id), template.name, preference)
         await ctx.respond(
-            "Set {} preference for **{}** to **{}**.".format(
-                template.name, ctx.author.display_name, preference
-            )
+            "Set your {} preference to **{}**.".format(template.name, preference),
+            ephemeral=True,
         )
-
-
-def build_autocomplete(options: list[str]):
-    def autocompleter(ctx: AutocompleteContext):
-        return autocomplete_filter(ctx.value, options)
-
-    return autocompleter
 
 
 async def prefs_autocomplete(ctx: AutocompleteContext):
@@ -79,11 +77,14 @@ class CogPreferences(Cog):
     async def list(self, ctx):
         response = "Preferences for **{}**:\n".format(ctx.author.display_name)
         for key in preferences.templates:
-            value = preferences.get_raw(str(ctx.author.id), key)
-            status = preferences.get_status(str(ctx.author.id), key, value)
+            user_id = str(ctx.author.id)
+            raw_value = preferences.get(user_id, key)
+            _, status = preferences.get_status(user_id, key)
             default = preferences.get_default(key)
-            response += RESPONSES[status].format(key=key, value=value, default=default)
-        await ctx.respond(response)
+            response += RESPONSES[status].format(
+                key=key, value=raw_value, default=default
+            )
+        await ctx.respond(response, ephemeral=True)
 
     @prefs.command(
         name="reset",
@@ -92,7 +93,8 @@ class CogPreferences(Cog):
     async def reset(self, ctx):
         preferences.reset(str(ctx.author.id))
         await ctx.respond(
-            "Reset all preferences for **{}**.".format(ctx.author.display_name)
+            "Reset all preferences for **{}**.".format(ctx.author.display_name),
+            ephemeral=True,
         )
 
     @prefs.command(name="show", description=locale["show"])

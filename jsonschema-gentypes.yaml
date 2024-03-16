@@ -12,10 +12,10 @@ generate:
     destination: src/sona/words.py
     root_name: Words
     python_version: "3.9"
-  - source: sona/api/generated/sandbox.json
-    destination: src/sona/sandbox.py
-    root_name: Sandbox
-    python_version: "3.9"
+  # - source: sona/api/generated/sandbox.json
+  #   destination: src/sona/sandbox.py
+  #   root_name: Sandbox
+  #   python_version: "3.9"
 
   - source: sona/api/generated/definition_translation.json
     destination: src/sona/definition_translation.py

@@ -1,10 +1,8 @@
 from discord.ext.commands import Cog
 
-from ilo.cog_utils import Locale, load_file
-from ilo.preferences import preferences
-from ilo.preferences import Template
-
+from ilo.cog_utils import Locale, handle_pref_error
 from ilo.cogs.acro import acronym
+from ilo.preferences import Template, preferences
 
 
 class CogAcro(Cog):
@@ -21,7 +19,7 @@ class CogAcro(Cog):
 
 
 async def acro(ctx, text):
-    book = preferences.get(str(ctx.author.id), "acro")
+    book = await handle_pref_error(ctx, str(ctx.author.id), "acro")
     await ctx.respond(acronym.respond(text, book))
 
 

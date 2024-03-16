@@ -1,3 +1,4 @@
+from discord import ApplicationContext
 from discord.ext.commands import Cog
 
 from ilo import data
@@ -13,22 +14,26 @@ class CogLp(Cog):
 
     @locale.command("lp")
     @locale.option("lp-word", autocomplete=word_autocomplete)
-    async def slash_lp(self, ctx, word):
-        await lp(ctx, word)
+    @locale.option("lp-hide")
+    async def slash_lp(self, ctx: ApplicationContext, word: str, hide: bool = True):
+        await lp(ctx, word, hide)
 
     @locale.command("lukapona")
     @locale.option("lukapona-word", autocomplete=word_autocomplete)
-    async def slash_lukapona(self, ctx, word):
-        await lp(ctx, word)
+    @locale.option("lukapona-hide")
+    async def slash_lukapona(
+        self, ctx: ApplicationContext, word: str, hide: bool = True
+    ):
+        await lp(ctx, word, hide)
 
 
-async def lp(ctx, word):
-    response = handle_sign_query(word)
+async def lp(ctx: ApplicationContext, word: str, hide: bool = True):
+    success, response = handle_sign_query(word)
 
-    if isinstance(response, str):
-        await ctx.respond(response)
+    if not success:
+        await ctx.respond(response, ephemeral=True)
         return
     if gif := data.deep_get(response, "video", "gif"):
-        await ctx.respond(gif)
+        await ctx.respond(gif, ephemeral=hide)
         return
-    await ctx.respond(f"No luka pona available for **{word}**")
+    await ctx.respond(f"No luka pona available for **{word}**", ephemeral=True)

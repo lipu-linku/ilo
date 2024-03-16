@@ -97,16 +97,8 @@ class _SignSignwriting(TypedDict, total=False):
 class _SignVideo(TypedDict, total=False):
     """Videos of the sign being performed, by format."""
 
-    gif: Required[str]
-    """
-    A link to a gif of the sign being signed.
+    gif: str
+    """ A link to a gif of the sign being signed. """
 
-    Required property
-    """
-
-    mp4: Required[str]
-    """
-    a link to an mp4 of the sign being signed.
-
-    Required property
-    """
+    mp4: str
+    """ a link to an mp4 of the sign being signed. """

@@ -1,47 +1,46 @@
 import logging
 from itertools import zip_longest
-from typing import Any, Callable, Dict, cast
+from typing import Any, Callable, Dict, Literal, Tuple, cast
 
 from ilo import data
 from ilo.cog_utils import load_file
 from ilo.data import get_word_data
-from sona.sign import Sign
 from sona.word import Word
 
 LOG = logging.getLogger()
 
-# Strings
-
 STRINGS: Dict = cast(Dict, load_file(__file__, "locale.json"))
 
-MAX_EMBED_SIZE = 1024
 MAX_EMBED_SIZE = 900
 # this is to fly under the requirement
 CLIPPED_EMBED_SIZE = 750
 
+
 ### coalescing to human readable response
-
-
 def __coalesce_resp(
     query: str,
     searchfunc: Callable[[str], Any],
     *args: Any,
     **kwargs: Any,
-) -> str | Any:
+) -> Tuple[bool, Any]:
     if len(query.split()) > 1:
-        return STRINGS["multiple_words"].format(query)
+        return False, STRINGS["multiple_words"].format(query)
 
     resp = searchfunc(query, *args, **kwargs)
     if not resp:
-        return STRINGS["missing_word"].format(query)
-    return resp
+        return False, STRINGS["missing_word"].format(query)
+    return True, resp
 
 
-def handle_word_query(query: str) -> str | Word:
+def handle_word_query(
+    query: str,
+) -> Tuple[Literal[True], Word] | Tuple[Literal[False], str]:
     return __coalesce_resp(query, get_word_data)
 
 
-def handle_sign_query(query: str) -> str | Sign:
+def handle_sign_query(
+    query: str,
+) -> Tuple[Literal[True], Word] | Tuple[Literal[False], str]:
     return __coalesce_resp(query, data.get_lukapona_data)
 
 
@@ -73,12 +72,15 @@ def format_etymology(
 ):
     etyms_formatted = []
     for etymu, etymt in zip_longest(etym_untrans, etym_trans):
-        lang = etymt["language"]
-        word = etymu["word"]
+        lang = etymt["language"]  # always defined
+        word = etymu.get("word")
         alt = etymu.get("alt")
-        defin = etymt["definition"]
+        defin = etymt.get("definition")
 
-        etym_formatted = f"{lang}: {word}"
+        etym_formatted = f"{lang}"
+
+        if word:
+            etym_formatted += f": {word}"
         if alt:
             etym_formatted += f" ({alt})"
         if defin:
