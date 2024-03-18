@@ -164,12 +164,18 @@ def unescape_newline(text: str) -> str:
 
 
 def text_to_filename(text: str) -> str:
+    # NOTE: We do NOT support UCSUR filenames.
+    # Maybe in the future when we make an UCSUR converter?
     text = text.lower()
     text = text.replace(" ", "_")
     text = "".join(char for char in text if char.isalnum() or char == "_")
 
     text = text[:50]
     # NOTE: this is a semi-arbitrary practical-for-enduser thing
+
+    if not text:
+        # if we replace all text
+        text = "image"
     return text
 
 
