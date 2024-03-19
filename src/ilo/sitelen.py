@@ -53,7 +53,10 @@ def display(
     )
     image = Image.new(
         mode="RGBA",
-        size=(x + w + STROKE_WIDTH * 2, y + h + STROKE_WIDTH * 2 + LINE_SPACING),
+        size=(
+            x + w + STROKE_WIDTH * 2,
+            y + h + STROKE_WIDTH * 2 + (LINE_SPACING * text.count("\n")),
+        ),
         color=bg_color,
     )
     d = ImageDraw.Draw(image)
