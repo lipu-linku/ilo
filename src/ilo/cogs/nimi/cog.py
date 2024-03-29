@@ -169,6 +169,14 @@ def embed_response(
             embed.add_field(
                 name="see also", value=", ".join(response["see_also"]), inline=inline
             )
+    if response["usage_category"] == "uncommon":
+        embed.set_footer(
+            text="⚠️ This word is uncommon. Many speakers don't use this word."
+        )
+    elif response["usage_category"] == "obscure":
+        embed.set_footer(
+            text="⚠️ This word is obscure. Most speakers don't use or understand this word."
+        )
     return embed
 
 
