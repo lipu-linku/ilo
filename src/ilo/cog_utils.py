@@ -14,7 +14,10 @@ from ilo.preferences import preferences
 LOG = logging.getLogger("ilo")
 
 VALID_STYLES = ["outline", "background"]
-Style = Literal["outline"] | Literal["background"]
+BgStyle = Literal["outline"] | Literal["background"]
+
+Color = tuple[int, int, int]
+ColorAlpha = tuple[int, int, int, int]
 
 
 async def handle_pref_error(
@@ -51,7 +54,7 @@ def is_valid_color(value: str) -> bool:
     return False
 
 
-def is_valid_bgstyle(style: Style) -> bool:
+def is_valid_bgstyle(style: BgStyle) -> bool:
     return style in VALID_STYLES
 
 
@@ -63,7 +66,7 @@ def load_file(file_path, file_name) -> List[str] | Dict:
         return list(f.readlines())
 
 
-def rgb_tuple(value: str) -> Tuple[int, int, int]:
+def rgb_tuple(value: str) -> Color | ColorAlpha:
     return tuple(bytes.fromhex(value))
 
 
