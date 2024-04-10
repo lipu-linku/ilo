@@ -58,9 +58,9 @@ def get_bg_stroke_colors(
             return TRANSPARENT, BLACK
 
     if passes_aa(color, BLACK, font_size):
-        return BLACK, TRANSPARENT
-    else:
-        return WHITE, TRANSPARENT
+        return BLACK, BLACK
+    return WHITE, WHITE
+
 
 # by jan Tepo
 def display(
