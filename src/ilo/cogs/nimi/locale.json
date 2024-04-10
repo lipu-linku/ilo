@@ -1,11 +1,13 @@
 {
-  "nimi": "Get the translation of a toki pona word",
+  "nimi": "Get the definition of a toki pona word",
   "nimi-query": "The word you want to get the translation of.",
+  "nimi-sandbox": "Whether to search the sandbox, a collection of unused words.",
   "nimi-language": "The language you want to see definitions in (overrides your settings)",
   "nimi-hide": "Whether to show the word to only you. Defaults to true",
 
-  "n": "Get the translation of a toki pona word",
+  "n": "Get the definition of a toki pona word",
   "n-query": "The word you want to get the translation of.",
+  "n-sandbox": "Whether to search the sandbox, a collection of unused words.",
   "n-language": "The language you want to see definitions in (overrides your settings)",
   "n-hide": "Whether to show the word to only you. Defaults to true",
 

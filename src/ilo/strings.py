@@ -1,15 +1,15 @@
 import logging
 from itertools import zip_longest
-from typing import Any, Callable, Dict, Literal, Tuple, cast
+from typing import Any, Callable, Dict, Literal, cast
 
 from ilo import data
 from ilo.cog_utils import load_file
-from ilo.data import get_word_data
+from ilo.data import get_sandbox_data, get_word_data
 from sona.word import Word
 
 LOG = logging.getLogger()
 
-STRINGS: Dict = cast(Dict, load_file(__file__, "locale.json"))
+STRINGS = cast(dict[str, str], load_file(__file__, "locale.json"))
 
 MAX_EMBED_SIZE = 900
 # this is to fly under the requirement
@@ -20,9 +20,9 @@ CLIPPED_EMBED_SIZE = 750
 def __coalesce_resp(
     query: str,
     searchfunc: Callable[[str], Any],
-    *args: Any,
-    **kwargs: Any,
-) -> Tuple[bool, Any]:
+    *args: list[Any],
+    **kwargs: dict[Any, Any],
+) -> tuple[Literal[True], Word] | tuple[Literal[False], str]:
     if len(query.split()) > 1:
         return False, STRINGS["multiple_words"].format(query)
 
@@ -34,13 +34,27 @@ def __coalesce_resp(
 
 def handle_word_query(
     query: str,
-) -> Tuple[Literal[True], Word] | Tuple[Literal[False], str]:
-    return __coalesce_resp(query, get_word_data)
+    sandbox: bool = False,
+) -> tuple[Literal[True], Word] | tuple[Literal[False], str]:
+    if len(query.split()) > 1:
+        return False, STRINGS["multiple_words"].format(query)
+
+    resp = get_word_data(query)
+    if resp:
+        return True, resp
+
+    sandbox_resp = get_sandbox_data(query)
+    if sandbox and sandbox_resp:
+        return True, sandbox_resp
+    if (not sandbox) and sandbox_resp:
+        return False, STRINGS["sandbox_word"].format(query)
+
+    return False, STRINGS["missing_word"].format(query)
 
 
 def handle_sign_query(
     query: str,
-) -> Tuple[Literal[True], Word] | Tuple[Literal[False], str]:
+) -> tuple[Literal[True], Word] | tuple[Literal[False], str]:
     return __coalesce_resp(query, data.get_lukapona_data)
 
 

@@ -8,6 +8,7 @@ from ilo import cog_utils as utils
 from ilo import data, strings
 from ilo.cogs.nimi.colour import colours
 from ilo.preferences import Template, preferences
+from sona.word import Word
 
 language_autocomplete = utils.build_autocomplete(data.LANGUAGES_FOR_PREFS)
 
@@ -39,21 +40,33 @@ class CogNimi(Cog):
 
     @locale.command("nimi")
     @locale.option("nimi-query", autocomplete=utils.word_autocomplete)
+    @locale.option("nimi-sandbox")
     @locale.option("nimi-language", autocomplete=language_autocomplete)
     @locale.option("nimi-hide")
     async def slash_nimi(
-        self, ctx: ApplicationContext, query: str, language: str = "", hide: bool = True
+        self,
+        ctx: ApplicationContext,
+        query: str,
+        sandbox: bool = False,
+        language: str = "",
+        hide: bool = True,
     ):
-        await nimi(ctx, query, language, hide)
+        await nimi(ctx, query, sandbox, language, hide)
 
     @locale.command("n")
     @locale.option("n-query", autocomplete=utils.word_autocomplete)
+    @locale.option("n-sandbox")
     @locale.option("n-language", autocomplete=language_autocomplete)
     @locale.option("n-hide")
     async def slash_n(
-        self, ctx: ApplicationContext, query: str, language: str = "", hide: bool = True
+        self,
+        ctx: ApplicationContext,
+        query: str,
+        sandbox: bool = False,
+        language: str = "",
+        hide: bool = True,
     ):
-        await nimi(ctx, query, language, hide)
+        await nimi(ctx, query, sandbox, language, hide)
 
     # imo guess is a special case of nimi
     @locale.command("guess")
@@ -61,20 +74,28 @@ class CogNimi(Cog):
     @locale.option("guess-language", autocomplete=language_autocomplete)
     @locale.option("guess-hide")
     async def slash_guess(
-        self, ctx, which: str = "def", language: str = "", hide: bool = True
+        self,
+        ctx: ApplicationContext,
+        which: str = "def",
+        language: str = "",
+        hide: bool = True,
     ):
         assert which in ("word", "def")
         await guess(ctx, which, language, hide)
 
 
 async def nimi(
-    ctx: ApplicationContext, query: str, language: str = "", hide: bool = True
+    ctx: ApplicationContext,
+    query: str,
+    sandbox: bool = False,
+    language: str = "",
+    hide: bool = True,
 ):
     # this feeds user's mistake back when we fail to find
     language = data.LANGUAGES_FOR_PREFS.get(language, language)
     lang = await utils.handle_pref_error(ctx, str(ctx.author.id), "language", language)
 
-    success, response = strings.handle_word_query(query)
+    success, response = strings.handle_word_query(query, sandbox)
     if not success:
         await ctx.respond(response, ephemeral=True)
         return
@@ -119,7 +140,7 @@ def guess_embed_response(word: str, lang: str, response, hide: Literal["word", "
 def embed_response(
     word: str,
     lang: str,
-    response,
+    response: Word,
     embedtype: Literal["concise", "verbose"],
 ):
     embed = Embed()
@@ -133,7 +154,7 @@ def embed_response(
     )
 
     embed.set_thumbnail(
-        url=f"https://raw.githubusercontent.com/lipu-linku/ijo/main/sitelenpona/sitelen-seli-kiwen/{word}.png",
+        url=f"https://raw.githubusercontent.com/lipu-linku/ijo/main/sitelenpona/sitelen-seli-kiwen/{response['word']}.png",
     )
     # embed.set_thumbnail( # TODO: not final, but REPLACEME
     #     url=data.deep_get(response, "representations", "sitelen_pona_svg", 0)

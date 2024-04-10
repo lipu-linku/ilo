@@ -1,5 +1,6 @@
 {
   "missing_word": "The word you requested, ***{}***, is not in the database I use. Make sure you didn't misspell it, or talk to kala Asi if this word really is missing.",
+  "sandbox_word": "The word you requested, ***{}***, is not in the main dictionary, but is in the sandbox. Try your search again with `sandbox=True`.",
   "multiple_words": "The phrase you requested, ***{}***, contains multiple words. I am but a simple dictionary and can only do one word at a time.",
   "unknown_error": "Something failed and I'm not sure what. Please tell kala Asi."
 }
