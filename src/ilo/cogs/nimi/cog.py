@@ -193,7 +193,7 @@ class NimiView(View):
             Button(
                 style=ButtonStyle.link,
                 label="linku.la",
-                url=f"https://linku.la/?q={word}",
+                url=f"https://linku.la/words/{word}",
                 # url=f"https://linku.la/words/{word}",
             )
         )
