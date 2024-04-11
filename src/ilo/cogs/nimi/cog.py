@@ -198,6 +198,10 @@ def embed_response(
         embed.set_footer(
             text="⚠️ This word is obscure. Most speakers don't use or understand this word."
         )
+    elif response["usage_category"] == "sandbox":
+        embed.set_footer(
+            text="⚠️ This proposed word is in the sandbox. It is not in use by the community."
+        )
     return embed
 
 
