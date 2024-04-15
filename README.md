@@ -1,7 +1,9 @@
 # ilo Linku
 
 <div align="center">
-<a  href="https://discord.gg/A3ZPqnHHsy"><img src="https://img.shields.io/badge/-Discord-%237289da?style=for-the-badge&logo=appveyor"></a>
+  <a href="https://discord.gg/A3ZPqnHHsy">
+    <img src="https://img.shields.io/badge/-Discord-%237289da?style=for-the-badge&logo=appveyor">
+  </a>
 </div>
 
 ## Overview
@@ -51,6 +53,17 @@ You likely already have the last two, but a symptom of not having them is that `
     - Use Slash Commands
 - Save your bot token to a `.env` file as `DISCORD_TOKEN=longstringofcharactersyougotfromtheportal`.
 - Run the bot: `make build up` or `make local`, if you want the containerized or local bot respectively.
+
+## Contributing
+
+<div align="center">
+  <a href="https://github.com/lipu-linku/ilo/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=lipu-linku/ilo" />
+  </a>
+</div>
+
+Feel free to post issues, fork the repo, and open pull requests with your changes.
+You can also join the discord to contribute translations and talk to the maintainers.
 
 ## License
 
