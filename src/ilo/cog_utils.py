@@ -2,7 +2,7 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Tuple
+from typing import Any, Dict, List, Literal, Tuple, TypedDict
 
 from discord import ApplicationContext, AutocompleteContext
 from discord.commands import option as pycord_option
