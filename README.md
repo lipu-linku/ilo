@@ -2,7 +2,7 @@
 
 <div align="center">
   <a href="https://discord.gg/A3ZPqnHHsy">
-    <img src="https://img.shields.io/badge/-Discord-%237289da?style=for-the-badge&logo=appveyor">
+    <img src="https://img.shields.io/badge/-Discord-%237289da?style=for-the-badge&logo=discord&logoColor=white">
   </a>
 </div>
 

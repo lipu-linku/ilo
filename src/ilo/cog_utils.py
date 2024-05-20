@@ -2,12 +2,11 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Tuple
+from typing import Any, Dict, List, Literal
 
 from discord import ApplicationContext, AutocompleteContext
 from discord.commands import option as pycord_option
 from discord.ext.bridge import bridge_command as pycord_bridge_command
-
 from ilo import data
 from ilo.preferences import preferences
 
