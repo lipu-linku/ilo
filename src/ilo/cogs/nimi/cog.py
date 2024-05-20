@@ -245,10 +245,10 @@ class NimiButton(Button):
     async def callback(self, interaction):
         buttontype, word, lang = self.custom_id.split(";")
         if buttontype == "expand":
-            embed = embed_response(word, lang, data.get_word_data(word), "verbose")
+            embed = embed_response(word, lang, data.get_any_word_data(word), "verbose")
             view = NimiView("minimise", word, lang)
         elif buttontype == "minimise":
-            embed = embed_response(word, lang, data.get_word_data(word), "concise")
+            embed = embed_response(word, lang, data.get_any_word_data(word), "concise")
             view = NimiView("expand", word, lang)
         else:
             await interaction.response.edit_message("Something went wrong!")

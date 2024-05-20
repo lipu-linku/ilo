@@ -120,6 +120,10 @@ def get_sandbox_data(word: str) -> Optional[JSON]:
     return SANDBOX_DATA.get(word)
 
 
+def get_any_word_data(word: str) -> Optional[Word]:
+    return get_word_data(word) or get_sandbox_data(word)
+
+
 def get_lukapona_data(word: str) -> Optional[Sign]:
     return SIGNS_DATA_BY_WORD.get(word)
 
