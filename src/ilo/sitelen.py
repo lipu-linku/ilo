@@ -45,30 +45,30 @@ def passes_aa(color: Color, bg_color: Color, font_size: int) -> bool:
     return minimum_ratio <= contrast_ratio(color, bg_color)
 
 
-def midpoint(a: int, b: int) -> int:
-    return round((a + b) / 2)
+# def midpoint(a: int, b: int) -> int:
+#     return round((a + b) / 2)
 
 
-def midpoint_color(color1: Color, color2: Color) -> Color:
-    return (
-        midpoint(color1[0], color2[0]),
-        midpoint(color1[1], color2[1]),
-        midpoint(color1[2], color2[2]),
-    )
+# def midpoint_color(color1: Color, color2: Color) -> Color:
+#     return (
+#         midpoint(color1[0], color2[0]),
+#         midpoint(color1[1], color2[1]),
+#         midpoint(color1[2], color2[2]),
+#     )
 
 
-def get_bg_stroke_colors(
-    color: Color, bgstyle: BgStyle, font_size: int
-) -> tuple[ColorAlpha, ColorAlpha]:
-    if bgstyle == "outline":
-        passes_on_dark = passes_aa(color, BLACK, font_size)
-        passes_on_light = passes_aa(midpoint_color(color, BLACK), WHITE, font_size)
-        if passes_on_dark and passes_on_light:
-            return TRANSPARENT, BLACK
+# def get_bg_stroke_colors(
+#     color: Color, bgstyle: BgStyle, font_size: int
+# ) -> tuple[ColorAlpha, ColorAlpha]:
+#     if bgstyle == "outline":
+#         passes_on_dark = passes_aa(color, BLACK, font_size)
+#         passes_on_light = passes_aa(midpoint_color(color, BLACK), WHITE, font_size)
+#         if passes_on_dark and passes_on_light:
+#             return TRANSPARENT, BLACK
 
-    if passes_aa(color, BLACK, font_size):
-        return BLACK, BLACK
-    return WHITE, WHITE
+#     if passes_aa(color, BLACK, font_size):
+#         return BLACK, BLACK
+#     return WHITE, WHITE
 
 
 # by jan Tepo
@@ -76,7 +76,9 @@ def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: Bg
     STROKE_WIDTH = round((font_size / 133) * 5)
     LINE_SPACING = round((font_size / 11) * 2)
 
-    bg_color, stroke_color = get_bg_stroke_colors(color, bgstyle, font_size)
+    stroke_color = BLACK if passes_aa(color, BLACK, font_size) else WHITE
+    bg_color = stroke_color if bgstyle == "background" else TRANSPARENT
+
     font = ImageFont.truetype(font_path, font_size)
     d = ImageDraw.Draw(Image.new("RGBA", (0, 0), (0, 0, 0, 0)))
     x, y, w, h = d.multiline_textbbox(
