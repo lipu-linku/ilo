@@ -21,6 +21,6 @@ COPY src/ /project/pkgs/
 COPY ijo/nasinsitelen/ /project/ijo/nasinsitelen
 
 # this will change most often
-COPY --from=builder /project/__pypackages__/3.11/lib /project/pkgs
+COPY --from=builder /project/__pypackages__/3.12/lib /project/pkgs
 WORKDIR /project
 ENTRYPOINT ["python", "-m", "ilo"]
