@@ -49,7 +49,7 @@ class CogNimi(Cog):
         query: str,
         sandbox: bool = False,
         language: str = "",
-        hide: bool = True,
+        hide: bool = False,
     ):
         await nimi(ctx, query, sandbox, language, hide)
 
@@ -64,7 +64,7 @@ class CogNimi(Cog):
         query: str,
         sandbox: bool = False,
         language: str = "",
-        hide: bool = True,
+        hide: bool = False,
     ):
         await nimi(ctx, query, sandbox, language, hide)
 
@@ -78,7 +78,7 @@ class CogNimi(Cog):
         ctx: ApplicationContext,
         which: str = "def",
         language: str = "",
-        hide: bool = True,
+        hide: bool = False,
     ):
         assert which in ("word", "def")
         await guess(ctx, which, language, hide)
@@ -89,7 +89,7 @@ async def nimi(
     query: str,
     sandbox: bool = False,
     language: str = "",
-    hide: bool = True,
+    hide: bool = False,
 ):
     # this feeds user's mistake back when we fail to find
     language = data.LANGUAGES_FOR_PREFS.get(language, language)
