@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Literal
 
 from discord import ApplicationContext, AutocompleteContext
-from discord.commands import option as pycord_option
-from discord.ext.bridge import bridge_command as pycord_bridge_command
+from discord.ext.bridge import bridge_option
+from discord.ext.bridge import bridge_command
 from ilo import data
 from ilo.preferences import preferences
 
@@ -121,9 +121,9 @@ class Locale:
         return self.locale[key]
 
     def command(self, name, **kwargs):
-        return pycord_bridge_command(name=name, description=self.locale[name], **kwargs)
+        return bridge_command(name=name, description=self.locale[name], **kwargs)
 
     def option(self, name, **kwargs):
-        return pycord_option(
+        return bridge_option(
             name=name.split("-")[-1], description=self.locale[name], **kwargs
         )
