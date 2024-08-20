@@ -3,7 +3,6 @@ import os
 import uuid
 
 from discord import ApplicationContext
-from discord.app_commands import AppInstallationType
 from discord.ext import bridge, commands
 from dotenv import load_dotenv
 
@@ -37,7 +36,6 @@ if DEBUG_GUILDS:
 bot = bridge.Bot(
     command_prefix=commands.when_mentioned_or("/"),
     debug_guilds=DEBUG_GUILDS,
-    allowed_installs=AppInstallationType(user=True,guild=True),
     # intents=Intents.all(),
 )
 
