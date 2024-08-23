@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Literal
 
 from discord import ApplicationContext, AutocompleteContext, IntegrationType
-from discord.ext.bridge import bridge_option
-from discord.ext.bridge import bridge_command
+from discord.ext.bridge import bridge_command, bridge_option
+
 from ilo import data
 from ilo.preferences import preferences
 
@@ -121,7 +121,17 @@ class Locale:
         return self.locale[key]
 
     def command(self, name, **kwargs):
-        return bridge_command(name=name, description=self.locale[name], integration_types=set((IntegrationType.guild_install,IntegrationType.user_install)), **kwargs)
+        return bridge_command(
+            name=name,
+            description=self.locale[name],
+            integration_types=set(
+                (
+                    IntegrationType.guild_install,
+                    IntegrationType.user_install,
+                )
+            ),
+            **kwargs,
+        )
 
     def option(self, name, **kwargs):
         return bridge_option(
