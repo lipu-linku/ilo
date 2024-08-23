@@ -1,5 +1,6 @@
 {
 	"se": "Convert your text to sitelen Emosi",
 	"se-text": "The text you want to convert to sitelen sitelen.",
+	"se-system": "The emoji system you want to use.",
   "se-spoiler": "Whether or not to hide the text with a spoiler."
 }
