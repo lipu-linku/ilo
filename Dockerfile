@@ -1,5 +1,5 @@
 # no support for 3.11 in cchardet (from py-cord[speed])
-FROM python:3.12-slim AS builder
+FROM python:3.13-slim AS builder
 RUN python -m pip install --no-cache-dir pdm
 RUN pdm config python.use_venv false
 
@@ -7,7 +7,7 @@ COPY pyproject.toml pdm.lock /project/
 WORKDIR /project
 RUN pdm install --prod --no-lock --no-editable
 
-FROM python:3.12-slim AS bot
+FROM python:3.13-slim AS bot
 RUN apt-get update -y && \
   apt-get install -y --no-install-recommends \
   libfribidi0 \
