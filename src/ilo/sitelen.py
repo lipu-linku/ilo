@@ -76,6 +76,9 @@ def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: Bg
     STROKE_WIDTH = round((font_size / 133) * 5)
     LINE_SPACING = round((font_size / 2))
 
+    HPAD = round(font_size / 30)
+    # NOTE: the VPAD is high because keli's font tool produces fonts which cut off on the top otherwise
+    VPAD = round(font_size / 4) + 5
 
     stroke_color = BLACK if passes_aa(color, BLACK, font_size) else WHITE
     bg_color = stroke_color if bgstyle == "background" else TRANSPARENT
@@ -83,19 +86,21 @@ def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: Bg
     font = ImageFont.truetype(font_path, font_size)
     d = ImageDraw.Draw(Image.new("RGBA", (0, 0), (0, 0, 0, 0)))
     x, y, w, h = d.multiline_textbbox(
-        (0, 0), text, stroke_width=STROKE_WIDTH, font=font
+        (0, 0),
+        text=text,
+        font=font,
+        spacing=LINE_SPACING,
+        stroke_width=STROKE_WIDTH,
+        font_size=font_size,
     )
     image = Image.new(
         mode="RGBA",
-        size=(
-            x + w + STROKE_WIDTH * 2,
-            y + h + STROKE_WIDTH * 2 + (LINE_SPACING * text.count("\n")),
-        ),
+        size=(w + (HPAD * 2), h + (VPAD * 2)),
         color=bg_color,
     )
     d = ImageDraw.Draw(image)
     d.multiline_text(
-        (STROKE_WIDTH, STROKE_WIDTH),
+        (HPAD, VPAD),
         text,
         font=font,
         fill=color,
