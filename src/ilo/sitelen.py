@@ -74,7 +74,8 @@ def passes_aa(color: Color, bg_color: Color, font_size: int) -> bool:
 # by jan Tepo
 def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: BgStyle):
     STROKE_WIDTH = round((font_size / 133) * 5)
-    LINE_SPACING = round((font_size / 11) * 2)
+    LINE_SPACING = round((font_size / 2))
+
 
     stroke_color = BLACK if passes_aa(color, BLACK, font_size) else WHITE
     bg_color = stroke_color if bgstyle == "background" else TRANSPARENT
