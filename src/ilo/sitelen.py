@@ -74,11 +74,8 @@ def passes_aa(color: Color, bg_color: Color, font_size: int) -> bool:
 # by jan Tepo
 def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: BgStyle):
     STROKE_WIDTH = round((font_size / 133) * 5)
-    LINE_SPACING = round((font_size / 2))
-
-    HPAD = round(font_size / 30)
-    # NOTE: the VPAD is high because keli's font tool produces fonts which cut off on the top otherwise
-    VPAD = round(font_size / 4) + 5
+    LINE_SPACING = round((font_size / 2.5))
+    PAD = round(font_size / 25)
 
     stroke_color = BLACK if passes_aa(color, BLACK, font_size) else WHITE
     bg_color = stroke_color if bgstyle == "background" else TRANSPARENT
@@ -95,12 +92,12 @@ def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: Bg
     )
     image = Image.new(
         mode="RGBA",
-        size=(w + (HPAD * 2), h + (VPAD * 2)),
+        size=(w + PAD, h + PAD),
         color=bg_color,
     )
     d = ImageDraw.Draw(image)
     d.multiline_text(
-        (HPAD, VPAD),
+        (PAD // 2, PAD // 2),
         text,
         font=font,
         fill=color,
