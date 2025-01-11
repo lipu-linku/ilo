@@ -2,8 +2,11 @@ import logging
 import os
 import uuid
 
-from discord import ApplicationContext
+from discord import ApplicationContext, User
 from discord.ext import bridge, commands
+from discord.member import Member
+from discord.permissions import Permissions
+from discord.reaction import Reaction
 from dotenv import load_dotenv
 
 from ilo.log_config import configure_logger
@@ -53,9 +56,25 @@ async def on_application_command_error(ctx: ApplicationContext, error: BaseExcep
 
 
 @bot.event
-async def on_reaction_add(reaction, user):
-    if reaction.message.author == bot.user:
-        if reaction.emoji == "❌":
+async def on_reaction_add(reaction: Reaction, user: User | Member):
+    message = reaction.message
+    interaction = message.interaction_metadata
+    if not message.author == bot.user:
+        return  # not bot's message
+    if not interaction:
+        return  # not created by a command
+    if not reaction.emoji == "❌":
+        return  # not the delete react we chose
+
+    # there is no way to obtain the single author of the triggering react
+    async for user in reaction.users():
+        if user == interaction.user:
+            await reaction.message.delete()
+            return
+
+        # it can be null
+        perms: Permissions | None = getattr(user, "guild_permissions", None)
+        if perms and (perms.manage_messages or perms.administrator):
             await reaction.message.delete()
 
 
