@@ -76,6 +76,7 @@ async def on_reaction_add(reaction: Reaction, user: User | Member):
         perms: Permissions | None = getattr(user, "guild_permissions", None)
         if perms and (perms.manage_messages or perms.administrator):
             await reaction.message.delete()
+            return
 
 
 def load_extensions():
