@@ -149,12 +149,9 @@ def embed_response(
     definition = data.deep_get(response, "translations", lang, "definition")
     # TODO: REPLACEME with `definition`
     usage = response["usage_category"] if "usage_category" in response else "unknown"
-    embed.set_footer(
-        text=f"{usage} ({response['book'].replace('none', 'no book')})",
+    embed.add_field(
+        name="usage", value=f"{usage} ({response['book'].replace('none', 'no book')})"
     )
-    # embed.add_field(
-    #     name="usage", value=f"{usage} ({response['book'].replace('none', 'no book')})"
-    # )
 
     embed.set_thumbnail(
         url=f"https://raw.githubusercontent.com/lipu-linku/ijo/main/sitelenpona/sitelen-seli-kiwen/{response['word']}.png",
@@ -164,17 +161,11 @@ def embed_response(
     # )
 
     inline = embedtype == "concise"
-    # embed.add_field(name="definition", value=definition, inline=inline)
-    embed.description = definition
-
-    etym_untrans = response.get("etymology")
-    etym_trans = data.deep_get(response, "translations", lang, "etymology")
-
-    # embed.set_footer(
-    #     text=strings.format_etymology(etym_untrans, etym_trans)
-    # )
+    embed.add_field(name="definition", value=definition, inline=inline)
 
     if embedtype == "verbose":
+        etym_untrans = response.get("etymology")
+        etym_trans = data.deep_get(response, "translations", lang, "etymology")
         if etym_untrans and etym_trans:
             embed.add_field(
                 name="etymology",
@@ -193,24 +184,24 @@ def embed_response(
         if commentary:
             embed.add_field(name="commentary", value=commentary, inline=inline)
 
-    # if response["usage_category"] != "core":
-    #     # these words may have `see_also` but don't need it
-    #     if "see_also" in response:
-    #         embed.add_field(
-    #             name="see also", value=", ".join(response["see_also"]), inline=inline
-    #         )
-    # if response["usage_category"] == "uncommon":
-    #     embed.set_footer(
-    #         text="⚠️ This word is uncommon. Many speakers don't use this word."
-    #     )
-    # elif response["usage_category"] == "obscure":
-    #     embed.set_footer(
-    #         text="⚠️ This word is obscure. Most speakers don't use or understand this word."
-    #     )
-    # elif response["usage_category"] == "sandbox":
-    #     embed.set_footer(
-    #         text="⚠️ This proposed word is in the sandbox. It is not in use by the community."
-    #     )
+    if response["usage_category"] != "core":
+        # these words may have `see_also` but don't need it
+        if "see_also" in response:
+            embed.add_field(
+                name="see also", value=", ".join(response["see_also"]), inline=inline
+            )
+    if response["usage_category"] == "uncommon":
+        embed.set_footer(
+            text="⚠️ This word is uncommon. Many speakers don't use this word."
+        )
+    elif response["usage_category"] == "obscure":
+        embed.set_footer(
+            text="⚠️ This word is obscure. Most speakers don't use or understand this word."
+        )
+    elif response["usage_category"] == "sandbox":
+        embed.set_footer(
+            text="⚠️ This proposed word is in the sandbox. It is not in use by the community."
+        )
     return embed
 
 
