@@ -71,7 +71,7 @@ FONTDIR = "ijo/nasinsitelen/"
 USABLE_FONTS = {
     font: os.path.join(FONTDIR, fontdata["filename"])
     for font, fontdata in FONTS_DATA.items()
-    if "filename" in fontdata
+    if fontdata.get("filename")
     and os.path.exists(os.path.join(FONTDIR, fontdata["filename"]))
 }
 assert USABLE_FONTS, (

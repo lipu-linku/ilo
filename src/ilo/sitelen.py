@@ -74,7 +74,8 @@ def passes_aa(color: Color, bg_color: Color, font_size: int) -> bool:
 # by jan Tepo
 def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: BgStyle):
     STROKE_WIDTH = round((font_size / 133) * 5)
-    LINE_SPACING = round((font_size / 11) * 2)
+    LINE_SPACING = round((font_size / 2.5))
+    PAD = round(font_size / 25)
 
     stroke_color = BLACK if passes_aa(color, BLACK, font_size) else WHITE
     bg_color = stroke_color if bgstyle == "background" else TRANSPARENT
@@ -82,19 +83,21 @@ def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: Bg
     font = ImageFont.truetype(font_path, font_size)
     d = ImageDraw.Draw(Image.new("RGBA", (0, 0), (0, 0, 0, 0)))
     x, y, w, h = d.multiline_textbbox(
-        (0, 0), text, stroke_width=STROKE_WIDTH, font=font
+        (0, 0),
+        text=text,
+        font=font,
+        spacing=LINE_SPACING,
+        stroke_width=STROKE_WIDTH,
+        font_size=font_size,
     )
     image = Image.new(
         mode="RGBA",
-        size=(
-            x + w + STROKE_WIDTH * 2,
-            y + h + STROKE_WIDTH * 2 + (LINE_SPACING * text.count("\n")),
-        ),
+        size=(w + PAD, h + PAD),
         color=bg_color,
     )
     d = ImageDraw.Draw(image)
     d.multiline_text(
-        (STROKE_WIDTH, STROKE_WIDTH),
+        (PAD // 2, PAD // 2),
         text,
         font=font,
         fill=color,
