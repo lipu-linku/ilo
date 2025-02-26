@@ -11,6 +11,9 @@ from ilo.data import get_word_data
 from ilo.strings import spoiler_text
 
 vocab = cast(dict[str, str], load_file(__file__, "ucsur.json"))
+chars = list(map(re.escape,list(vocab.keys())))
+chars.sort(key=len,reverse=True)
+    
 
 class CogSe(Cog):
     def __init__(self, bot: Bot):
@@ -33,15 +36,21 @@ async def ucsur(
   ctx: ApplicationContext, string: str, hide: bool = False
 ):
     if len(string) > 500:
-        response = (
-            "Message is too long. Please try to keep messages below 500 characters."
-        )
+        _ = await ctx.respond("Message is too long. Please try to keep messages below 500 characters.")
     string = clean_string(string)
     if not string:
         _ = await ctx.respond("Input became empty. Please provide a proper input.")
-    # TODO: convert string with vocab
+    
+    response = re.sub("|".join(chars), lambda x: vocab[x.group(0)]+" " if vocab[x.group(0)][0] in "abcdefghijklmnopqrstuvwxyz" else vocab[x.group(0)], string) #the ternary adds a space after any latin word, which ucsur characters don't tend to have in-between
+
+    # cleaning up:
+    response = " ".join(response.split(" ")) #collapse all spaces to one
+    response=re.sub("\u0020(?=[,\.:!\?\]\)<v\^>\+\-\&=_\|\}12345678　」])","",response)
+    response=re.sub("\u0020(?=([　-〿]|[︀-️]|[󱤀-󱧿]|[←-↙]))","",response)
+    
     _ = await ctx.respond(response,ephemeral=hide)
 
-def clean_string(string: str): #TODO: figure out what needs to be cleaned
-  clean_string=string
-  return clean_string
+def clean_string(string: str): 
+    clean_string = re.findall(r"([ -~]|[　-〿]|[︀-️]|[󱤀-󱧿]|[←-↙])", string)
+    clean_string = "".join(clean_string)
+    return clean_string
