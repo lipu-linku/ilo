@@ -42,9 +42,7 @@ async def se(
     ctx: ApplicationContext, string: str, system: UserChoices, spoiler: bool = False
 ):
     if len(string) > 500:
-        response = (
-            "Message is too long. Please try to keep messages below 500 characters."
-        )
+        _ = await ctx.respond("Message is too long. Please try to keep messages below 500 characters.")
     string = clean_string(string)
     if not string:
         _ = await ctx.respond("Input became empty. Please provide a proper input.")
