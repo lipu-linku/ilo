@@ -15,7 +15,7 @@ chars = list(map(re.escape,list(vocab.keys())))
 chars.sort(key=len,reverse=True)
     
 
-class CogSe(Cog):
+class CogUcsur(Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
 
@@ -23,7 +23,7 @@ class CogSe(Cog):
 
     @locale.command("ucsur")
     @locale.option("ucsur-text")
-    @locale.option("se-hide", choices=[True,False])
+    @locale.option("ucsur-hide", choices=[True,False])
     async def slash_ucsur(
         self,
         ctx: ApplicationContext,

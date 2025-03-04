@@ -1,5 +1,5 @@
-from .cog import CogSe
+from .cog import CogUcsur
 
 
 def setup(bot):
-    bot.add_cog(CogSe(bot))
+    bot.add_cog(CogUcsur(bot))
