@@ -18,7 +18,8 @@ RUN apt-get update -y && \
 ENV PYTHONPATH=/project/pkgs
 
 COPY src/ /project/pkgs/
-COPY ijo/nasinsitelen/ /project/ijo/nasinsitelen
+COPY ijo/nasinsitelen/ /project/ijo/nasinsitelen/
+COPY kemeka/data/ /project/kemeka/data/
 
 # this will change most often
 COPY --from=builder /project/__pypackages__/3.13/lib /project/pkgs
