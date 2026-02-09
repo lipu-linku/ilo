@@ -1,4 +1,5 @@
 {
   "kemeka": "Search lipu Kemeka for an English word.",
-  "kemeka-query": "The word to get translations of."
+  "kemeka-query": "The word to get translations of.",
+  "kemeka-hide": "Whether to show the translations to only you. Defaults to false."
 }

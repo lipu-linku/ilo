@@ -24,19 +24,28 @@ class CogKemeka(Cog):
 
     @locale.command("kemeka")
     @locale.option("kemeka-query", autocomplete=kemeka_autocomplete)
-    async def slash_kemeka(self, ctx: ApplicationContext, query: str):
-        await kemeka_command(ctx, query)
+    @locale.option("kemeka-hide")
+    async def slash_kemeka(
+        self,
+        ctx: ApplicationContext,
+        query: str,
+        hide: bool = False,
+    ):
+        await kemeka_command(ctx, query, hide)
 
 
-async def kemeka_command(ctx: ApplicationContext, query: str):
+async def kemeka_command(ctx: ApplicationContext, query: str, hide: bool):
     entry = kemeka_dict.get(query, None)
     if entry is None:
-        await ctx.respond("Unable to find entry!")
+        await ctx.respond(
+            f"The word you requested, ***{query}***, is not in *lipu Kemeka*. Make sure you didn't misspell it, and if the word was recently added, it may not have been updated in my database yet.",
+            ephemeral=True,
+        )
         return
 
     embed = kemeka_embed(entry)
     view = KemekaView(word=query)
-    await ctx.respond(embed=embed, view=view)
+    await ctx.respond(embed=embed, view=view, ephemeral=hide)
 
 
 def limit_len(entry: KemekaEntry, text: str, max_len: int) -> str:
