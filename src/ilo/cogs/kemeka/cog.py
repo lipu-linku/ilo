@@ -39,6 +39,15 @@ async def kemeka_command(ctx: ApplicationContext, query: str):
     await ctx.respond(embed=embed, view=view)
 
 
+def limit_len(entry: KemekaEntry, text: str, max_len: int) -> str:
+    if len(text) <= max_len:
+        return text
+    return (
+        text[: max_len - 32]
+        + f"[\\[…\\]](https://kemeka.pona.la/?q={entry.keyword.replace(" ", "_")})"
+    )
+
+
 def kemeka_embed(entry: KemekaEntry) -> Embed:
     embed = Embed()
 
@@ -72,16 +81,12 @@ def kemeka_embed(entry: KemekaEntry) -> Embed:
                 definition_text.append("")
 
         full_text = "\n".join(definition_text)
+        full_text = limit_len(entry, full_text, 2048)
         embed.description = full_text
 
     if entry.notes:
         notes_text = replace_md_links(entry.notes)
-
-        if len(notes_text) > 1024:
-            notes_text = (
-                notes_text[:1000]
-                + f"[\\[…\\]](https://kemeka.pona.la/?q={entry.keyword.replace(" ", "_")})"
-            )
+        notes_text = limit_len(entry, notes_text, 1024)
 
         embed.add_field(name="Notes", value=notes_text, inline=False)
 
