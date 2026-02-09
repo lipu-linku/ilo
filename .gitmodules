@@ -4,3 +4,6 @@
 [submodule "sona"]
 	path = sona
 	url = https://github.com/lipu-linku/sona.git
+[submodule "kemeka"]
+	path = kemeka
+	url = https://github.com/pona-la/kemeka.pona.la.git
