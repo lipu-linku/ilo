@@ -38,7 +38,7 @@ async def kemeka_command(ctx: ApplicationContext, query: str, hide: bool):
     entry = kemeka_dict.get(query, None)
     if entry is None:
         await ctx.respond(
-            f"The word you requested, ***{query}***, is not in *lipu Kemeka*. Make sure you didn't misspell it, and if the word was recently added, it may not have been updated in my database yet.",
+            f"The word you requested, ***{query}***, is not in *lipu Kemeka*. If the word was recently added, it may not have been updated in my database yet. If it's not in *lipu Kemeka* and you want it added, you can request it on [this form](https://docs.google.com/forms/d/e/1FAIpQLSclWsDweTAcnVr6rN4SVehxKqDtrvrEMC-IWT4vC29N22hl5g/viewform)!",
             ephemeral=True,
         )
         return
