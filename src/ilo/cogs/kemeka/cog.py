@@ -86,7 +86,7 @@ def kemeka_embed(entry: KemekaEntry) -> Embed:
                     tok_ex = replace_md_links(example.tok)
                     eng_ex = replace_md_links(example.eng)
                     definition_text.append(f"> *{tok_ex}*")
-                    definition_text.append(f"> {eng_ex}")
+                    definition_text.append(f"> \u00a0\u00a0\u00a0\u00a0{eng_ex}")
                 definition_text.append("")
 
         full_text = "\n".join(definition_text)
