@@ -95,7 +95,7 @@ LANGUAGES_FOR_PREFS = {
 }
 USAGES_FOR_PREFS = {usage.name: usage.name for usage in UsageCategory}
 
-SITELEN_SITELEN_FONT = "sitelen Latin (ss)"
+SITELEN_SITELEN_FONT = "sitelen sitelen open"
 DEFAULT_FONT = "nasin sitelen pu mono"
 DEFAULT_FONTSIZE = 72
 DEFAULT_COLOR = "dcdcdc"
