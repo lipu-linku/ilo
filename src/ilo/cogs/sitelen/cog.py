@@ -8,6 +8,8 @@ from ilo import cog_utils as utils
 from ilo import data, sitelen
 from ilo.preferences import Template, preferences
 
+from ilo.cogs.ucsur import ucsur
+
 
 class CogSitelen(Cog):
     def __init__(self, bot):
@@ -68,6 +70,7 @@ class CogSitelen(Cog):
     @locale.option("sp-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sp-spoiler")
     @locale.option("sp-hide")
+    @locale.option("sp-ucsur")
     async def slash_sp(
         self,
         ctx: ApplicationContext,
@@ -78,7 +81,9 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
+        convert: bool = False,
     ):
+        if(convert):text=ucsur(text)
         await sp(ctx, text, font, fontsize, color, bgstyle, spoiler, hide)
 
     @locale.command("sitelenpona")
@@ -89,6 +94,7 @@ class CogSitelen(Cog):
     @locale.option("sitelenpona-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sitelenpona-spoiler")
     @locale.option("sitelenpona-hide")
+    @locale.option("sitelenpona-ucsur")
     async def slash_sitelenpona(
         self,
         ctx: ApplicationContext,
