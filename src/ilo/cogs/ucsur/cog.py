@@ -37,10 +37,19 @@ async def ucsur(
 ):
     if len(string) > 500:
         _ = await ctx.respond("Message is too long. Please try to keep messages below 500 characters.")
-    string = clean_string(string)
+    
     if not string:
         _ = await ctx.respond("Input became empty. Please provide a proper input.")
     
+    response = ucsur_replace(string)
+
+    if not response:
+        _ = await ctx.respond("Input became empty. Please provide a proper input.")
+    
+    _ = await ctx.respond(response,ephemeral=hide)
+
+def ucsur_replace(string: str):
+    string = clean_string(string)
     response = re.sub("|".join(chars), lambda x: vocab[x.group(0)]+" " if vocab[x.group(0)][0] in "abcdefghijklmnopqrstuvwxyz" else vocab[x.group(0)], string) #the ternary adds a space after any latin word, which ucsur characters don't tend to have in-between
 
     # cleaning up:
@@ -48,7 +57,7 @@ async def ucsur(
     response=re.sub("\u0020(?=[,\.:!\?\]\)<v\^>\+\-\&=_\|\}12345678　」])","",response)
     response=re.sub("\u0020(?=([　-〿]|[︀-️]|[󱤀-󱧿]|[←-↙]))","",response)
     
-    _ = await ctx.respond(response,ephemeral=hide)
+    return response;
 
 def clean_string(string: str): 
     clean_string = re.findall(r"([ -~]|[　-〿]|[︀-️]|[󱤀-󱧿]|[←-↙])", string)
