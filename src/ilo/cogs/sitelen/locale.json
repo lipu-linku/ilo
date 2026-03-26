@@ -7,6 +7,7 @@
   "sp-spoiler": "Whether or not to hide the image with a spoiler",
   "sp-hide": "Whether to show the image to only you.",
   "sp-bgstyle": "Select background or outline for your background style.",
+  "sp-convert": "Whether or not to convert text from and to ucsur.",
 
   "sitelenpona": "Get sitelen pona of a toki pona phrase",
   "sitelenpona-text": "The phrase you want to convert to sitelen pona.",
@@ -16,6 +17,7 @@
   "sitelenpona-spoiler": "Whether or not to hide the image with a spoiler",
   "sitelenpona-hide": "Whether to show the image to only you.",
   "sitelenpona-bgstyle": "Select background or outline for your background style.",
+  "sitelenpona-convert": "Whether or not to convert text from and to ucsur.",
 
   "ss": "Get the sitelen sitelen of a toki pona phrase",
   "ss-text": "The phrase you want to convert to sitelen sitelen.",
