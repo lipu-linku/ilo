@@ -69,7 +69,7 @@ class CogSitelen(Cog):
     @locale.option("sp-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sp-spoiler")
     @locale.option("sp-hide")
-    @locale.option("sp-ucsur")
+    @locale.option("sp-convert")
     async def slash_sp(
         self,
         ctx: ApplicationContext,
@@ -94,7 +94,7 @@ class CogSitelen(Cog):
     @locale.option("sitelenpona-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sitelenpona-spoiler")
     @locale.option("sitelenpona-hide")
-    @locale.option("sitelenpona-ucsur")
+    @locale.option("sitelenpona-convert")
     async def slash_sitelenpona(
         self,
         ctx: ApplicationContext,
