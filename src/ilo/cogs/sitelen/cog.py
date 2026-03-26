@@ -7,8 +7,7 @@ from discord.ext.commands import Cog
 from ilo import cog_utils as utils
 from ilo import data, sitelen
 from ilo.preferences import Template, preferences
-
-from ilo.cogs.ucsur import ucsur_replace
+from ilo.ucsur import ucsur_replace
 
 
 class CogSitelen(Cog):
@@ -83,7 +82,8 @@ class CogSitelen(Cog):
         hide: bool = False,
         convert: bool = False,
     ):
-        if(convert):text=ucsur_replace(text)
+        if convert:
+            text = ucsur_replace(text)
         await sp(ctx, text, font, fontsize, color, bgstyle, spoiler, hide)
 
     @locale.command("sitelenpona")
@@ -107,7 +107,8 @@ class CogSitelen(Cog):
         hide: bool = False,
         convert: bool = False,
     ):
-        if(convert):text=ucsur_replace(text)
+        if convert:
+            text = ucsur_replace(text)
         await sp(ctx, text, font, fontsize, color, bgstyle, spoiler, hide)
 
     @locale.command("ss")
