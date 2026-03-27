@@ -6,6 +6,7 @@ from discord.ext.commands import Cog
 
 from ilo import cog_utils as utils
 from ilo import data, sitelen
+from ilo.cog_utils import BgStyle, Color, ColorAlpha
 from ilo.preferences import Template, preferences
 from ilo.ucsur import ucsur_replace
 from ilo.webhook import WebhookManager
@@ -220,27 +221,26 @@ class CogSitelen(Cog):
         proxy: bool = False,
         convert: bool = False,
     ):
-        if convert:
-            text = ucsur_replace(text)
-
         user_id = str(ctx.author.id)
-        proxy = await utils.handle_pref_error(ctx, user_id, "proxy", False)
+        proxy = await utils.handle_pref_error(ctx, user_id, "proxy", proxy)
         await ctx.defer(ephemeral=hide | proxy)
 
         # TODO: font from preferences isn't a usable font
         font = await utils.handle_pref_error(ctx, user_id, "font", font)
         font = data.USABLE_FONTS[font]
-
-        proxy = await utils.handle_pref_error(ctx, user_id, "proxy", False)
         fontsize = await utils.handle_pref_error(ctx, user_id, "fontsize", fontsize)
         color = await utils.handle_pref_error(ctx, user_id, "color", color)
         bgstyle = await utils.handle_pref_error(ctx, user_id, "bgstyle", bgstyle)
+
+        # we want to make alt text from the original text in case the changes are destructive
+        # e.g. newlines don't appear in alt text
+        alt_text = f"{ctx.author.display_name} said: {text}"
+        if convert:
+            text = ucsur_replace(text)
         text = unescape_newline(text)
         image = io.BytesIO(
             sitelen.display(text, font, fontsize, utils.rgb_tuple(color), bgstyle)
         )
-
-        alt_text = f"{ctx.author.display_name} said: {text}"
         filename = text_to_filename(text) + ".png"
         file = File(
             fp=image,
@@ -249,26 +249,32 @@ class CogSitelen(Cog):
             spoiler=spoiler,
         )
 
-        if not proxy or hide:
-            # proxied messages can't be ephemeral
-            await ctx.respond(file=file, ephemeral=hide)
-            return
-
-        # if we pass "thread" as an arg at all, it has to be a defined channel
-        # if we pass None it blows up. so, dinky workaround.
         kwargs = {}
-        kwargs["username"] = ctx.author.display_name
-        kwargs["avatar_url"] = ctx.author.display_avatar.url
-        kwargs["file"] = file
+        if proxy and not hide:
+            channel = ctx.channel
+            # if we pass "thread" at all, it has to be a channel
+            # None makes it die. so, dinky workaround.
+            if isinstance(channel, Thread):
+                kwargs["thread"] = channel
+                channel = ctx.channel.parent
 
-        channel = ctx.channel
-        target = ctx.channel
-        if isinstance(target, Thread):
-            channel = ctx.channel.parent
-            kwargs["thread"] = target
-        webhook = await self.webhooks.get_webhook(channel)
-        await webhook.send(**kwargs)
-        await ctx.interaction.delete_original_response()
+            kwargs["username"] = ctx.author.display_name
+            kwargs["avatar_url"] = ctx.author.display_avatar.url
+            kwargs["file"] = file
+
+            webhook = await self.webhooks.get_webhook(channel)
+            if not webhook:
+                _ = await ctx.respond(
+                    "Couldn't make a webhook! Please have an admin check my permissions.",
+                    ephemeral=True,
+                )
+            else:
+                await webhook.send(**kwargs)
+                await ctx.interaction.delete_original_response()
+                return
+
+        # falls through
+        _ = await ctx.respond(file=file, ephemeral=hide)
         return
 
 

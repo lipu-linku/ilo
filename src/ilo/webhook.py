@@ -1,6 +1,7 @@
 from typing import Self
 
 from discord import Bot, ForumChannel, TextChannel, VoiceChannel, Webhook
+from discord.errors import Forbidden, NotFound
 
 
 # singleton
@@ -23,22 +24,34 @@ class WebhookManager:
     async def get_webhook(
         self,
         channel: TextChannel | VoiceChannel | ForumChannel,
-    ) -> Webhook:
+    ) -> Webhook | None:
+        # get from cache
         channel_id = channel.id
-
         webhook = self.cache.get(channel_id)
         if webhook:
-            return webhook
+            try:
+                await webhook.fetch()
+                return webhook
+            except NotFound:
+                self.cache.pop(channel_id, None)
 
-        webhooks = await channel.webhooks()
+        # or discord
+        try:
+            webhooks = await channel.webhooks()
+        except Forbidden:
+            return None
         for wh in webhooks:
             if wh.user == self.bot.user:
                 self.cache[channel_id] = wh
                 return wh
 
-        webhook = await channel.create_webhook(
-            name=self.bot.user.name,
-            reason="proxy for linku sitelen pona",
-        )
-        self.cache[channel_id] = webhook
-        return webhook
+        # or make it
+        try:
+            webhook = await channel.create_webhook(
+                name=self.bot.user.name,
+                reason="proxy for linku sitelen pona",
+            )
+            self.cache[channel_id] = webhook
+            return webhook
+        except Forbidden:
+            return None
