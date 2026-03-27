@@ -57,5 +57,11 @@
   "prefs-bgstyle-fallback": "The bgstyle ***{}*** is not a valid style. Using the default ***{}***.",
   "prefs-bgstyle-pref-invalid": "The bgstyle ***{}*** is in your preferences but not a valid style. Using the default ***{}***.",
   "prefs-bgstyle-choice-invalid": "The bgstyle ***{}*** is not a valid style. Did not update preferences.",
-  "prefs-bgstyle-option": "The text bgstyle you want to use."
+  "prefs-bgstyle-option": "The text bgstyle you want to use.",
+
+  "prefs-proxy": "Set whether /sp sends an image or uses a webhook to message as though you sent it.",
+  "prefs-proxy-fallback": "The proxy setting ***{}*** is invalid. Using the default ***{}***.",
+  "prefs-proxy-pref-invalid": "The proxy setting ***{}*** is in your preferences but not valid. Using the default ***{}***.",
+  "prefs-proxy-choice-invalid": "The proxy setting ***{}*** is invalid. Did not update preferences.",
+  "prefs-proxy-option": "Enable or disable proxying."
 }
