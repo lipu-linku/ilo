@@ -8,6 +8,7 @@
   "sp-hide": "Whether to show the image to only you.",
   "sp-bgstyle": "Select background or outline for your background style.",
   "sp-convert": "Whether or not to convert text from and to ucsur.",
+  "sp-proxy": "Whether to send an image via the bot or proxying you.",
 
   "sitelenpona": "Get sitelen pona of a toki pona phrase",
   "sitelenpona-text": "The phrase you want to convert to sitelen pona.",
@@ -18,6 +19,7 @@
   "sitelenpona-hide": "Whether to show the image to only you.",
   "sitelenpona-bgstyle": "Select background or outline for your background style.",
   "sitelenpona-convert": "Whether or not to convert text from and to ucsur.",
+  "sitelenpona-proxy": "Whether to send an image via the bot or proxying you.",
 
   "ss": "Get the sitelen sitelen of a toki pona phrase",
   "ss-text": "The phrase you want to convert to sitelen sitelen.",
@@ -26,6 +28,7 @@
   "ss-spoiler": "Whether or not to hide the image with a spoiler",
   "ss-hide": "Whether to show the image to only you.",
   "ss-bgstyle": "Select background or outline for your background style.",
+  "ss-proxy": "Whether to send an image via the bot or proxying you.",
 
   "sitelensitelen": "Get the sitelen sitelen of a toki pona phrase",
   "sitelensitelen-text": "The phrase you want to convert to sitelen sitelen.",
@@ -34,6 +37,7 @@
   "sitelensitelen-spoiler": "Whether or not to hide the image with a spoiler",
   "sitelensitelen-hide": "Whether to show the image to only you.",
   "sitelensitelen-bgstyle": "Select background or outline for your background style.",
+  "sitelensitelen-proxy": "Whether to send an image via the bot or proxying you.",
 
   "prefs-fontsize": "Set the font size that sitelen pona will be displayed as",
   "prefs-fontsize-fallback": "The fontsize ***{}*** is not in the range 14 to 500. Using the default ***{}***.",

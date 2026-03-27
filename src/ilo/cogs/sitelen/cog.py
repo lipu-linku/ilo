@@ -80,7 +80,7 @@ class CogSitelen(Cog):
     @locale.option("sp-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sp-spoiler")
     @locale.option("sp-hide")
-    # @locale.option("sp-proxy")
+    @locale.option("sp-proxy")
     @locale.option("sp-convert")
     async def slash_sp(
         self,
@@ -92,7 +92,7 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
-        # proxy: bool = False,
+        proxy: bool = False,
         convert: bool = False,
     ):
         await self.sp(
@@ -104,7 +104,7 @@ class CogSitelen(Cog):
             bgstyle,
             spoiler,
             hide,
-            # proxy,
+            proxy,
             convert,
         )
 
@@ -116,7 +116,7 @@ class CogSitelen(Cog):
     @locale.option("sitelenpona-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sitelenpona-spoiler")
     @locale.option("sitelenpona-hide")
-    # @locale.option("sitelenpona-proxy")
+    @locale.option("sitelenpona-proxy")
     @locale.option("sitelenpona-convert")
     async def slash_sitelenpona(
         self,
@@ -128,7 +128,7 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
-        # proxy: bool = False,
+        proxy: bool = False,
         convert: bool = False,
     ):
         await self.sp(
@@ -140,7 +140,7 @@ class CogSitelen(Cog):
             bgstyle,
             spoiler,
             hide,
-            # proxy,
+            proxy,
             convert,
         )
 
@@ -151,7 +151,7 @@ class CogSitelen(Cog):
     @locale.option("ss-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("ss-spoiler")
     @locale.option("ss-hide")
-    # @locale.option("ss-proxy")
+    @locale.option("ss-proxy")
     async def slash_ss(
         self,
         ctx: ApplicationContext,
@@ -161,7 +161,7 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
-        # proxy: bool = False,
+        proxy: bool = False,
     ):
         await self.sp(
             ctx,
@@ -172,7 +172,7 @@ class CogSitelen(Cog):
             bgstyle,
             spoiler,
             hide,
-            # proxy,
+            proxy,
         )
 
     @locale.command("sitelensitelen")
@@ -182,7 +182,7 @@ class CogSitelen(Cog):
     @locale.option("sitelensitelen-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sitelensitelen-spoiler")
     @locale.option("sitelensitelen-hide")
-    # @locale.option("sitelensitelen-proxy")
+    @locale.option("sitelensitelen-proxy")
     async def slash_sitelensitelen(
         self,
         ctx: ApplicationContext,
@@ -192,7 +192,7 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
-        # proxy: bool = False,
+        proxy: bool = False,
     ):
         await self.sp(
             ctx,
@@ -203,7 +203,8 @@ class CogSitelen(Cog):
             bgstyle,
             spoiler,
             hide,
-            # proxy,
+            proxy,
+            False,
         )
 
     async def sp(
@@ -216,7 +217,7 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
-        # proxy: bool = False,
+        proxy: bool = False,
         convert: bool = False,
     ):
         if convert:
