@@ -92,7 +92,8 @@ def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: Bg
     )
     image = Image.new(
         mode="RGBA",
-        size=(w + PAD, h + PAD),
+        size=(w + PAD, h + PAD + 25),
+        # NOTE: +20px is a buffer for alt text button on desktop
         color=bg_color,
     )
     d = ImageDraw.Draw(image)
