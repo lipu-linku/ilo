@@ -262,18 +262,15 @@ class CogSitelen(Cog):
             kwargs["avatar_url"] = ctx.author.display_avatar.url
             kwargs["file"] = file
 
-            webhook = await self.webhooks.get_webhook(channel)
-            if not webhook:
-                _ = await ctx.respond(
-                    "Couldn't make a webhook! Please have an admin check my permissions.",
-                    ephemeral=True,
-                )
-            else:
-                await webhook.send(**kwargs)
+            sent = await self.webhooks.send(ctx, channel, **kwargs)
+            if sent:
                 await ctx.interaction.delete_original_response()
                 return
 
-        # falls through
+            _ = await ctx.respond(
+                "Couldn't make a webhook! Please have an admin check my permissions.",
+                ephemeral=True,
+            )
         _ = await ctx.respond(file=file, ephemeral=hide)
         return
 

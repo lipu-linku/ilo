@@ -1,10 +1,18 @@
 from typing import Self
 
-from discord import Bot, ForumChannel, TextChannel, VoiceChannel, Webhook
+from cachetools import TTLCache
+from discord import (
+    ApplicationContext,
+    Bot,
+    ForumChannel,
+    TextChannel,
+    VoiceChannel,
+    Webhook,
+    WebhookMessage,
+)
 from discord.errors import Forbidden, NotFound
 
 
-# singleton
 class WebhookManager:
     __initialized: bool = False
     __instance: Self | None = None
@@ -18,7 +26,9 @@ class WebhookManager:
         if self.__initialized:
             return
         self.bot: Bot = bot
-        self.cache: dict[int, Webhook] = dict()
+        self.webhook_cache: dict[int, Webhook] = dict()
+        self.sender_cache: TTLCache[int, int] = TTLCache(maxsize=99999, ttl=1800)
+        # TODO: will these ever be args?
         self.__initialized = True
 
     async def get_webhook(
@@ -27,13 +37,13 @@ class WebhookManager:
     ) -> Webhook | None:
         # get from cache
         channel_id = channel.id
-        webhook = self.cache.get(channel_id)
+        webhook = self.webhook_cache.get(channel_id)
         if webhook:
             try:
                 await webhook.fetch()
                 return webhook
             except NotFound:
-                self.cache.pop(channel_id, None)
+                self.webhook_cache.pop(channel_id, None)
 
         # or discord
         try:
@@ -42,7 +52,7 @@ class WebhookManager:
             return None
         for wh in webhooks:
             if wh.user == self.bot.user:
-                self.cache[channel_id] = wh
+                self.webhook_cache[channel_id] = wh
                 return wh
 
         # or make it
@@ -51,7 +61,27 @@ class WebhookManager:
                 name=self.bot.user.name,
                 reason="proxy for linku sitelen pona",
             )
-            self.cache[channel_id] = webhook
+            self.webhook_cache[channel_id] = webhook
             return webhook
         except Forbidden:
             return None
+
+    def __record_sender(self, ctx: ApplicationContext, msg: WebhookMessage):
+        user_id = ctx.author.id
+        msg_id = msg.id
+        self.sender_cache[msg_id] = user_id
+
+    async def send(
+        self,
+        ctx: ApplicationContext,
+        channel: TextChannel | VoiceChannel | ForumChannel,
+        *args,
+        **kwargs,
+    ) -> bool:
+        webhook = await self.get_webhook(channel)
+        if not webhook:
+            return False
+
+        msg = await webhook.send(*args, **kwargs, wait=True)
+        self.__record_sender(ctx, msg)
+        return True
