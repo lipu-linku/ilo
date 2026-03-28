@@ -8,7 +8,6 @@ from discord import (
     TextChannel,
     VoiceChannel,
     Webhook,
-    WebhookMessage,
 )
 from discord.errors import Forbidden, NotFound
 
@@ -66,10 +65,9 @@ class WebhookManager:
         except Forbidden:
             return None
 
-    def __record_sender(self, ctx: ApplicationContext, msg: WebhookMessage):
-        user_id = ctx.author.id
-        msg_id = msg.id
-        self.sender_cache[msg_id] = user_id
+    def is_owned_msg(self, message_id: int, user_id: int) -> bool:
+        owner_id = self.sender_cache.get(message_id)
+        return owner_id == user_id
 
     async def send(
         self,
@@ -83,5 +81,5 @@ class WebhookManager:
             return False
 
         msg = await webhook.send(*args, **kwargs, wait=True)
-        self.__record_sender(ctx, msg)
+        self.sender_cache[msg.id] = ctx.author.id
         return True

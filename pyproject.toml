@@ -11,6 +11,7 @@ dependencies = [
     # a 3.13 migration issue. required by pycord but not given in requirements.
     # used to be a standard library but removed in 3.13, i think?
     "audioop-lts>=0.2.1",
+    "cachetools>=7.0.5",
 ]
 requires-python = ">=3.13"
 license = { text = "GPL-3.0" }
