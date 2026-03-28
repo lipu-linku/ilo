@@ -1,18 +1,22 @@
 import io
 
-from discord import File
+from discord import Bot, File, Thread, Webhook
 from discord.commands.context import ApplicationContext
 from discord.ext.commands import Cog
 
 from ilo import cog_utils as utils
 from ilo import data, sitelen
+from ilo.cog_utils import BgStyle, Color, ColorAlpha
 from ilo.preferences import Template, preferences
 from ilo.ucsur import ucsur_replace
+from ilo.webhook import WebhookManager
 
 
 class CogSitelen(Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: Bot):
+        super().__init__()
+        self.bot: Bot = bot
+        self.webhooks: WebhookManager = WebhookManager(bot)
         preferences.register(
             Template(
                 locale=self.locale,
@@ -58,6 +62,14 @@ class CogSitelen(Cog):
                 validation=utils.is_valid_bgstyle,
             )
         )
+        preferences.register(
+            Template(
+                locale=self.locale,
+                name="proxy",
+                default=data.DEFAULT_PROXY,
+                validation=lambda x: isinstance(x, bool),
+            )
+        )
 
     locale = utils.Locale(__file__)
 
@@ -69,6 +81,7 @@ class CogSitelen(Cog):
     @locale.option("sp-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sp-spoiler")
     @locale.option("sp-hide")
+    # @locale.option("sp-proxy")
     @locale.option("sp-convert")
     async def slash_sp(
         self,
@@ -80,11 +93,21 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
+        # proxy: bool = False,
         convert: bool = False,
     ):
-        if convert:
-            text = ucsur_replace(text)
-        await sp(ctx, text, font, fontsize, color, bgstyle, spoiler, hide)
+        await self.sp(
+            ctx,
+            text,
+            font,
+            fontsize,
+            color,
+            bgstyle,
+            spoiler,
+            hide,
+            # proxy,
+            convert,
+        )
 
     @locale.command("sitelenpona")
     @locale.option("sitelenpona-text")
@@ -94,6 +117,7 @@ class CogSitelen(Cog):
     @locale.option("sitelenpona-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sitelenpona-spoiler")
     @locale.option("sitelenpona-hide")
+    # @locale.option("sitelenpona-proxy")
     @locale.option("sitelenpona-convert")
     async def slash_sitelenpona(
         self,
@@ -105,11 +129,21 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
+        # proxy: bool = False,
         convert: bool = False,
     ):
-        if convert:
-            text = ucsur_replace(text)
-        await sp(ctx, text, font, fontsize, color, bgstyle, spoiler, hide)
+        await self.sp(
+            ctx,
+            text,
+            font,
+            fontsize,
+            color,
+            bgstyle,
+            spoiler,
+            hide,
+            # proxy,
+            convert,
+        )
 
     @locale.command("ss")
     @locale.option("ss-text")
@@ -118,6 +152,7 @@ class CogSitelen(Cog):
     @locale.option("ss-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("ss-spoiler")
     @locale.option("ss-hide")
+    # @locale.option("ss-proxy")
     async def slash_ss(
         self,
         ctx: ApplicationContext,
@@ -127,8 +162,9 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
+        # proxy: bool = False,
     ):
-        await sp(
+        await self.sp(
             ctx,
             text,
             data.SITELEN_SITELEN_FONT,
@@ -137,6 +173,7 @@ class CogSitelen(Cog):
             bgstyle,
             spoiler,
             hide,
+            # proxy,
         )
 
     @locale.command("sitelensitelen")
@@ -146,6 +183,7 @@ class CogSitelen(Cog):
     @locale.option("sitelensitelen-bgstyle", choices=utils.VALID_STYLES)
     @locale.option("sitelensitelen-spoiler")
     @locale.option("sitelensitelen-hide")
+    # @locale.option("sitelensitelen-proxy")
     async def slash_sitelensitelen(
         self,
         ctx: ApplicationContext,
@@ -155,8 +193,9 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
+        # proxy: bool = False,
     ):
-        await sp(
+        await self.sp(
             ctx,
             text,
             data.SITELEN_SITELEN_FONT,
@@ -165,7 +204,75 @@ class CogSitelen(Cog):
             bgstyle,
             spoiler,
             hide,
+            # proxy,
+            False,
         )
+
+    async def sp(
+        self,
+        ctx: ApplicationContext,
+        text: str,
+        font: str = "",
+        fontsize: int = 0,
+        color: str = "",
+        bgstyle: str = "",
+        spoiler: bool = False,
+        hide: bool = False,
+        # proxy: bool = False,
+        convert: bool = False,
+    ):
+        user_id = str(ctx.author.id)
+        proxy = await utils.handle_pref_error(ctx, user_id, "proxy", False)
+        await ctx.defer(ephemeral=hide | proxy)
+
+        # TODO: font from preferences isn't a usable font
+        font = await utils.handle_pref_error(ctx, user_id, "font", font)
+        font = data.USABLE_FONTS[font]
+        fontsize = await utils.handle_pref_error(ctx, user_id, "fontsize", fontsize)
+        color = await utils.handle_pref_error(ctx, user_id, "color", color)
+        bgstyle = await utils.handle_pref_error(ctx, user_id, "bgstyle", bgstyle)
+
+        # we want to make alt text from the original text in case the changes are destructive
+        # e.g. newlines don't appear in alt text
+        alt_text = f"{ctx.author.display_name} said: {text}"
+        if convert:
+            text = ucsur_replace(text)
+        text = unescape_newline(text)
+        image = io.BytesIO(
+            sitelen.display(text, font, fontsize, utils.rgb_tuple(color), bgstyle)
+        )
+        filename = text_to_filename(text) + ".png"
+        file = File(
+            fp=image,
+            filename=filename,
+            description=alt_text,
+            spoiler=spoiler,
+        )
+
+        kwargs = {}
+        if proxy and not hide:
+            channel = ctx.channel
+            # if we pass "thread" at all, it has to be a channel
+            # None makes it die. so, dinky workaround.
+            if isinstance(channel, Thread):
+                kwargs["thread"] = channel
+                channel = ctx.channel.parent
+
+            kwargs["username"] = ctx.author.display_name
+            kwargs["avatar_url"] = ctx.author.display_avatar.url
+            kwargs["file"] = file
+
+            sent = await self.webhooks.send(ctx, channel, **kwargs)
+            if sent:
+                await ctx.interaction.delete_original_response()
+                return
+
+            _ = await ctx.respond(
+                "Couldn't make a webhook! Please have an admin check my permissions.",
+                ephemeral=True,
+            )
+        _ = await ctx.respond(file=file, ephemeral=hide)
+        return
 
 
 def unescape_newline(text: str) -> str:
@@ -186,42 +293,3 @@ def text_to_filename(text: str) -> str:
         # if we replace all text
         text = "image"
     return text
-
-
-async def sp(
-    ctx: ApplicationContext,
-    text: str,
-    font: str = "",
-    fontsize: int = 0,
-    color: str = "",
-    bgstyle: str = "",
-    spoiler: bool = False,
-    hide: bool = False,
-):
-    user_id = str(ctx.author.id)
-
-    font = await utils.handle_pref_error(ctx, user_id, "font", override=font)
-    font = data.USABLE_FONTS[font]  # TODO: font from preferences isn't a usable font
-
-    fontsize = await utils.handle_pref_error(
-        ctx, user_id, "fontsize", override=fontsize
-    )
-    color = await utils.handle_pref_error(ctx, user_id, "color", override=color)
-    bgstyle = await utils.handle_pref_error(ctx, user_id, "bgstyle", override=bgstyle)
-
-    text = unescape_newline(text)
-    image = io.BytesIO(
-        sitelen.display(text, font, fontsize, utils.rgb_tuple(color), bgstyle)
-    )
-
-    alt_text = f"{ctx.author.display_name} said: {text}"
-    filename = text_to_filename(text) + ".png"
-    await ctx.respond(
-        file=File(
-            fp=image,
-            filename=filename,
-            description=alt_text,
-            spoiler=spoiler,
-        ),
-        ephemeral=hide,
-    )
