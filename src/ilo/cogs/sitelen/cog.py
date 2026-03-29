@@ -9,7 +9,12 @@ from ilo import data, sitelen
 from ilo.cog_utils import BgStyle, Color, ColorAlpha
 from ilo.preferences import Template, preferences
 from ilo.ucsur import ucsur_replace
-from ilo.webhook import WebhookManager
+from ilo.webhook import WebhookManager, WebhookResult
+
+ERRORS = {
+    WebhookResult.DMChannel: "Couldn't make a webhook! Webhooks are not supported in DMs.",
+    WebhookResult.NoPermission: "Couldn't make a webhook! Please have an admin check my permissions.",
+}
 
 
 class CogSitelen(Cog):
@@ -264,13 +269,14 @@ class CogSitelen(Cog):
 
             sent = await self.webhooks.send(ctx, channel, **kwargs)
             if sent:
-                await ctx.interaction.delete_original_response()
+                await ctx.delete()
                 return
-
-            _ = await ctx.respond(
-                "Couldn't make a webhook! Please have an admin check my permissions.",
-                ephemeral=True,
-            )
+            else:
+                # TODO: if we switch to discord.py, we can set reference=ctx.interaction.message
+                # then we can drop this else and just fall through
+                _ = await ctx.respond(file=file, ephemeral=hide)
+                _ = await ctx.respond(ERRORS[sent], ephemeral=True)
+                return
         _ = await ctx.respond(file=file, ephemeral=hide)
         return
 
