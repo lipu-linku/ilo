@@ -1,15 +1,20 @@
+from enum import Enum
 from typing import Self
 
 from cachetools import TTLCache
-from discord import (
-    ApplicationContext,
-    Bot,
-    ForumChannel,
-    TextChannel,
-    VoiceChannel,
-    Webhook,
-)
+from discord import ApplicationContext, Bot, DMChannel, GroupChannel, Thread, Webhook
+from discord.abc import GuildChannel
 from discord.errors import Forbidden, NotFound
+
+
+class WebhookResult(Enum):
+    Success = 1
+    NotFound = 2
+    NoPermission = 3
+    DMChannel = 4
+
+    def __bool__(self) -> bool:
+        return self is WebhookResult.Success
 
 
 class WebhookManager:
@@ -30,40 +35,64 @@ class WebhookManager:
         # TODO: will these ever be args?
         self.__initialized = True
 
-    async def get_webhook(
-        self,
-        channel: TextChannel | VoiceChannel | ForumChannel,
-    ) -> Webhook | None:
+    async def _get_cached_webhook(
+        self, channel: GuildChannel
+    ) -> tuple[Webhook | None, WebhookResult]:
         # get from cache
-        channel_id = channel.id
-        webhook = self.webhook_cache.get(channel_id)
+        webhook = self.webhook_cache.get(channel.id)
         if webhook:
             try:
                 await webhook.fetch()
-                return webhook
+                return webhook, WebhookResult.Success
             except NotFound:
-                self.webhook_cache.pop(channel_id, None)
+                self.webhook_cache.pop(channel.id, None)
+        return None, WebhookResult.NotFound
 
-        # or discord
+    async def _find_webhook(
+        self, channel: GuildChannel
+    ) -> tuple[Webhook | None, WebhookResult]:
         try:
             webhooks = await channel.webhooks()
         except Forbidden:
-            return None
+            return None, WebhookResult.NoPermission
+
         for wh in webhooks:
             if wh.user == self.bot.user:
-                self.webhook_cache[channel_id] = wh
-                return wh
+                self.webhook_cache[channel.id] = wh
+                return wh, WebhookResult.Success
 
-        # or make it
+        return None, WebhookResult.NotFound
+
+    async def _make_webhook(
+        self, channel: GuildChannel
+    ) -> tuple[Webhook | None, WebhookResult]:
         try:
             webhook = await channel.create_webhook(
                 name=self.bot.user.name,
                 reason="proxy for linku sitelen pona",
             )
-            self.webhook_cache[channel_id] = webhook
-            return webhook
+            self.webhook_cache[channel.id] = webhook
+            return webhook, WebhookResult.Success
         except Forbidden:
-            return None
+            return None, WebhookResult.NoPermission
+
+    async def get_webhook(
+        self, channel: GuildChannel
+    ) -> tuple[Webhook | None, WebhookResult]:
+        if isinstance(channel, (DMChannel, GroupChannel)):
+            return None, WebhookResult.DMChannel
+        if isinstance(channel, Thread):
+            channel = channel.parent
+
+        wh, res = await self._get_cached_webhook(channel)
+        if wh:
+            return wh, res
+
+        wh, res = await self._find_webhook(channel)
+        if wh:
+            return wh, res
+
+        return await self._make_webhook(channel)
 
     def is_owned_msg(self, message_id: int, user_id: int) -> bool:
         owner_id = self.sender_cache.get(message_id)
@@ -72,14 +101,14 @@ class WebhookManager:
     async def send(
         self,
         ctx: ApplicationContext,
-        channel: TextChannel | VoiceChannel | ForumChannel,
+        channel: GuildChannel,
         *args,
         **kwargs,
-    ) -> bool:
-        webhook = await self.get_webhook(channel)
-        if not webhook:
-            return False
+    ) -> WebhookResult:
+        wh, res = await self.get_webhook(channel)
+        if not wh:
+            return res
 
-        msg = await webhook.send(*args, **kwargs, wait=True)
+        msg = await wh.send(*args, **kwargs, wait=True)
         self.sender_cache[msg.id] = ctx.author.id
-        return True
+        return WebhookResult.Success
