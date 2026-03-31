@@ -22,7 +22,7 @@ API_URL = "https://api.linku.la/"
 WORDS_LINK = "https://api.linku.la/v1/words?lang=*"
 SANDBOX_LINK = "https://api.linku.la/v1/sandbox?lang=*"
 LANGUAGES_LINK = "https://api.linku.la/v1/languages"
-FONTS_LINK = "https://api.linku.la/v1/fonts"
+FONTS_LINK = "https://api.linku.la/v2/fonts"
 SIGNS_LINK = "https://api.linku.la/v1/luka_pona/signs?lang=*"
 FINGERSPELLING_LINK = "https://api.linku.la/v1/luka_pona/fingerspelling?lang=*"
 
