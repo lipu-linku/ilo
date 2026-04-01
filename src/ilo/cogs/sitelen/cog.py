@@ -1,4 +1,5 @@
 import io
+import logging
 
 from discord import Bot, File, Thread, Webhook
 from discord.commands.context import ApplicationContext
@@ -10,6 +11,8 @@ from ilo.cog_utils import BgStyle, Color, ColorAlpha
 from ilo.preferences import Template, preferences
 from ilo.ucsur import ucsur_replace
 from ilo.webhook import WebhookManager, WebhookResult
+
+LOG = logging.getLogger("ilo")
 
 ERRORS = {
     WebhookResult.DMChannel: "Couldn't make a webhook! Webhooks are not supported in DMs.",
