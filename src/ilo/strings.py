@@ -1,6 +1,9 @@
 import logging
+from datetime import datetime
 from itertools import zip_longest
 from typing import Any, Callable, Dict, Literal, cast
+
+from discord import Embed, Message
 
 from ilo import data
 from ilo.cog_utils import load_file
@@ -109,3 +112,26 @@ def format_etymology(
 
 def spoiler_text(text: str):
     return f"||{text}||"
+
+
+def format_reply_embed(message: Message) -> Embed:
+    # TODO: not finalized.
+    content = message.content
+    if not content or len(content) > 100:
+        content = content[:100] + "..."
+
+    jump = message.jump_url  # direct link to the message
+
+    embed = Embed(
+        description=f"{content}\n\n[Link]({jump})",
+        timestamp=(
+            message.created_at if isinstance(message.created_at, datetime) else None
+        ),
+    )
+
+    _ = embed.set_author(
+        name=message.author.display_name,
+        icon_url=message.author.display_avatar.url,
+    )
+
+    return embed
