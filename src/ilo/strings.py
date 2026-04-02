@@ -1,9 +1,11 @@
 import logging
+import re
 from datetime import datetime
 from itertools import zip_longest
 from typing import Any, Callable, Dict, Literal, cast
 
 from discord import Embed, Message
+from sonatoki.Preprocessors import DiscordMentions
 
 from ilo import data
 from ilo.cog_utils import load_file
@@ -112,6 +114,12 @@ def format_etymology(
 
 def spoiler_text(text: str):
     return f"||{text}||"
+
+
+def get_mentions(text: str) -> list[str]:
+    pattern = DiscordMentions.pattern
+    mentions = re.findall(pattern, text)
+    return mentions
 
 
 def format_reply_embed(message: Message) -> Embed:
