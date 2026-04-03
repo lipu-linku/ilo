@@ -1,17 +1,20 @@
 import io
+import logging
 
-from discord import Bot, File, Thread, Webhook
+from discord import Bot, File, Message, Thread
 from discord.commands.context import ApplicationContext
 from discord.ext.commands import Cog
 
 from ilo import cog_utils as utils
 from ilo import data, sitelen
-from ilo.cog_utils import BgStyle, Color, ColorAlpha
 from ilo.preferences import Template, preferences
+from ilo.strings import sub_refs
 from ilo.ucsur import ucsur_replace
 from ilo.webhook import WebhookManager, WebhookResult
 
+LOG = logging.getLogger("ilo")
 ERRORS = {
+    None: "Something went wrong, and I'm not sure what! Please notify the Linku developers.",
     WebhookResult.DMChannel: "Couldn't make a webhook! Webhooks are not supported in DMs.",
     WebhookResult.NoPermission: "Couldn't make a webhook! Please have an admin check my permissions.",
 }
@@ -213,7 +216,7 @@ class CogSitelen(Cog):
             False,
         )
 
-    async def sp(
+    async def make_sp_reply(
         self,
         ctx: ApplicationContext,
         text: str,
@@ -222,27 +225,29 @@ class CogSitelen(Cog):
         color: str = "",
         bgstyle: str = "",
         spoiler: bool = False,
-        hide: bool = False,
-        # proxy: bool = False,
         convert: bool = False,
-    ):
+    ) -> tuple[File, list[str]]:
         user_id = str(ctx.author.id)
-        proxy = await utils.handle_pref_error(ctx, user_id, "proxy", False)
-        await ctx.defer(ephemeral=hide | proxy)
 
         # TODO: font from preferences isn't a usable font
         font = await utils.handle_pref_error(ctx, user_id, "font", font)
         font = data.USABLE_FONTS[font]
+
         fontsize = await utils.handle_pref_error(ctx, user_id, "fontsize", fontsize)
         color = await utils.handle_pref_error(ctx, user_id, "color", color)
         bgstyle = await utils.handle_pref_error(ctx, user_id, "bgstyle", bgstyle)
-
+        # TODO: get channel name or user display name?
+        # we can't stop them from getting smooshed in the render process...
+        text, refs = sub_refs(text, "@MN", "#CH")
+        # alt_text = f"{ctx.author.display_name} said: {text}"
+        alt_text = text
         # we want to make alt text from the original text in case the changes are destructive
-        # e.g. newlines don't appear in alt text
-        alt_text = f"{ctx.author.display_name} said: {text}"
+        # but mentions are an exception since they're a kinda useless ID otherwise
+
         if convert:
             text = ucsur_replace(text)
         text = unescape_newline(text)
+        # desktop alt text has no newlines
         image = io.BytesIO(
             sitelen.display(text, font, fontsize, utils.rgb_tuple(color), bgstyle)
         )
@@ -253,32 +258,70 @@ class CogSitelen(Cog):
             description=alt_text,
             spoiler=spoiler,
         )
+        return file, refs
+
+    async def handle_proxy(self, msg: Message):
+        pass
+
+    async def sp(
+        self,
+        ctx: ApplicationContext,
+        text: str,
+        font: str = "",
+        fontsize: int = 0,
+        color: str = "",
+        bgstyle: str = "",
+        spoiler: bool = False,
+        hide: bool = False,
+        convert: bool = False,
+    ):
+        user_id = str(ctx.author.id)
+        proxy = await utils.handle_pref_error(ctx, user_id, "proxy", False)
+        await ctx.defer(ephemeral=hide)
 
         kwargs = {}
+        file, refs = await self.make_sp_reply(
+            ctx,
+            text,
+            font,
+            fontsize,
+            color,
+            bgstyle,
+            spoiler,
+            convert,
+        )
+
+        kwargs["file"] = file
+        if refs:  # will be mentions, then channels
+            kwargs["content"] = " ".join(refs)
+
+        sent = None
         if proxy and not hide:
             channel = ctx.channel
-            # if we pass "thread" at all, it has to be a channel
-            # None makes it die. so, dinky workaround.
             if isinstance(channel, Thread):
                 kwargs["thread"] = channel
                 channel = ctx.channel.parent
 
             kwargs["username"] = ctx.author.display_name
             kwargs["avatar_url"] = ctx.author.display_avatar.url
-            kwargs["file"] = file
 
             sent = await self.webhooks.send(ctx, channel, **kwargs)
             if sent:
                 await ctx.delete()
                 return
-            else:
-                # TODO: if we switch to discord.py, we can set reference=ctx.interaction.message
-                # then we can drop this else and just fall through
-                _ = await ctx.respond(file=file, ephemeral=hide)
-                _ = await ctx.respond(ERRORS[sent], ephemeral=True)
-                return
-        _ = await ctx.respond(file=file, ephemeral=hide)
-        return
+            kwargs.pop("username")
+            kwargs.pop("avatar_url")
+            kwargs.pop("thread") if kwargs.get("thread") else None
+
+        LOG.info("%s %s", kwargs, hide)
+        _ = await ctx.respond(**kwargs, ephemeral=hide)
+        if proxy and not sent:
+            # suppress dm error reporting
+            _ = (
+                await ctx.respond(ERRORS[sent], ephemeral=True)
+                if sent != WebhookResult.DMChannel
+                else None
+            )
 
 
 def unescape_newline(text: str) -> str:

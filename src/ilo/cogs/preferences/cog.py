@@ -1,7 +1,7 @@
 import re
 
-from discord import AutocompleteContext, Option, OptionChoice
-from discord.commands import SlashCommandGroup
+from discord import ApplicationContext, AutocompleteContext, Bot
+from discord.ext.bridge import BridgeOption, bridge_group
 from discord.ext.commands import Cog
 
 from ilo.cog_utils import (
@@ -23,7 +23,7 @@ RESPONSES = {
 
 def build_subcommands(prefs, template):
     autocompleter = build_autocomplete(template.choices) if template.choices else None
-    option = Option(
+    option = BridgeOption(
         template.option_type,
         template.option_desc,
         autocomplete=autocompleter,
@@ -57,8 +57,10 @@ async def prefs_autocomplete(ctx: AutocompleteContext):
 
 
 class CogPreferences(Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: Bot):
+        self.bot: Bot = bot
+        super().__init__()
+
         # for template in preferences.templates.values():
         #    self.build_subcommands(template, prefs)
         # for subcommand in prefs.subcommands:
@@ -66,7 +68,10 @@ class CogPreferences(Cog):
 
     locale = Locale(__file__)
 
-    prefs = SlashCommandGroup("preferences", locale["prefs"])
+    @bridge_group(name="preferences", description=locale["prefs"])
+    async def prefs(self, ctx: ApplicationContext):
+        pass
+
     for template in preferences.templates.values():
         build_subcommands(prefs, template)
 
@@ -101,7 +106,9 @@ class CogPreferences(Cog):
     async def show(
         self,
         ctx,
-        preference: Option(str, name="preference", autocomplete=prefs_autocomplete),
+        preference: BridgeOption(
+            str, name="preference", autocomplete=prefs_autocomplete
+        ),
     ):
         if template := preferences.templates.get(preference):
             if c := template.choices:  # we know it's a dict

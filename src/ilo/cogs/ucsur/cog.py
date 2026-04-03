@@ -1,10 +1,16 @@
 # from pozzei
 
-from discord import ApplicationContext, Bot
+import logging
+from typing import Any
+
+from discord import ApplicationContext, Bot, Message
+from discord.commands import message_command
 from discord.ext.commands import Cog
 
 from ilo.cog_utils import Locale
 from ilo.ucsur import ucsur_replace
+
+LOG = logging.getLogger("ilo")
 
 
 class CogUcsur(Cog):
@@ -24,6 +30,10 @@ class CogUcsur(Cog):
         hide: bool = False,
     ):
         await ucsur(ctx, text, hide)
+
+    @message_command(name="Convert UCSUR")
+    async def appmenu_ucsur(self, ctx: ApplicationContext, message: Message):
+        await ucsur(ctx, message.content, hide=True)
 
 
 async def ucsur(ctx: ApplicationContext, string: str, hide: bool = False):
