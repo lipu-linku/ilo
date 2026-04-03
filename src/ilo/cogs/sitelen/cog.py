@@ -8,7 +8,7 @@ from discord.ext.commands import Cog
 from ilo import cog_utils as utils
 from ilo import data, sitelen
 from ilo.preferences import Template, preferences
-from ilo.strings import sub_refs
+from ilo.strings import rm_refs
 from ilo.ucsur import ucsur_replace
 from ilo.webhook import WebhookManager, WebhookResult
 
@@ -238,7 +238,7 @@ class CogSitelen(Cog):
         bgstyle = await utils.handle_pref_error(ctx, user_id, "bgstyle", bgstyle)
         # TODO: get channel name or user display name?
         # we can't stop them from getting smooshed in the render process...
-        text, refs = sub_refs(text, "@MN", "#CH")
+        text, refs = rm_refs(text)
         # alt_text = f"{ctx.author.display_name} said: {text}"
         alt_text = text
         # we want to make alt text from the original text in case the changes are destructive

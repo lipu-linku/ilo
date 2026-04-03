@@ -123,14 +123,10 @@ def get_refs(text: str) -> list[str]:
     return channels + mentions
 
 
-def sub_refs(
-    text: str,
-    repl_mentions: str,
-    repl_channels: str,
-) -> tuple[str, list[str]]:
+def rm_refs(text: str) -> tuple[str, list[str]]:
     refs = get_refs(text)
-    text = re.sub(DiscordMentions.pattern, repl_mentions, text)
-    text = re.sub(DiscordChannels.pattern, repl_channels, text)
+    text = DiscordMentions.process(text)
+    text = DiscordChannels.process(text)
     return text, refs
 
 
