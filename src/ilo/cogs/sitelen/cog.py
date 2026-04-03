@@ -318,7 +318,7 @@ class CogSitelen(Cog):
         if proxy and not sent:
             # suppress dm error reporting
             _ = (
-                await ctx.respond(ERRORS[sent], ephemeral=hide)
+                await ctx.respond(ERRORS[sent], ephemeral=True)
                 if sent != WebhookResult.DMChannel
                 else None
             )
