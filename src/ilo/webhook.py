@@ -14,7 +14,7 @@ class WebhookResult(Enum):
     DMChannel = 4
 
     def __bool__(self) -> bool:
-        return self is WebhookResult.Success
+        return self in (WebhookResult.Success,)
 
 
 class WebhookManager:
