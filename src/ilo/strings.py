@@ -126,7 +126,7 @@ def get_refs(text: str) -> list[str]:
 def sub_refs(
     text: str,
     repl_mentions: str,
-    repl_channels,
+    repl_channels: str,
 ) -> tuple[str, list[str]]:
     refs = get_refs(text)
     text = re.sub(DiscordMentions.pattern, repl_mentions, text)
