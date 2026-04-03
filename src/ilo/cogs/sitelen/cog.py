@@ -13,8 +13,8 @@ from ilo.ucsur import ucsur_replace
 from ilo.webhook import WebhookManager, WebhookResult
 
 LOG = logging.getLogger("ilo")
-
 ERRORS = {
+    None: "Something went wrong, and I'm not sure what! Please notify the Linku developers.",
     WebhookResult.DMChannel: "Couldn't make a webhook! Webhooks are not supported in DMs.",
     WebhookResult.NoPermission: "Couldn't make a webhook! Please have an admin check my permissions.",
 }
@@ -216,7 +216,6 @@ class CogSitelen(Cog):
             False,
         )
 
-
     async def make_sp_reply(
         self,
         ctx: ApplicationContext,
@@ -261,7 +260,7 @@ class CogSitelen(Cog):
         )
         return file, refs
 
-    async def handle_proxy(self, msg: Message) :
+    async def handle_proxy(self, msg: Message):
         pass
 
     async def sp(
@@ -310,10 +309,19 @@ class CogSitelen(Cog):
             if sent:
                 await ctx.delete()
                 return
+            kwargs.pop("username")
+            kwargs.pop("avatar_url")
+            kwargs.pop("thread") if kwargs.get("thread") else None
 
+        LOG.info("%s %s", kwargs, hide)
         _ = await ctx.respond(**kwargs, ephemeral=hide)
-        if isinstance(sent, WebhookResult) and not sent:
-            _ = await ctx.respond(ERRORS[sent], ephemeral=True)
+        if proxy and not sent:
+            # suppress dm error reporting
+            _ = (
+                await ctx.respond(ERRORS[sent], ephemeral=hide)
+                if sent != WebhookResult.DMChannel
+                else None
+            )
 
 
 def unescape_newline(text: str) -> str:
