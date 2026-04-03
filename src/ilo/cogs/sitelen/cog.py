@@ -277,7 +277,7 @@ class CogSitelen(Cog):
     ):
         user_id = str(ctx.author.id)
         proxy = await utils.handle_pref_error(ctx, user_id, "proxy", False)
-        await ctx.defer(ephemeral=hide | proxy)
+        await ctx.defer(ephemeral=hide)
 
         kwargs = {}
         file, refs = await self.make_sp_reply(
