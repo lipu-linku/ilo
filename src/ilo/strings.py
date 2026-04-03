@@ -5,7 +5,7 @@ from itertools import zip_longest
 from typing import Any, Callable, Dict, Literal, cast
 
 from discord import Embed, Message
-from sonatoki.Preprocessors import DiscordMentions
+from sonatoki.Preprocessors import DiscordChannels, DiscordMentions
 
 from ilo import data
 from ilo.cog_utils import load_file
@@ -116,10 +116,22 @@ def spoiler_text(text: str):
     return f"||{text}||"
 
 
-def get_mentions(text: str) -> list[str]:
-    pattern = DiscordMentions.pattern
-    mentions = re.findall(pattern, text)
-    return mentions
+def get_refs(text: str) -> list[str]:
+    # fetch mentions and channels
+    mentions = re.findall(DiscordMentions.pattern, text)
+    channels = re.findall(DiscordChannels.pattern, text)
+    return channels + mentions
+
+
+def sub_refs(
+    text: str,
+    repl_mentions: str,
+    repl_channels,
+) -> tuple[str, list[str]]:
+    refs = get_refs(text)
+    text = re.sub(DiscordMentions.pattern, repl_mentions, text)
+    text = re.sub(DiscordChannels.pattern, repl_channels, text)
+    return text, refs
 
 
 def format_reply_embed(message: Message) -> Embed:
