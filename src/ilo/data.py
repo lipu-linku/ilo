@@ -103,6 +103,7 @@ DEFAULT_BGSTYLE = "outline"
 DEFAULT_LANGUAGE = "en"
 DEFAULT_USAGE_CATEGORY = "common"
 DEFAULT_PROXY = False
+DEFAULT_PREFIX = "-sp "
 
 # TODO:
 # - rework all functions here to use the api

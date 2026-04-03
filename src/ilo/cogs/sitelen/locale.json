@@ -67,5 +67,11 @@
   "prefs-proxy-fallback": "The proxy setting ***{}*** is invalid. Using the default ***{}***.",
   "prefs-proxy-pref-invalid": "The proxy setting ***{}*** is in your preferences but not valid. Using the default ***{}***.",
   "prefs-proxy-choice-invalid": "The proxy setting ***{}*** is invalid. Did not update preferences.",
-  "prefs-proxy-option": "Enable or disable proxying."
+  "prefs-proxy-option": "Enable or disable proxying.",
+
+  "prefs-prefix": "Set a prefix for messages to proxy as sitelen pona.",
+  "prefs-prefix-fallback": "The prefix ***{}*** is invalid. Using the default ***{}***.",
+  "prefs-prefix-pref-invalid": "The prefix ***{}*** is in your preferences but not valid. Using the default ***{}***.",
+  "prefs-prefix-choice-invalid": "The prefix ***{}*** is invalid. Did not update preferences.",
+  "prefs-prefix-option": "Enable or disable prefixing."
 }

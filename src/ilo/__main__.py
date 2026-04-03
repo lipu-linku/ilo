@@ -1,7 +1,7 @@
 import logging
 import os
 
-from discord import ApplicationContext, Intents, User
+from discord import ApplicationContext, Intents, Message, User
 from discord.ext import bridge, commands
 from discord.member import Member
 from discord.permissions import Permissions
@@ -53,12 +53,7 @@ async def on_application_command_error(ctx: ApplicationContext, error: BaseExcep
     raise error  # ensure we get full stacktrace
 
 
-@bot.event
-async def on_reaction_add(reaction: Reaction, user: User | Member):
-    if reaction.emoji != "❌":
-        return  # not the delete react we chose
-
-    message = reaction.message
+async def handle_delete(message: Message, user: User | Member):
     webhook_owned = webhooks.is_owned_msg(message.id, user.id)
     if webhook_owned:  # shortcut: we know this message
         await message.delete()
@@ -79,6 +74,34 @@ async def on_reaction_add(reaction: Reaction, user: User | Member):
     if perms and (perms.manage_messages or perms.administrator):
         await message.delete()
         return
+
+
+async def handle_identify(message: Message, user: User | Member):
+    pass
+
+
+async def handle_ping(message: Message, user: User | Member):
+    pass
+
+
+@bot.event
+async def on_reaction_add(reaction: Reaction, user: User | Member):
+    message = reaction.message
+    author_id = webhooks.get_author(message.id)
+    bot_owned = message.author == bot.user
+    # if not author_id:
+    #     interaction = message.interaction.user.id if message.interaction else None
+    # if not known or (bot_owned and interaction):
+    #     return
+
+    if reaction.emoji in ("❌", "🗑️"):
+        await handle_delete(message, user)
+
+    if reaction.emoji in ("❓", "❔"):
+        await handle_identify(message, user)
+
+    if reaction.emoji in ("🔔", "🛎️", "❗️", "‼️", "🏓"):
+        await handle_ping(message, user)
 
 
 def load_extensions():

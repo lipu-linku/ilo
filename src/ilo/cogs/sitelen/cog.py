@@ -78,6 +78,14 @@ class CogSitelen(Cog):
                 validation=lambda x: isinstance(x, bool),
             )
         )
+        preferences.register(
+            Template(
+                locale=self.locale,
+                name="prefix",
+                default=data.DEFAULT_PREFIX,
+                validation=lambda x: isinstance(x, str) and len(x) <= 6,
+            )
+        )
 
     locale = utils.Locale(__file__)
 
@@ -216,6 +224,17 @@ class CogSitelen(Cog):
             False,
         )
 
+    @Cog.listener("on_message")
+    async def text_proxy(self, message: Message):
+        user_id = message.author.id
+        proxy: bool = preferences.get_or_default(user_id, "proxy")
+        if not proxy:
+            return
+        prefix: str = preferences.get_or_default(user_id, "prefix")
+        if not prefix:
+            return
+        if not message.content.startswith(prefix):
+            return
 
     async def make_sp_reply(
         self,

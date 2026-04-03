@@ -94,6 +94,12 @@ class WebhookManager:
 
         return await self._make_webhook(channel)
 
+    def get_author(self, message_id: int) -> int | None:
+        return self.sender_cache.get(message_id)
+
+    def is_known_msg(self, message_id: int) -> bool:
+        return message_id in self.sender_cache
+
     def is_owned_msg(self, message_id: int, user_id: int) -> bool:
         owner_id = self.sender_cache.get(message_id)
         return owner_id == user_id

@@ -5,6 +5,7 @@ from typing import Any, Callable, Dict, Optional, Tuple
 
 from ilo.data import deep_get
 
+LOG = logging.getLogger("ilo")
 PREFERENCES_PATH = "userdata/preferences.json"
 
 
