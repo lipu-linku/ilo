@@ -315,7 +315,7 @@ class CogSitelen(Cog):
 
         LOG.info("%s %s", kwargs, hide)
         _ = await ctx.respond(**kwargs, ephemeral=hide)
-        if proxy and not sent:
+        if proxy and not hide and not sent:
             # suppress dm error reporting
             _ = (
                 await ctx.respond(ERRORS[sent], ephemeral=True)
