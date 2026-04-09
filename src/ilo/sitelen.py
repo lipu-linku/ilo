@@ -1,16 +1,17 @@
 import io
 import logging
+import re
 
 from PIL import Image, ImageDraw, ImageFont
 
 from ilo.cog_utils import BgStyle, Color, ColorAlpha
+from ilo.ucsur import chars
 
 LOG = logging.getLogger("ilo")
 
 BLACK: ColorAlpha = (0x36, 0x39, 0x3F, 0xFF)
 WHITE: ColorAlpha = (0xF0, 0xF0, 0xF0, 0xFF)
 TRANSPARENT: ColorAlpha = (0, 0, 0, 0)
-
 
 def subpixel_luminance(num: int) -> float:
     srgb = num / 255
@@ -70,9 +71,33 @@ def passes_aa(color: Color, bg_color: Color, font_size: int) -> bool:
 #         return BLACK, BLACK
 #     return WHITE, WHITE
 
+def wrap_text(text:str, font: ImageFont.FreeTypeFont, line_width: int):
+    lines = text.splitlines()
+    wrapped_text = ""
+    for line in lines:
+        if font.getlength(line) < line_width:
+            wrapped_text += line+"\n"
+            continue
+        
+        split_line = re.sub(rf"({"|".join(chars)})", r"\g<0> ", line) # insert space after every uscur character
+        split_line = split_line.split(" ")
+        current_line_segment = ""
+        for word in split_line: 
+            newline = current_line_segment + word
+            if font.getlength(newline) < line_width:
+                if current_line_segment != "" and word not in chars: # add space not first word on line and if not uscur char
+                    current_line_segment += " "
+                current_line_segment += word
+            else:
+                wrapped_text += current_line_segment + "\n"
+                current_line_segment = word
+        wrapped_text += current_line_segment + "\n"
+    if wrapped_text[-1] == "\n":
+        wrapped_text = wrapped_text[:-1]
+    return(wrapped_text)
 
 # by jan Tepo
-def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: BgStyle):
+def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: BgStyle, linewrap:bool, linewidth:int):
     STROKE_WIDTH = round((font_size / 133) * 5)
     LINE_SPACING = round((font_size / 2.5))
     PAD = round(font_size / 25)
@@ -81,6 +106,10 @@ def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: Bg
     bg_color = stroke_color if bgstyle == "background" else TRANSPARENT
 
     font = ImageFont.truetype(font_path, font_size)
+
+    if linewrap:
+        text = wrap_text(text, font, linewidth)
+
     d = ImageDraw.Draw(Image.new("RGBA", (0, 0), (0, 0, 0, 0)))
     x, y, w, h = d.multiline_textbbox(
         (0, 0),
@@ -90,6 +119,10 @@ def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: Bg
         stroke_width=STROKE_WIDTH,
         font_size=font_size,
     )
+    
+    if linewrap:
+        w = max(w, linewidth) # mobile sometimes expands images to the screen's width, so this helps keep the characters displayi   ng at a constant size
+
     image = Image.new(
         mode="RGBA",
         size=(w + PAD, h + PAD + 25),

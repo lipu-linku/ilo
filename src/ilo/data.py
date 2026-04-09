@@ -103,6 +103,8 @@ DEFAULT_BGSTYLE = "outline"
 DEFAULT_LANGUAGE = "en"
 DEFAULT_USAGE_CATEGORY = "common"
 DEFAULT_PROXY = False
+DEFAULT_LINE_WRAP = False
+DEFAULT_LINE_WIDTH = 1000
 
 # TODO:
 # - rework all functions here to use the api
