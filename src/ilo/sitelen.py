@@ -90,6 +90,8 @@ def wrap_text(text:str, font: ImageFont.FreeTypeFont, line_width: int):
                 wrapped_text += current_line_segment + "\n"
                 current_line_segment = word
         wrapped_text += current_line_segment + "\n"
+    if wrapped_text[-1] == "\n":
+        wrapped_text = wrapped_text[:-1]
     return(wrapped_text)
 
 # by jan Tepo
