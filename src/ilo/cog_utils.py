@@ -56,7 +56,7 @@ def is_valid_bgstyle(style: BgStyle) -> bool:
     return style in VALID_STYLES
 
 def is_valid_line_width(value: int) -> bool:
-    return(value >= 1)
+    return(value > 1 and value < 10000)
 
 def load_file(file_path, file_name) -> List[str] | Dict:
     path = Path(file_path).parent / file_name
