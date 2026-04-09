@@ -85,6 +85,8 @@ def wrap_text(text:str, font: ImageFont.FreeTypeFont, line_width: int):
         for word in split_line: 
             newline = current_line_segment + word
             if font.getlength(newline) < line_width:
+                if current_line_segment != "" and word not in chars: # add space not first word on line and if not uscur char
+                    current_line_segment += " "
                 current_line_segment += word
             else:
                 wrapped_text += current_line_segment + "\n"
