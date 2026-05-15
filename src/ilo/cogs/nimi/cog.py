@@ -153,9 +153,7 @@ def embed_response(
         name="usage", value=f"{word.usage_category} ({word.book.replace('none', 'no book')})"
     )
 
-    embed.set_thumbnail(
-        url=f"https://raw.githubusercontent.com/lipu-linku/ijo/main/sitelenpona/sitelen-seli-kiwen/{word.ID}.png",
-    )
+    embed.set_thumbnail(url=word.image)
 
     inline = embedtype == "concise"
     embed.add_field(name="definition", value=word.get_definition(lang), inline=inline)
