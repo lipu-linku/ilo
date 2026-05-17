@@ -3,24 +3,8 @@
 
 from typing import Literal, Required, TypedDict
 
-Languages = dict[str, "_Schema1"]
-"""
-The languages offered by sona Linku.
 
-propertyNames:
-  $ref: '#/$defs/__schema0'
-"""
-
-
-_Schema0 = str
-"""
-A unique identifier for an object in Linku. Generally named after the object.
-
-minLength: 1
-"""
-
-
-class _Schema1(TypedDict, total=False):
+class Language(TypedDict, total=False):
     id: Required["_Schema0"]
     """
     A unique identifier for an object in Linku. Generally named after the object.
@@ -39,7 +23,7 @@ class _Schema1(TypedDict, total=False):
     Required property
     """
 
-    direction: Required["_Schema1Direction"]
+    direction: Required["_LanguageDirection"]
     """
     The direction of the language's script.
 
@@ -48,11 +32,11 @@ class _Schema1(TypedDict, total=False):
     Required property
     """
 
-    name: Required["_Schema1Name"]
+    name: Required["_LanguageName"]
     """ Required property """
 
 
-_Schema1Direction = Literal["ltr"] | Literal["rtl"]
+_LanguageDirection = Literal["ltr"] | Literal["rtl"]
 """
 The direction of the language's script.
 
@@ -60,7 +44,7 @@ Aggregation type: anyOf
 """
 
 
-class _Schema1Name(TypedDict, total=False):
+class _LanguageName(TypedDict, total=False):
     en: Required[str]
     """
     The name of the language in English.
@@ -76,3 +60,11 @@ class _Schema1Name(TypedDict, total=False):
     """
 
     tok: str
+
+
+_Schema0 = str
+"""
+A unique identifier for an object in Linku. Generally named after the object.
+
+minLength: 1
+"""

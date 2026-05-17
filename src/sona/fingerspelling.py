@@ -1,62 +1,92 @@
 # Generated from the JSON schema of sona Linku
 
 
-from typing import Dict, List, Required, TypedDict
-
-Fingerspelling = Dict[str, "_FingerspellingAdditionalproperties"]
-"""
-A raw data object containing information about Luka Pona fingerspelling signs
-
-propertyNames:
-  minLength: 1
-"""
+from typing import Required, TypedDict
 
 
-class _FingerspellingAdditionalproperties(TypedDict, total=False):
-    """Unlocalized info on a fingerspelling sign."""
+class Fingerspelling(TypedDict, total=False):
+    """Info on a fingerspelling sign."""
 
-    id: Required[str]
+    id: Required["_Schema0"]
     """
-    A globally unique name for the sign which is also a gloss.
+    A unique name for the fingerspelling which is also a gloss.
+
+    minLength: 1
 
     Required property
     """
 
-    is_two_handed: Required[bool]
+    is_two_handed: Required["_Schema1"]
     """
     Whether the sign is two-handed or not.
 
     Required property
     """
 
-    etymology: Required[List["_FingerspellingAdditionalpropertiesEtymologyItem"]]
+    etymology: Required["_Schema2"]
     """
     Unlocalized etymological values regarding this sign's origin
 
     Required property
     """
 
-    signwriting: Required["_FingerspellingAdditionalpropertiesSignwriting"]
+    signwriting: Required["_Schema5"]
     """
     Scripts for representing a sign as characters.
 
     Required property
     """
 
-    video: Required["_FingerspellingAdditionalpropertiesVideo"]
+    video: "_Schema8"
+    """ Videos of the sign being performed, by format. """
+
+    translations: Required["_Schema12"]
+    """ Required property """
+
+
+_Schema0 = str
+"""
+A unique name for the fingerspelling which is also a gloss.
+
+minLength: 1
+"""
+
+
+_Schema1 = bool
+""" Whether the sign is two-handed or not. """
+
+
+_Schema10 = str
+"""
+A URL pointing to some external resource.
+
+format: uri
+"""
+
+
+class _Schema12(TypedDict, total=False):
+    parameters: Required["_Schema12Parameters"]
     """
-    Videos of the sign being performed, by format.
+    Partly localized descriptions of how a sign is signed.
 
     Required property
     """
 
-    translations: Required[
-        Dict[str, "_FingerspellingAdditionalpropertiesTranslationsAdditionalproperties"]
-    ]
-    """ Required property """
+
+class _Schema12Parameters(TypedDict, total=False):
+    """Partly localized descriptions of how a sign is signed."""
+
+    handshape: str
+    movement: str
+    placement: str
+    orientation: str
 
 
-class _FingerspellingAdditionalpropertiesEtymologyItem(TypedDict, total=False):
+_Schema2 = list["_Schema3"]
+""" Unlocalized etymological values regarding this sign's origin """
+
+
+class _Schema3(TypedDict, total=False):
     language: Required[str]
     """
     The language of the sign.
@@ -64,62 +94,64 @@ class _FingerspellingAdditionalpropertiesEtymologyItem(TypedDict, total=False):
     Required property
     """
 
-    sign: Required[str]
-    """
-    The name of the sign such that it could be found in a sign language dictionary.
-
-    Required property
-    """
+    sign: str
 
 
-class _FingerspellingAdditionalpropertiesSignwriting(TypedDict, total=False):
+class _Schema5(TypedDict, total=False):
     """Scripts for representing a sign as characters."""
 
-    fsw: Required[str]
+    fsw: Required["_Schema6"]
     """
-    The Formal Sign Writing representation of the sign.
+    The [Formal SignWriting](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
+
+    minLength: 1
 
     Required property
     """
 
-    swu: Required[str]
+    swu: Required["_Schema7"]
     """
-    The Sign Writing with Unicode representation of hte sign.
+    The [SignWriting with Unicode](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
+
+    minLength: 1
 
     Required property
     """
 
 
-class _FingerspellingAdditionalpropertiesTranslationsAdditionalproperties(
-    TypedDict, total=False
-):
-    parameters: Required[
-        "_FingerspellingAdditionalpropertiesTranslationsAdditionalpropertiesParameters"
-    ]
-    """ Required property """
+_Schema6 = str
+"""
+The [Formal SignWriting](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
+
+minLength: 1
+"""
 
 
-class _FingerspellingAdditionalpropertiesTranslationsAdditionalpropertiesParameters(
-    TypedDict, total=False
-):
-    handshape: str
-    """ The shape of the hand when signing, identified by its name in ASL. Should not be translated in any language other than Toki Pona """
+_Schema7 = str
+"""
+The [SignWriting with Unicode](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
-    movement: str
-    """ The motion of the hand when signing. """
-
-    placement: str
-    """ The placement of the hand when signing. """
-
-    orientation: str
-    """ The orientation of the hand when signing. """
+minLength: 1
+"""
 
 
-class _FingerspellingAdditionalpropertiesVideo(TypedDict, total=False):
+class _Schema8(TypedDict, total=False):
     """Videos of the sign being performed, by format."""
 
-    gif: str
-    """ A link to a gif of the sign being signed. """
+    gif: Required["_Schema10"]
+    """
+    A URL pointing to some external resource.
 
-    mp4: str
-    """ a link to an mp4 of the sign being signed. """
+    format: uri
+
+    Required property
+    """
+
+    mp4: Required["_Schema10"]
+    """
+    A URL pointing to some external resource.
+
+    format: uri
+
+    Required property
+    """

@@ -1,83 +1,173 @@
 # Generated from the JSON schema of sona Linku
 
 
-from typing import Dict, List, Required, TypedDict
+from typing import Required, TypedDict
 
-Signs = Dict[str, "_SignsAdditionalproperties"]
+Signs = dict[str, "_Schema1"]
 """
 A raw data object containing information about Luka Pona signs
 
 propertyNames:
-  minLength: 1
+  $ref: '#/$defs/__schema0'
 """
 
 
-class _SignsAdditionalproperties(TypedDict, total=False):
-    """Unlocalized info on a Luka Pona sign"""
+_Schema0 = str
+"""
+A unique identifier for an object in Linku. Generally named after the object.
 
-    definition: Required[str]
+minLength: 1
+"""
+
+
+class _Schema1(TypedDict, total=False):
+    """Info on a Luka Pona sign"""
+
+    id: Required["_Schema0"]
     """
-    The definition of the sign as a single toki pona word.
+    A unique identifier for an object in Linku. Generally named after the object.
+
+    minLength: 1
 
     Required property
     """
 
-    id: Required[str]
-    """
-    A globally unique name for the sign which is also a gloss.
-
-    Required property
-    """
-
-    is_two_handed: Required[bool]
+    is_two_handed: Required["_Schema3"]
     """
     Whether the sign is two-handed or not.
 
     Required property
     """
 
-    new_gloss: Required[str]
-    """
-    The more recent, preferred gloss for this sign.
-
-    Required property
-    """
-
-    old_gloss: Required[str]
-    """
-    The older gloss for this sign, similar to `id`.
-
-    Required property
-    """
-
-    etymology: Required[List["_SignsAdditionalpropertiesEtymologyItem"]]
+    etymology: Required["_Schema4"]
     """
     Unlocalized etymological values regarding this sign's origin
 
     Required property
     """
 
-    signwriting: Required["_SignsAdditionalpropertiesSignwriting"]
+    signwriting: Required["_Schema7"]
     """
     Scripts for representing a sign as characters.
 
     Required property
     """
 
-    video: Required["_SignsAdditionalpropertiesVideo"]
+    video: "_Schema10"
+    """ Videos of the sign being performed, by format. """
+
+    translations: Required["_Schema14"]
+    """ Required property """
+
+    definition: Required["_Schema23"]
     """
-    Videos of the sign being performed, by format.
+    The definition of the sign as a single toki pona word.
 
     Required property
     """
 
-    translations: Required[
-        Dict[str, "_SignsAdditionalpropertiesTranslationsAdditionalproperties"]
-    ]
-    """ Required property """
+    new_gloss: Required["_Schema24"]
+    """
+    The more recent, preferred gloss for this sign.
+
+    Required property
+    """
+
+    old_gloss: Required["_Schema25"]
+    """
+    The older gloss for this sign, similar to `id`.
+
+    Required property
+    """
+
+    old_id: Required["_Schema26"]
+    """
+    Previous, malformed id for the sign.
+
+    Required property
+    """
 
 
-class _SignsAdditionalpropertiesEtymologyItem(TypedDict, total=False):
+class _Schema10(TypedDict, total=False):
+    """Videos of the sign being performed, by format."""
+
+    gif: Required["_Schema12"]
+    """
+    A URL pointing to some external resource.
+
+    format: uri
+
+    Required property
+    """
+
+    mp4: Required["_Schema12"]
+    """
+    A URL pointing to some external resource.
+
+    format: uri
+
+    Required property
+    """
+
+
+_Schema12 = str
+"""
+A URL pointing to some external resource.
+
+format: uri
+"""
+
+
+class _Schema14(TypedDict, total=False):
+    icons: Required[str]
+    """
+    Localized descriptions of the thing a sign represents.
+
+    Required property
+    """
+
+    parameters: Required["_Schema14Parameters"]
+    """
+    Partly localized descriptions of how a sign is signed.
+
+    Required property
+    """
+
+
+class _Schema14Parameters(TypedDict, total=False):
+    """Partly localized descriptions of how a sign is signed."""
+
+    handshape: str
+    movement: str
+    placement: str
+    orientation: str
+
+
+_Schema23 = str
+""" The definition of the sign as a single toki pona word. """
+
+
+_Schema24 = str
+""" The more recent, preferred gloss for this sign. """
+
+
+_Schema25 = str
+""" The older gloss for this sign, similar to `id`. """
+
+
+_Schema26 = str
+""" Previous, malformed id for the sign. """
+
+
+_Schema3 = bool
+""" Whether the sign is two-handed or not. """
+
+
+_Schema4 = list["_Schema5"]
+""" Unlocalized etymological values regarding this sign's origin """
+
+
+class _Schema5(TypedDict, total=False):
     language: Required[str]
     """
     The language of the sign.
@@ -86,60 +176,41 @@ class _SignsAdditionalpropertiesEtymologyItem(TypedDict, total=False):
     """
 
     sign: str
-    """ The name of the sign such that it could be found in a sign language dictionary. """
 
 
-class _SignsAdditionalpropertiesSignwriting(TypedDict, total=False):
+class _Schema7(TypedDict, total=False):
     """Scripts for representing a sign as characters."""
 
-    fsw: Required[str]
+    fsw: Required["_Schema8"]
     """
     The [Formal SignWriting](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
+    minLength: 1
+
     Required property
     """
 
-    swu: Required[str]
+    swu: Required["_Schema9"]
     """
     The [SignWriting with Unicode](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
+    minLength: 1
+
     Required property
     """
 
 
-class _SignsAdditionalpropertiesTranslationsAdditionalproperties(
-    TypedDict, total=False
-):
-    parameters: Required[
-        "_SignsAdditionalpropertiesTranslationsAdditionalpropertiesParameters"
-    ]
-    """ Required property """
+_Schema8 = str
+"""
+The [Formal SignWriting](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
-    icons: Required[str]
-    """ Required property """
+minLength: 1
+"""
 
 
-class _SignsAdditionalpropertiesTranslationsAdditionalpropertiesParameters(
-    TypedDict, total=False
-):
-    handshape: str
-    """ The shape of the hand when signing, identified by its name in ASL. Should not be translated in any language other than Toki Pona """
+_Schema9 = str
+"""
+The [SignWriting with Unicode](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
-    movement: str
-    """ The motion of the hand when signing. """
-
-    placement: str
-    """ The placement of the hand when signing. """
-
-    orientation: str
-    """ The orientation of the hand when signing. """
-
-
-class _SignsAdditionalpropertiesVideo(TypedDict, total=False):
-    """Videos of the sign being performed, by format."""
-
-    gif: str
-    """ A link to a gif of the sign being signed. """
-
-    mp4: str
-    """ a link to an mp4 of the sign being signed. """
+minLength: 1
+"""
