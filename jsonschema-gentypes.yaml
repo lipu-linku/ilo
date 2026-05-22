@@ -36,8 +36,8 @@ generate:
     root_name: Fingerspelling
     python_version: "3.12"
   - source: sona/api/generated/v2/fingerspellings.json
-    destination: src/sona/fingerspelling_sign.py
-    root_name: FingerspellingSign
+    destination: src/sona/fingerspellings.py
+    root_name: Fingerspellings
     python_version: "3.12"
 
   - source: sona/api/generated/v2/font.json
