@@ -314,7 +314,6 @@ class CogSitelen(Cog):
             kwargs.pop("avatar_url")
             kwargs.pop("thread") if kwargs.get("thread") else None
 
-        LOG.info("%s %s", kwargs, hide)
         _ = await ctx.respond(**kwargs, ephemeral=hide)
         if proxy and not hide and not sent:
             # suppress dm error reporting
