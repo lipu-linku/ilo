@@ -3,7 +3,7 @@
 
 from typing import Required, TypedDict
 
-FingerspellingSign = dict[str, "_Schema1"]
+Fingerspellings = dict[str, "_Schema1"]
 """
 A raw data object containing information about Luka Pona fingerspelling signs
 

@@ -150,7 +150,8 @@ def embed_response(
     embed.title = word.string
     embed.colour = colours[word.usage_category]
     embed.add_field(
-        name="usage", value=f"{word.usage_category} ({word.book.replace('none', 'no book')})"
+        name="usage",
+        value=f"{word.usage_category} ({word.book.replace('none', 'no book')})",
     )
 
     embed.set_thumbnail(url=word.image)
@@ -179,9 +180,7 @@ def embed_response(
             embed.add_field(name="commentary", value=commentary, inline=inline)
 
     if word.usage_category != "core" and word.see_also:
-        embed.add_field(
-            name="see also", value=", ".join(word.see_also), inline=inline
-        )
+        embed.add_field(name="see also", value=", ".join(word.see_also), inline=inline)
     if word.usage_category == "uncommon":
         embed.set_footer(
             text="⚠️ This word is uncommon. Many speakers don't use this word."
@@ -203,19 +202,21 @@ class NimiView(View):
         minmax = NimiButton(
             style=ButtonStyle.primary,
             label=buttontype,
-            custom_id=f"{buttontype};{word.ID};{lang}",
+            custom_id=f"{buttontype};{word.id};{lang}",
         )
         self.add_item(minmax)
         self.add_item(
             Button(
                 style=ButtonStyle.link,
                 label="linku.la",
-                url=f"https://linku.la/words/{word.ID}"
+                url=f"https://linku.la/words/{word.id}",
             )
         )
         self.add_item(
             Button(
-                style=ButtonStyle.link, label="nimi.li", url=f"https://nimi.li/{word.ID}"
+                style=ButtonStyle.link,
+                label="nimi.li",
+                url=f"https://nimi.li/{word.id}",
             )
         )
 
