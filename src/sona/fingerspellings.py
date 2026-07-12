@@ -3,60 +3,86 @@
 
 from typing import Required, TypedDict
 
+Fingerspellings = dict[str, "_Schema1"]
+"""
+A raw data object containing information about Luka Pona fingerspelling signs
 
-class Fingerspelling(TypedDict, total=False):
+propertyNames:
+  $ref: '#/$defs/__schema0'
+"""
+
+
+_Schema0 = str
+"""
+A unique identifier for an object in Linku. Generally named after the object.
+
+minLength: 1
+"""
+
+
+class _Schema1(TypedDict, total=False):
     """Info on a fingerspelling sign."""
 
     id: Required["_Schema0"]
     """
-    A unique name for the fingerspelling which is also a gloss.
+    A unique identifier for an object in Linku. Generally named after the object.
 
     minLength: 1
 
     Required property
     """
 
-    is_two_handed: Required["_Schema1"]
+    is_two_handed: Required["_Schema3"]
     """
     Whether the sign is two-handed or not.
 
     Required property
     """
 
-    etymology: Required["_Schema2"]
+    etymology: Required["_Schema4"]
     """
     Unlocalized etymological values regarding this sign's origin
 
     Required property
     """
 
-    signwriting: Required["_Schema5"]
+    signwriting: Required["_Schema7"]
     """
     Scripts for representing a sign as characters.
 
     Required property
     """
 
-    video: "_Schema8"
+    video: "_Schema10"
     """ Videos of the sign being performed, by format. """
 
-    translations: Required["_Schema12"]
+    translations: Required["_Schema14"]
     """ Required property """
 
 
-_Schema0 = str
-"""
-A unique name for the fingerspelling which is also a gloss.
+class _Schema10(TypedDict, total=False):
+    """Videos of the sign being performed, by format."""
 
-minLength: 1
-"""
+    gif: Required["_Schema12"]
+    """
+    A URL pointing to some external resource.
+
+    format: uri
+
+    Required property
+    """
+
+    mp4: Required["_Schema12"]
+    """
+    A URL pointing to some external resource.
+
+    format: uri
+
+    Required property
+    """
 
 
-_Schema1 = bool
-""" Whether the sign is two-handed or not. """
-
-
-_Schema10 = str
+_Schema12 = str
 """
 A URL pointing to some external resource.
 
@@ -64,8 +90,8 @@ format: uri
 """
 
 
-class _Schema12(TypedDict, total=False):
-    parameters: Required["_Schema12Parameters"]
+class _Schema14(TypedDict, total=False):
+    parameters: Required["_Schema14Parameters"]
     """
     Partly localized descriptions of how a sign is signed.
 
@@ -73,7 +99,7 @@ class _Schema12(TypedDict, total=False):
     """
 
 
-class _Schema12Parameters(TypedDict, total=False):
+class _Schema14Parameters(TypedDict, total=False):
     """Partly localized descriptions of how a sign is signed."""
 
     handshape: str
@@ -82,11 +108,15 @@ class _Schema12Parameters(TypedDict, total=False):
     orientation: str
 
 
-_Schema2 = list["_Schema3"]
+_Schema3 = bool
+""" Whether the sign is two-handed or not. """
+
+
+_Schema4 = list["_Schema5"]
 """ Unlocalized etymological values regarding this sign's origin """
 
 
-class _Schema3(TypedDict, total=False):
+class _Schema5(TypedDict, total=False):
     language: Required[str]
     """
     The language of the sign.
@@ -97,10 +127,10 @@ class _Schema3(TypedDict, total=False):
     sign: str
 
 
-class _Schema5(TypedDict, total=False):
+class _Schema7(TypedDict, total=False):
     """Scripts for representing a sign as characters."""
 
-    fsw: Required["_Schema6"]
+    fsw: Required["_Schema8"]
     """
     The [Formal SignWriting](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
@@ -109,7 +139,7 @@ class _Schema5(TypedDict, total=False):
     Required property
     """
 
-    swu: Required["_Schema7"]
+    swu: Required["_Schema9"]
     """
     The [SignWriting with Unicode](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
@@ -119,7 +149,7 @@ class _Schema5(TypedDict, total=False):
     """
 
 
-_Schema6 = str
+_Schema8 = str
 """
 The [Formal SignWriting](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
@@ -127,31 +157,9 @@ minLength: 1
 """
 
 
-_Schema7 = str
+_Schema9 = str
 """
 The [SignWriting with Unicode](https://en.wikipedia.org/wiki/SignWriting) representation of the sign.
 
 minLength: 1
 """
-
-
-class _Schema8(TypedDict, total=False):
-    """Videos of the sign being performed, by format."""
-
-    gif: Required["_Schema10"]
-    """
-    A URL pointing to some external resource.
-
-    format: uri
-
-    Required property
-    """
-
-    mp4: Required["_Schema10"]
-    """
-    A URL pointing to some external resource.
-
-    format: uri
-
-    Required property
-    """

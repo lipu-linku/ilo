@@ -4,73 +4,56 @@ callbacks:
   - - black
   - - isort
 generate:
-  - source: sona/api/generated/word.json
+  - source: sona/api/generated/v2/word.json
     destination: src/sona/word.py
     root_name: Word
-    python_version: "3.9"
-  - source: sona/api/generated/words.json
+    python_version: "3.12"
+  - source: sona/api/generated/v2/words.json
     destination: src/sona/words.py
     root_name: Words
-    python_version: "3.9"
-  # - source: sona/api/generated/sandbox.json
-  #   destination: src/sona/sandbox.py
-  #   root_name: Sandbox
-  #   python_version: "3.9"
+    python_version: "3.12"
 
-  - source: sona/api/generated/definition_translation.json
-    destination: src/sona/definition_translation.py
-    root_name: DefinitionTranslation
-    python_version: "3.9"
-  - source: sona/api/generated/commentary_translation.json
-    destination: src/sona/commentary_translation.py
-    root_name: CommentaryTranslation
-    python_version: "3.9"
-  - source: sona/api/generated/etymology_translation.json
-    destination: src/sona/etymology_translation.py
-    root_name: EtymologyTranslation
-    python_version: "3.9"
-  - source: sona/api/generated/sitelen_pona_translation.json
-    destination: src/sona/sitelen_pona_translation.py
-    root_name: SitelenPonaTranslation
-    python_version: "3.9"
+  - source: sona/api/generated/v2/glyph.json
+    destination: src/sona/glyph.py
+    root_name: Glyph
+    python_version: "3.12"
+  - source: sona/api/generated/v2/glyphs.json
+    destination: src/sona/glyphs.py
+    root_name: Glyphs
+    python_version: "3.12"
 
-  - source: sona/api/generated/sign.json
+  - source: sona/api/generated/v2/sign.json
     destination: src/sona/sign.py
     root_name: Sign
-    python_version: "3.9"
-  - source: sona/api/generated/signs.json
+    python_version: "3.12"
+  - source: sona/api/generated/v2/signs.json
     destination: src/sona/signs.py
     root_name: Signs
-    python_version: "3.9"
+    python_version: "3.12"
 
-  - source: sona/api/generated/fingerspelling.json
+  - source: sona/api/generated/v2/fingerspelling.json
     destination: src/sona/fingerspelling.py
     root_name: Fingerspelling
-    python_version: "3.9"
-  - source: sona/api/generated/fingerspelling_sign.json
-    destination: src/sona/fingerspelling_sign.py
-    root_name: FingerspellingSign
-    python_version: "3.9"
+    python_version: "3.12"
+  - source: sona/api/generated/v2/fingerspellings.json
+    destination: src/sona/fingerspellings.py
+    root_name: Fingerspellings
+    python_version: "3.12"
 
-  - source: sona/api/generated/parameters_translation.json
-    destination: src/sona/parameters_translation.py
-    root_name: ParametersTranslation
-    python_version: "3.9"
-  - source: sona/api/generated/icon_translation.json
-    destination: src/sona/icon_translation.py
-    root_name: IconTranslation
-    python_version: "3.9"
-
-  - source: sona/api/generated/font.json
+  - source: sona/api/generated/v2/font.json
     destination: src/sona/font.py
     root_name: Font
-    python_version: "3.9"
-  - source: sona/api/generated/fonts.json
+    python_version: "3.12"
+  - source: sona/api/generated/v2/fonts.json
     destination: src/sona/fonts.py
     root_name: Fonts
-    python_version: "3.9"
+    python_version: "3.12"
 
-  - source: sona/api/generated/languages.json
+  - source: sona/api/generated/v2/language.json
+    destination: src/sona/language.py
+    root_name: Language
+    python_version: "3.12"
+  - source: sona/api/generated/v2/languages.json
     destination: src/sona/languages.py
     root_name: Languages
-    python_version: "3.9"
+    python_version: "3.12"

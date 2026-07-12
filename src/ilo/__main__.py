@@ -1,7 +1,7 @@
 import logging
 import os
 
-from discord import ApplicationContext, Intents, User
+from discord import ApplicationContext, User
 from discord.ext import bridge, commands
 from discord.member import Member
 from discord.permissions import Permissions
@@ -46,10 +46,16 @@ async def on_ready():
     for index, guild in enumerate(bot.guilds):
         print("{}) {}".format(index + 1, guild.name))
 
+import traceback
 
 @bot.event
 async def on_application_command_error(ctx: ApplicationContext, error: BaseException):
-    await ctx.respond(f"Something went wrong!\n{error}", ephemeral=True)
+    if LOG_LEVEL == "DEBUG":
+        trace = f"Something went wrong!\n\n```{"".join(traceback.format_exception(type(error), error, error.__traceback__))}```"
+        msg = trace if len(trace) <= 2000 else f"Something went wrong!\n\n```{error}```"
+    else:
+        msg = f"Something went wrong!\n\n```{error}```"
+    await ctx.respond(msg, ephemeral=True)
     raise error  # ensure we get full stacktrace
 
 

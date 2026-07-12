@@ -9,8 +9,7 @@ from sonatoki.Preprocessors import DiscordChannels, DiscordMentions
 
 from ilo import data
 from ilo.cog_utils import load_file
-from ilo.data import get_sandbox_data, get_word_data
-from sona.word import Word
+from ilo.data import Word
 
 LOG = logging.getLogger()
 
@@ -44,14 +43,14 @@ def handle_word_query(
     if len(query.split()) > 1:
         return False, STRINGS["multiple_words"].format(query)
 
-    resp = get_word_data(query)
+    resp = data.get_non_sandbox_word(query)
     if resp:
         return True, resp
 
-    sandbox_resp = get_sandbox_data(query)
+    sandbox_resp = data.get_sandbox_word(query)
     if sandbox and sandbox_resp:
         return True, sandbox_resp
-    if (not sandbox) and sandbox_resp:
+    if sandbox_resp:
         return False, STRINGS["sandbox_word"].format(query)
 
     return False, STRINGS["missing_word"].format(query)
@@ -80,33 +79,6 @@ def format_ku_data(ku_data: Dict[str, int]):
     for word, score in sorted_data:
         to_format.append(f"{word}: {score}%")
     formatted = ", ".join(to_format)
-    print(len(formatted))
-    print(formatted)
-    return clip_for_embed(formatted)
-
-
-def format_etymology(
-    etym_untrans: list[Dict[str, str]],
-    etym_trans: list[Dict[str, str]],
-):
-    etyms_formatted = []
-    for etymu, etymt in zip_longest(etym_untrans, etym_trans):
-        lang = etymt["language"]  # always defined
-        word = etymu.get("word")
-        alt = etymu.get("alt")
-        defin = etymt.get("definition")
-
-        etym_formatted = f"{lang}"
-
-        if word:
-            etym_formatted += f": {word}"
-        if alt:
-            etym_formatted += f" ({alt})"
-        if defin:
-            etym_formatted += f"; {defin}"
-        etyms_formatted.append(etym_formatted)
-
-    formatted = "\n".join(etyms_formatted)
     print(len(formatted))
     print(formatted)
     return clip_for_embed(formatted)

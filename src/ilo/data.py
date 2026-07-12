@@ -3,24 +3,18 @@ import os
 import random
 import urllib.request
 from enum import Enum
-from typing import Callable, Dict, Iterable, List, Optional, Tuple, TypeAlias
+from typing import Dict, List, Optional, TypeAlias
+import discord
 
 from sona.fingerspelling import Fingerspelling
-from sona.fingerspelling_sign import FingerspellingSign
-from sona.font import Font
 from sona.fonts import Fonts
 from sona.languages import Languages
 from sona.sign import Sign
 from sona.signs import Signs
-from sona.word import Word
-from sona.words import Words
+from ilo.word import Word
 
 JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | str | int | float | bool | None
 
-API_URL = "https://api.linku.la/"
-
-WORDS_LINK = "https://api.linku.la/v1/words?lang=*"
-SANDBOX_LINK = "https://api.linku.la/v1/sandbox?lang=*"
 LANGUAGES_LINK = "https://api.linku.la/v1/languages"
 FONTS_LINK = "https://api.linku.la/v2/fonts"
 SIGNS_LINK = "https://api.linku.la/v1/luka_pona/signs?lang=*"
@@ -51,9 +45,6 @@ def get_site(url: str) -> bytes:
     resp = urllib.request.urlopen(req).read().decode("utf-8")
     return resp
 
-
-WORDS_DATA: Words = json.loads(get_site(WORDS_LINK))
-SANDBOX_DATA = json.loads(get_site(SANDBOX_LINK))
 FONTS_DATA: Fonts = json.loads(get_site(FONTS_LINK))
 LANGUAGE_DATA: Languages = json.loads(get_site(LANGUAGES_LINK))
 SIGNS_DATA: Signs = json.loads(get_site(SIGNS_LINK))
@@ -83,7 +74,7 @@ class UsageCategory(Enum):
     core = 90
     common = 60
     uncommon = 30
-    obscure = 2
+    obscure = 5
     sandbox = 0
 
 
@@ -108,41 +99,66 @@ DEFAULT_PROXY = False
 # - rework all functions here to use the api
 # - find all `jasima` and replace it with `data`
 
+# Don't reference these variables directly, instead use get_words() or get_word()
+_WORDS: dict[Word] = {}
+_FETCHED_LANGS: list[str] = []
 
-WORDS = list(WORDS_DATA.keys())
-SANDBOX_WORDS = list(SANDBOX_DATA.keys())
+async def fetch_lang_and_defer(lang: str, ctx: discord.Interaction, ephemeral = False):
+    """Does the same thing as fetch_lang(), but defers an interaction if the translation has not already been downloaded. Use this in commands"""
+    if lang not in _FETCHED_LANGS:
+         await ctx.response.defer(ephemeral = ephemeral)
+    return fetch_lang(lang)
 
+def fetch_lang(lang: str) -> bool:
+    """Downloads a language translation of the API if and only if it has not been downloaded already, otherwise does nothing."""
+    if lang in _FETCHED_LANGS:
+        return False
+    _FETCHED_LANGS.append(lang)
 
-def get_word_data(word: str) -> Optional[Word]:
-    return WORDS_DATA.get(word)
+    for key, value in (
+        json.loads(get_site(f"https://api.linku.la/v2/words?lang={lang}")) |
+        json.loads(get_site(f"https://api.linku.la/v2/sandbox?lang={lang}"))
+    ).items():
+        if not key in _WORDS:
+            _WORDS[key] = Word(value)
+        _WORDS[key].add_lang(lang, value)
+    return True
 
+def get_non_sandbox_word(word_str: str, lang: str = "en") -> Optional[Word]:
+    return word if (word := get_word(word_str, lang)) and word.usage_category != "sandbox" else None
 
-def get_sandbox_data(word: str) -> Optional[JSON]:
-    return SANDBOX_DATA.get(word)
+def get_sandbox_word(word_str: str, lang: str = "en") -> Optional[Word]:
+    return word if (word := get_word(word_str, lang)) and word.usage_category == "sandbox" else None
 
+def get_word(word_str: str, lang: str = "en") -> Optional[Word]:
+    fetch_lang(lang)
+    return _WORDS.get(word_str)
 
-def get_any_word_data(word: str) -> Optional[Word]:
-    return get_word_data(word) or get_sandbox_data(word)
+def get_non_sandbox_words(lang: str = "en") -> dict[Word]:
+    fetch_lang(lang)
+    return [word for word in _WORDS if word.usage_category != "sandbox"]
+
+def get_sandbox_words(lang: str = "en") -> dict[Word]:
+    fetch_lang(lang)
+    return [word for word in _WORDS if word.usage_category == "sandbox"]
+
+def get_words(lang: str = "en") -> dict[Word]:
+    fetch_lang(lang)
+    return _WORDS
 
 
 def get_lukapona_data(word: str) -> Optional[Sign]:
     return SIGNS_DATA_BY_WORD.get(word)
 
 
-def get_random_word(min_usage: str = "common") -> Tuple[str, Word]:
+def get_random_word(min_usage: str = "common") -> Word:
     word = random.choice(get_words_min_usage_filter(min_usage))
-    response = get_word_data(word)
-    return word, response
-
-
-def get_usage(word: str) -> int:
-    """Given a word, return the usage of that word if it exists or 0"""
-    return deep_get_callable(WORDS_DATA, word, "usage", dict.values, list, -1) or 0
+    return word
 
 
 def get_words_min_usage_filter(usage: str):
     """Make autocomplete better for word selection, prune to only words at or above selected usage"""
-    return [word for word in WORDS if get_usage(word) >= UsageCategory[usage].value]
+    return [word for word in _WORDS.values() if word.get_usage() >= UsageCategory[usage].value]
 
 
 def deep_get(obj: JSON, *keys: int | str) -> JSON:
@@ -156,26 +172,6 @@ def deep_get(obj: JSON, *keys: int | str) -> JSON:
             # or a key that is incompatible with the current obj
             return None
     return obj
-
-
-def deep_get_callable(
-    obj: JSON,
-    *keys: int | str | Callable[[JSON], JSON],
-) -> JSON:
-    for key in keys:
-        if isinstance(obj, Dict) and isinstance(key, str):
-            obj = obj.get(key)
-        elif isinstance(obj, List) and isinstance(key, int):
-            obj = obj[key] if key < len(obj) else None
-        elif isinstance(key, Callable):  # obj agnostic
-            obj = key(obj)
-        else:
-            return None
-    return obj
-
-
-def deep_get_word_data(*keys: int | str) -> JSON:
-    return deep_get(WORDS_DATA, *keys)  # type: ignore because `sona` is just more specific JSON
 
 
 def deep_get_sign_data(*keys: int | str) -> JSON:

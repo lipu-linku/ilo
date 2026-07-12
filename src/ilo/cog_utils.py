@@ -99,7 +99,7 @@ async def word_autocomplete(ctx: AutocompleteContext) -> List[str]:
     # we could pre-compute the usages to save some time
     usage: str = preferences.get_or_default(str(ctx.interaction.user.id), "usage")
     words = data.get_words_min_usage_filter(usage)
-    return autocomplete_filter(ctx.value, words)
+    return autocomplete_filter(ctx.value, [word.string for word in words])
 
 
 async def font_autocomplete(ctx: AutocompleteContext) -> List[str]:

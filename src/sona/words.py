@@ -1,374 +1,463 @@
 # Generated from the JSON schema of sona Linku
 
 
-from typing import Dict, List, Literal, Required, TypedDict, Union
+from typing import Literal, Required, TypedDict
 
-Words = Dict[str, "_WordsAdditionalproperties"]
+Words = dict[str, "_Schema1"]
 """
 A raw data object containing dictionary info about Toki Pona words
 
 propertyNames:
-  minLength: 1
+  $ref: '#/$defs/__schema0'
 """
 
 
-class _WordsAdditionalproperties(TypedDict, total=False):
+_Schema0 = str
+"""
+A unique identifier for an object in Linku. Generally named after the object.
+
+minLength: 1
+"""
+
+
+class _Schema1(TypedDict, total=False):
     """General info on a Toki Pona word"""
 
-    id: Required[str]
+    id: Required["_Schema0"]
     """
-    A unique identifier for the word. Usually the word but may have an integer added in case of a word with multiple definitions (like "we")
+    A unique identifier for an object in Linku. Generally named after the object.
 
     minLength: 1
 
     Required property
     """
 
-    author_verbatim: Required[str]
+    word: Required["_Schema3"]
     """
-    The author's original definition, taken verbatim in their words
+    The latin alphabet representation of the word.
+
+    minLength: 1
 
     Required property
     """
 
-    author_verbatim_source: Required[str]
-    """
-    Where the author's original definition is located (usually Discord)
+    author_verbatim: str
+    author_source: "_Schema7"
+    """ The source or origin of this object, often a URL. """
 
-    Required property
-    """
-
-    book: Required["_WordsAdditionalpropertiesBook"]
+    book: Required["_Schema8"]
     """
     Which official Toki Pona book was this word featured in, if any.
 
     Required property
     """
 
-    coined_era: Required["_WordsAdditionalpropertiesCoinedEra"]
+    coined_era: Required["_Schema9"]
     """
-    When this word was coined (relative to the publication dates of the official Toki Pona books, if known)
-
-    Aggregation type: anyOf
+    The period of time in which this word was coined, relative to the publication of the first two official Toki Pona books
 
     Required property
     """
 
-    coined_year: Required[str]
+    creation_date: Required["_Schema10"]
     """
-    The year when this word was coined (if known)
+    When this word was coined, to precision known.
+
+    pattern: ^(?:|(?<year>20\d{2})(?:-(?<month>0[1-9]|1[0-2])(?:-(?<day>0[1-9]|[12]\d|3[01]))?)?|(?<startYear>20\d{2})-(?<endYear>20\d{2}))$
 
     Required property
     """
 
-    creator: Required[List[str]]
+    author: Required["_Schema11"]
     """
-    The person who created this word (if known)
+    The name or names of those involved in creating this word.
 
     Required property
     """
 
-    ku_data: Dict[str, "_WordsAdditionalpropertiesKuDataAdditionalproperties"]
+    ku_data: "_Schema14"
     """
-    The usage data of the word as described in ku (the official Toki Pona dictionary)
-
     propertyNames:
+      __type__: string
+      description: A possible translation of the word into English, as listed in the Toki
+        Pona dictionary.
       minLength: 1
     """
 
-    see_also: Required[List[str]]
+    parent_id: "_Schema0"
     """
-    A list of related words
+    A unique identifier for an object in Linku. Generally named after the object.
+
+    minLength: 1
+    """
+
+    see_also: Required["_Schema19"]
+    """
+    The IDs of one or more objects related to this one.
 
     Required property
     """
 
-    resources: "_WordsAdditionalpropertiesResources"
-    """ Non-Linku resources related to the specific word, such as wiki links. """
+    resources: Required["_Schema20"]
+    """
+    Non-Linku resources related to the specific word, such as wiki links.
 
-    representations: "_WordsAdditionalpropertiesRepresentations"
-    """ Ways of representing this word in the real world, via text/computers """
+    Required property
+    """
 
-    source_language: Required[str]
+    representations: Required["_Schema24"]
+    """
+    Ways of representing this word via text/computers
+
+    Required property
+    """
+
+    source_language: Required["_Schema35"]
     """
     The language this word originated from
 
-    Required property
-    """
-
-    usage_category: Required["_WordsAdditionalpropertiesUsageCategory"]
-    """
-    The word's usage category, according to a survey performed by the Linku Project
+    minLength: 1
 
     Required property
     """
 
-    word: Required[str]
+    usage_category: Required["_Schema36"]
     """
-    The word's actual text, in case of a word with multiple definitions (like "we")
+    The word's usage category, derived from the data of the annual Linku word survey.
 
     Required property
     """
 
-    deprecated: Required[bool]
+    deprecated: Required["_Schema37"]
     """
-    Whether or not the word is considered deprecated by its author.
+    Whether this word is considered deprecated by its author(s).
 
     Required property
     """
 
-    etymology: Required[List["_WordsAdditionalpropertiesEtymologyItem"]]
-    """
-    Unlocalized etymological values regarding this word's origin
-
-    Required property
-    """
-
-    audio: Required[List["_WordsAdditionalpropertiesAudioItem"]]
+    audio: Required[list["_Schema38Item"]]
     """ Required property """
 
-    pu_verbatim: "_WordsAdditionalpropertiesPuVerbatim"
-    """ The original definition of the word in pu, the first official Toki Pona book """
-
-    usage: Required[Dict[str, "_WordsAdditionalpropertiesUsageAdditionalproperties"]]
+    pu_verbatim: "_Schema42"
+    usage: Required["_Schema44"]
     """
-    The percentage of people in the Toki Pona community who use this word, according to surveys performed by the Linku Project
+    The percentage of respondents to the annual Linku word survey who report to use this word, by the date of the survey.
 
     propertyNames:
-      pattern: ^20\d{2}-(0[1-9]|1[0-2])$
+      $ref: '#/$defs/__schema45'
 
     Required property
     """
 
-    translations: Required[
-        Dict[str, "_WordsAdditionalpropertiesTranslationsAdditionalproperties"]
-    ]
+    glyph_ids: Required["_Schema19"]
+    """
+    The IDs of one or more objects related to this one.
+
+    Required property
+    """
+
+    primary_glyph_id: "_Schema0"
+    """
+    A unique identifier for an object in Linku. Generally named after the object.
+
+    minLength: 1
+    """
+
+    image: "_Schema22"
+    """
+    A URL pointing to some external resource.
+
+    format: uri
+    """
+
+    svg: "_Schema22"
+    """
+    A URL pointing to some external resource.
+
+    format: uri
+    """
+
+    translations: Required["_Schema51"]
     """ Required property """
 
 
-class _WordsAdditionalpropertiesAudioItem(TypedDict, total=False):
-    """Audio files of the words pronounced out loud"""
-
-    author: Required[str]
-    """
-    The author of the audio file in `link`.
-
-    Required property
-    """
-
-    link: Required[str]
-    """
-    A link to the audio file for the word, pronounced by `author`.
-
-    format: uri
-
-    Required property
-    """
-
-
-_WordsAdditionalpropertiesBook = Union[
-    Literal["pu"], Literal["ku suli"], Literal["ku lili"], Literal["none"]
-]
-""" Which official Toki Pona book was this word featured in, if any. """
-_WORDSADDITIONALPROPERTIESBOOK_PU: Literal["pu"] = "pu"
-"""The values for the 'Which official Toki Pona book was this word featured in, if any' enum"""
-_WORDSADDITIONALPROPERTIESBOOK_KU_SULI: Literal["ku suli"] = "ku suli"
-"""The values for the 'Which official Toki Pona book was this word featured in, if any' enum"""
-_WORDSADDITIONALPROPERTIESBOOK_KU_LILI: Literal["ku lili"] = "ku lili"
-"""The values for the 'Which official Toki Pona book was this word featured in, if any' enum"""
-_WORDSADDITIONALPROPERTIESBOOK_NONE: Literal["none"] = "none"
-"""The values for the 'Which official Toki Pona book was this word featured in, if any' enum"""
-
-
-_WordsAdditionalpropertiesCoinedEra = Union[
-    "_WordsAdditionalpropertiesCoinedEraAnyof0", Literal[""]
-]
+_Schema10 = str
 """
-When this word was coined (relative to the publication dates of the official Toki Pona books, if known)
+When this word was coined, to precision known.
 
-Aggregation type: anyOf
+pattern: ^(?:|(?<year>20\d{2})(?:-(?<month>0[1-9]|1[0-2])(?:-(?<day>0[1-9]|[12]\d|3[01]))?)?|(?<startYear>20\d{2})-(?<endYear>20\d{2}))$
 """
 
 
-_WordsAdditionalpropertiesCoinedEraAnyof0 = Union[
-    Literal["pre-pu"], Literal["post-pu"], Literal["post-ku"]
-]
-_WORDSADDITIONALPROPERTIESCOINEDERAANYOF0_PRE_PU: Literal["pre-pu"] = "pre-pu"
-"""The values for the '_WordsAdditionalpropertiesCoinedEraAnyof0' enum"""
-_WORDSADDITIONALPROPERTIESCOINEDERAANYOF0_POST_PU: Literal["post-pu"] = "post-pu"
-"""The values for the '_WordsAdditionalpropertiesCoinedEraAnyof0' enum"""
-_WORDSADDITIONALPROPERTIESCOINEDERAANYOF0_POST_KU: Literal["post-ku"] = "post-ku"
-"""The values for the '_WordsAdditionalpropertiesCoinedEraAnyof0' enum"""
+_Schema11 = list["_Schema12"]
+""" The name or names of those involved in creating this word. """
 
 
-class _WordsAdditionalpropertiesEtymologyItem(TypedDict, total=False):
-    word: str
-    """ One of the root words of this word, as written out in its language of origin """
-
-    alt: str
-    """ A latinized representation of the "word" field """
+_Schema12 = str
+""" minLength: 1 """
 
 
-_WordsAdditionalpropertiesKuDataAdditionalproperties = Union[int, float]
+_Schema14 = dict[str, "_Schema15"]
 """
-The percentage of ku survey respondents who report this translation as accurate to their usage.
+propertyNames:
+  __type__: string
+  description: A possible translation of the word into English, as listed in the Toki
+    Pona dictionary.
+  minLength: 1
+"""
 
+
+_Schema15 = int | float
+"""
 minimum: 0
 maximum: 100
 """
 
 
-class _WordsAdditionalpropertiesPuVerbatim(TypedDict, total=False):
-    """The original definition of the word in pu, the first official Toki Pona book"""
+_Schema19 = list["_Schema0"]
+""" The IDs of one or more objects related to this one. """
 
-    en: Required[str]
+
+class _Schema20(TypedDict, total=False):
+    """Non-Linku resources related to the specific word, such as wiki links."""
+
+    sona_pona: "_Schema22"
     """
-    The original definition in the English version of pu
+    A URL pointing to some external resource.
 
-    Required property
-    """
-
-    fr: Required[str]
-    """
-    The original definition in the French version of pu
-
-    Required property
+    format: uri
     """
 
-    de: Required[str]
+    lipamanka_semantic: "_Schema22"
     """
-    The original definition in the German version of pu
+    A URL pointing to some external resource.
 
-    Required property
-    """
-
-    eo: Required[str]
-    """
-    The original definition in the Esperanto version of pu
-
-    Required property
+    format: uri
     """
 
 
-class _WordsAdditionalpropertiesRepresentations(TypedDict, total=False):
-    """Ways of representing this word in the real world, via text/computers"""
+_Schema22 = str
+"""
+A URL pointing to some external resource.
 
-    sitelen_emosi: str
+format: uri
+"""
+
+
+class _Schema24(TypedDict, total=False):
+    """Ways of representing this word via text/computers"""
+
+    sitelen_emosi: "_Schema26"
     """
-    The sitelen emosi representation of this word, a script for writing Toki Pona using emoji
-
+    minLength: 1
+    format: emoji
     pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$
     """
 
-    sitelen_jelo: List["_WordsAdditionalpropertiesRepresentationsSitelenJeloItem"]
-    """
-    One or more example emojis for how the word can be written in sitelen jelo
+    sitelen_jelo: "_Schema28"
+    """ minItems: 1 """
 
-    minItems: 1
+    ligatures: list["_Schema31Item"]
+    sitelen_sitelen: "_Schema22"
     """
-
-    ligatures: List["_WordsAdditionalpropertiesRepresentationsLigaturesItem"]
-    """ A list of sitelen Lasina representations of the word, used by ligature fonts to visually convert latin characters into sitelen pona """
-
-    sitelen_sitelen: str
-    """
-    A URL pointing to an image of this word's sitelen sitelen hieroglyphic block
+    A URL pointing to some external resource.
 
     format: uri
     """
 
-    ucsur: str
-    """
-    The word's UCSUR codepoint, as defined in https://www.kreativekorp.com/ucsur/charts/sitelen.html
-
-    pattern: ^U\+[\da-fA-F]{4,6}$
-    """
+    ucsur: "_Schema34"
+    """ pattern: ^U\+[\da-fA-F]{4,6}$ """
 
 
-_WordsAdditionalpropertiesRepresentationsLigaturesItem = str
+_Schema26 = str
+"""
+minLength: 1
+format: emoji
+pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$
+"""
+
+
+_Schema28 = list["_Schema29"]
+""" minItems: 1 """
+
+
+_Schema29 = str
+"""
+minLength: 1
+format: emoji
+pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$
+"""
+
+
+_Schema3 = str
+"""
+The latin alphabet representation of the word.
+
+minLength: 1
+"""
+
+
+_Schema31Item = str
 """ minLength: 1 """
 
 
-_WordsAdditionalpropertiesRepresentationsSitelenJeloItem = str
-""" pattern: ^(\p{Extended_Pictographic}|\p{Emoji_Component})+$ """
+_Schema34 = str
+""" pattern: ^U\+[\da-fA-F]{4,6}$ """
 
 
-class _WordsAdditionalpropertiesResources(TypedDict, total=False):
-    """Non-Linku resources related to the specific word, such as wiki links."""
+_Schema35 = str
+"""
+The language this word originated from
 
-    sona_pona: str
-    """
-    A link to the word's page on sona.pona.la, a Toki Pona wiki. May redirect for words with references but no dedicated page.
-
-    format: uri
-    """
-
-    lipamanka_semantic: str
-    """
-    A link to lipamanka's description of the word's semantic space.
-
-    format: uri
-    """
+minLength: 1
+"""
 
 
-class _WordsAdditionalpropertiesTranslationsAdditionalproperties(
-    TypedDict, total=False
-):
-    commentary: Required[str]
-    """ Required property """
+_Schema36 = (
+    Literal["core"]
+    | Literal["common"]
+    | Literal["uncommon"]
+    | Literal["obscure"]
+    | Literal["sandbox"]
+)
+""" The word's usage category, derived from the data of the annual Linku word survey. """
+_SCHEMA36_CORE: Literal["core"] = "core"
+"""The values for the 'The word's usage category, derived from the data of the annual Linku word survey' enum"""
+_SCHEMA36_COMMON: Literal["common"] = "common"
+"""The values for the 'The word's usage category, derived from the data of the annual Linku word survey' enum"""
+_SCHEMA36_UNCOMMON: Literal["uncommon"] = "uncommon"
+"""The values for the 'The word's usage category, derived from the data of the annual Linku word survey' enum"""
+_SCHEMA36_OBSCURE: Literal["obscure"] = "obscure"
+"""The values for the 'The word's usage category, derived from the data of the annual Linku word survey' enum"""
+_SCHEMA36_SANDBOX: Literal["sandbox"] = "sandbox"
+"""The values for the 'The word's usage category, derived from the data of the annual Linku word survey' enum"""
 
-    definition: Required[str]
+
+_Schema37 = bool
+""" Whether this word is considered deprecated by its author(s). """
+
+
+class _Schema38Item(TypedDict, total=False):
+    """Audio files of the words pronounced out loud"""
+
+    author: Required["_Schema12"]
     """
     minLength: 1
 
     Required property
     """
 
-    etymology: Required[
-        List["_WordsAdditionalpropertiesTranslationsAdditionalpropertiesEtymologyItem"]
-    ]
-    """ Required property """
-
-    sp_etymology: Required[str]
-    """ Required property """
-
-
-class _WordsAdditionalpropertiesTranslationsAdditionalpropertiesEtymologyItem(
-    TypedDict, total=False
-):
-    definition: str
-    """ The localized definition of the root word in its origin language """
-
-    language: Required[str]
+    link: Required["_Schema22"]
     """
-    The localized name of the language this word originated from
+    A URL pointing to some external resource.
+
+    format: uri
 
     Required property
     """
 
 
-_WordsAdditionalpropertiesUsageAdditionalproperties = Union[int, float]
+class _Schema42(TypedDict, total=False):
+    en: Required["_Schema43"]
+    """
+    Localized definition on the parent, such as a word or luka pona sign
+
+    minLength: 1
+
+    Required property
+    """
+
+    fr: Required["_Schema43"]
+    """
+    Localized definition on the parent, such as a word or luka pona sign
+
+    minLength: 1
+
+    Required property
+    """
+
+    de: Required["_Schema43"]
+    """
+    Localized definition on the parent, such as a word or luka pona sign
+
+    minLength: 1
+
+    Required property
+    """
+
+    eo: Required["_Schema43"]
+    """
+    Localized definition on the parent, such as a word or luka pona sign
+
+    minLength: 1
+
+    Required property
+    """
+
+
+_Schema43 = str
 """
-minimum: 0
-maximum: 100
+Localized definition on the parent, such as a word or luka pona sign
+
+minLength: 1
 """
 
 
-_WordsAdditionalpropertiesUsageCategory = Union[
-    Literal["core"],
-    Literal["common"],
-    Literal["uncommon"],
-    Literal["obscure"],
-    Literal["sandbox"],
-]
-""" The word's usage category, according to a survey performed by the Linku Project """
-_WORDSADDITIONALPROPERTIESUSAGECATEGORY_CORE: Literal["core"] = "core"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_WORDSADDITIONALPROPERTIESUSAGECATEGORY_COMMON: Literal["common"] = "common"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_WORDSADDITIONALPROPERTIESUSAGECATEGORY_UNCOMMON: Literal["uncommon"] = "uncommon"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_WORDSADDITIONALPROPERTIESUSAGECATEGORY_OBSCURE: Literal["obscure"] = "obscure"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
-_WORDSADDITIONALPROPERTIESUSAGECATEGORY_SANDBOX: Literal["sandbox"] = "sandbox"
-"""The values for the 'The word's usage category, according to a survey performed by the Linku Project' enum"""
+_Schema44 = dict[str, "_Schema15"]
+"""
+The percentage of respondents to the annual Linku word survey who report to use this word, by the date of the survey.
+
+propertyNames:
+  $ref: '#/$defs/__schema45'
+"""
+
+
+class _Schema51(TypedDict, total=False):
+    commentary: Required[str]
+    """
+    Localized commentary on this word, such as history, clarifications, or trivia.
+
+    Required property
+    """
+
+    etymology: Required[str]
+    """
+    Localized etymology of this word.
+
+    Required property
+    """
+
+    definition: Required["_Schema43"]
+    """
+    Localized definition on the parent, such as a word or luka pona sign
+
+    minLength: 1
+
+    Required property
+    """
+
+
+_Schema7 = str
+""" The source or origin of this object, often a URL. """
+
+
+_Schema8 = Literal["pu"] | Literal["ku suli"] | Literal["ku lili"] | Literal["none"]
+""" Which official Toki Pona book was this word featured in, if any. """
+_SCHEMA8_PU: Literal["pu"] = "pu"
+"""The values for the 'Which official Toki Pona book was this word featured in, if any' enum"""
+_SCHEMA8_KU_SULI: Literal["ku suli"] = "ku suli"
+"""The values for the 'Which official Toki Pona book was this word featured in, if any' enum"""
+_SCHEMA8_KU_LILI: Literal["ku lili"] = "ku lili"
+"""The values for the 'Which official Toki Pona book was this word featured in, if any' enum"""
+_SCHEMA8_NONE: Literal["none"] = "none"
+"""The values for the 'Which official Toki Pona book was this word featured in, if any' enum"""
+
+
+_Schema9 = Literal["pre-pu"] | Literal["post-pu"] | Literal["post-ku"]
+""" The period of time in which this word was coined, relative to the publication of the first two official Toki Pona books """
+_SCHEMA9_PRE_PU: Literal["pre-pu"] = "pre-pu"
+"""The values for the 'The period of time in which this word was coined, relative to the publication of the first two official Toki Pona books' enum"""
+_SCHEMA9_POST_PU: Literal["post-pu"] = "post-pu"
+"""The values for the 'The period of time in which this word was coined, relative to the publication of the first two official Toki Pona books' enum"""
+_SCHEMA9_POST_KU: Literal["post-ku"] = "post-ku"
+"""The values for the 'The period of time in which this word was coined, relative to the publication of the first two official Toki Pona books' enum"""

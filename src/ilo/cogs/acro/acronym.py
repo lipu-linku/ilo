@@ -15,23 +15,23 @@ books_allowed = {
 }
 
 
-def respond(word, book_label):
+def respond(text: str, book_label):
     """
     return a dictionary mapping single letters to the list of words starting with that letter
     """
-    fetched = sorted(data.WORDS_DATA.values(), key=lambda x: books_order[x["book"]])
+    fetched = sorted(data.get_non_sandbox_words().values(), key=lambda word: books_order[word.book])
     responses = {}
     for entry in fetched:
-        if entry["book"] in books_allowed[book_label]:
-            w = entry["word"]
-            if w[0].lower() not in responses:
-                responses[w[0].lower()] = []
-            responses[w[0].lower()].append(
-                templates_books[entry["book"].lower()].format(w)
+        if entry.book in books_allowed[book_label]:
+            char = entry.string[0].lower()
+            if char not in responses:
+                responses[char] = []
+            responses[char].append(
+                templates_books[entry.book.lower()].format(entry.string)
             )
-    word = sorted(set(word.lower()))
+    text = sorted(set(text.lower()))
     response = "\n".join(
-        ", ".join(responses[letter]) for letter in word if letter in responses
+        ", ".join(responses[letter]) for letter in text if letter in responses
     )
     if not response:
         response = (

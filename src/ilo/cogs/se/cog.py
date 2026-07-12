@@ -7,7 +7,7 @@ from discord import ApplicationContext, Bot
 from discord.ext.commands import Cog
 
 from ilo.cog_utils import Locale, load_file
-from ilo.data import get_word_data
+from ilo.data import Word
 from ilo.strings import spoiler_text
 
 UserChoices = Literal["sitelen jelo"] | Literal["sitelen pilin"]
@@ -72,12 +72,9 @@ def clean_string(string: str):
     return clean_string
 
 
-def sitelen_emosi(word: str, chosen_system: LinkuEmojiReprs) -> str:
-    word_data = get_word_data(word)
-    sitelen_ken: str | list[str] | None = (
-        word_data.get("representations", {}).get(chosen_system) if word_data else None
-    )
-    if not word_data or not sitelen_ken:
+def sitelen_emosi(word: Word, chosen_system: LinkuEmojiReprs) -> str:
+    sitelen_ken: str | list[str] | None = word.representations.get(chosen_system)
+    if not sitelen_ken:
         return fallback_emoji(word)
 
     if isinstance(sitelen_ken, list):
@@ -87,9 +84,9 @@ def sitelen_emosi(word: str, chosen_system: LinkuEmojiReprs) -> str:
     return sitelen_ken
 
 
-def fallback_emoji(word: str) -> str:
+def fallback_emoji(word: Word) -> str:
     chars: list[str] = []
-    for letter in word:
+    for letter in word.string:
         chars.append(extraemoji[letter])
     return " ".join(chars)
 

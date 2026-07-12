@@ -8,7 +8,6 @@ from ilo.cog_utils import (
     Locale,
     autocomplete_filter,
     build_autocomplete,
-    startswith_filter,
 )
 from ilo.preferences import preferences
 
@@ -107,7 +106,7 @@ class CogPreferences(Cog):
         self,
         ctx,
         preference: BridgeOption(
-            str, name="preference", autocomplete=prefs_autocomplete
+            str, name="preferences", autocomplete=prefs_autocomplete
         ),
     ):
         if template := preferences.templates.get(preference):
