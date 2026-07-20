@@ -9,6 +9,8 @@
   "sp-bgstyle": "Select background or outline for your background style.",
   "sp-convert": "Whether or not to convert text from and to ucsur.",
   "sp-proxy": "Whether to send an image via the bot or proxying you.",
+  "sp-linewrap": "Whether to wrap text when image becomes wider than specified line width",
+  "sp-linewidth": "The width in pixels after which a line gets wrapped if line wrap is enabled",
 
   "sitelenpona": "Get sitelen pona of a toki pona phrase",
   "sitelenpona-text": "The phrase you want to convert to sitelen pona.",
@@ -20,6 +22,8 @@
   "sitelenpona-bgstyle": "Select background or outline for your background style.",
   "sitelenpona-convert": "Whether or not to convert text from and to ucsur.",
   "sitelenpona-proxy": "Whether to send an image via the bot or proxying you.",
+  "sitelenpona-linewrap": "Whether to wrap text when image becomes wider than specified line width",
+  "sitelenpona-linewidth": "The width in pixels after which a line gets wrapped if line wrap is enabled",
 
   "ss": "Get the sitelen sitelen of a toki pona phrase",
   "ss-text": "The phrase you want to convert to sitelen sitelen.",
@@ -29,6 +33,8 @@
   "ss-hide": "Whether to show the image to only you.",
   "ss-bgstyle": "Select background or outline for your background style.",
   "ss-proxy": "Whether to send an image via the bot or proxying you.",
+  "ss-linewrap": "Whether to wrap text when image becomes wider than specified line width",
+  "ss-linewidth": "The width in pixels after which a line gets wrapped if line wrap is enabled",
 
   "sitelensitelen": "Get the sitelen sitelen of a toki pona phrase",
   "sitelensitelen-text": "The phrase you want to convert to sitelen sitelen.",
@@ -38,6 +44,8 @@
   "sitelensitelen-hide": "Whether to show the image to only you.",
   "sitelensitelen-bgstyle": "Select background or outline for your background style.",
   "sitelensitelen-proxy": "Whether to send an image via the bot or proxying you.",
+  "sitelensitelen-linewrap": "Whether to wrap text when image becomes wider than specified line width",
+  "sitelensitelen-linewidth": "The width in pixels after which a line gets wrapped if line wrap is enabled",
 
   "prefs-fontsize": "Set the font size that sitelen pona will be displayed as",
   "prefs-fontsize-fallback": "The fontsize ***{}*** is not in the range 14 to 500. Using the default ***{}***.",
@@ -67,5 +75,17 @@
   "prefs-proxy-fallback": "The proxy setting ***{}*** is invalid. Using the default ***{}***.",
   "prefs-proxy-pref-invalid": "The proxy setting ***{}*** is in your preferences but not valid. Using the default ***{}***.",
   "prefs-proxy-choice-invalid": "The proxy setting ***{}*** is invalid. Did not update preferences.",
-  "prefs-proxy-option": "Enable or disable proxying."
+  "prefs-proxy-option": "Enable or disable proxying.",
+
+  "prefs-linewrap": "Set whether to wrap text when image becomes wider than specified line width",
+  "prefs-linewrap-fallback": "The line wrap setting ***{}*** is invalid. Using the default ***{}***.",
+  "prefs-linewrap-pref-invalid": "The line wrap setting ***{}*** is in your preferences but not valid. Using the default ***{}***.",
+  "prefs-linewrap-choice-invalid": "The line wrap setting ***{}*** is invalid. Did not update preferences.",
+  "prefs-linewrap-option": "Enable or disable line wrapping.",
+
+  "prefs-linewidth": "Set the width in pixels after which a line gets wrapped if line wrap is enabled",
+  "prefs-linewidth-fallback": "The line width setting ***{}*** is invalid. Using the default ***{}***.",
+  "prefs-linewidth-pref-invalid": "The line width setting ***{}*** is in your preferences but not valid. Using the default ***{}***.",
+  "prefs-linewidth-choice-invalid": "The line width setting ***{}*** is invalid. Did not update preferences.",
+  "prefs-linewidth-option": "Set the width in pixels after which a line gets wrapped if line wrap is enabled"
 }

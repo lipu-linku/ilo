@@ -79,6 +79,22 @@ class CogSitelen(Cog):
                 validation=lambda x: isinstance(x, bool),
             )
         )
+        preferences.register(
+            Template(
+                locale=self.locale,
+                name="linewrap",
+                default=data.DEFAULT_LINE_WRAP,
+                validation=lambda x: isinstance(x, bool),
+            )
+        )
+        preferences.register(
+            Template(
+                locale=self.locale,
+                name="linewidth",
+                default=data.DEFAULT_LINE_WIDTH,
+                validation=utils.is_valid_line_width,
+            )
+        )
 
     locale = utils.Locale(__file__)
 
@@ -92,6 +108,9 @@ class CogSitelen(Cog):
     @locale.option("sp-hide")
     # @locale.option("sp-proxy")
     @locale.option("sp-convert")
+    @locale.option("sp-linewrap")
+    @locale.option("sp-linewidth")
+
     async def slash_sp(
         self,
         ctx: ApplicationContext,
@@ -104,6 +123,8 @@ class CogSitelen(Cog):
         hide: bool = False,
         # proxy: bool = False,
         convert: bool = False,
+        linewrap: bool = False,
+        linewidth: int = 0
     ):
         await self.sp(
             ctx,
@@ -116,6 +137,8 @@ class CogSitelen(Cog):
             hide,
             # proxy,
             convert,
+            linewrap,
+            linewidth
         )
 
     @locale.command("sitelenpona")
@@ -140,6 +163,8 @@ class CogSitelen(Cog):
         hide: bool = False,
         # proxy: bool = False,
         convert: bool = False,
+        linewrap: bool = False,
+        linewidth: int = 0
     ):
         await self.sp(
             ctx,
@@ -152,6 +177,8 @@ class CogSitelen(Cog):
             hide,
             # proxy,
             convert,
+            linewrap,
+            linewidth
         )
 
     @locale.command("ss")
@@ -166,12 +193,15 @@ class CogSitelen(Cog):
         self,
         ctx: ApplicationContext,
         text: str,
+        font: str = "",
         fontsize: int = 0,
         color: str = "",
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
         # proxy: bool = False,
+        linewrap: bool = False,
+        linewidth: int = 0
     ):
         await self.sp(
             ctx,
@@ -183,6 +213,9 @@ class CogSitelen(Cog):
             spoiler,
             hide,
             # proxy,
+            False,
+            linewrap,
+            linewidth
         )
 
     @locale.command("sitelensitelen")
@@ -197,12 +230,15 @@ class CogSitelen(Cog):
         self,
         ctx: ApplicationContext,
         text: str,
+        font: str = "",
         fontsize: int = 0,
         color: str = "",
         bgstyle: str = "",
         spoiler: bool = False,
         hide: bool = False,
         # proxy: bool = False,
+        linewrap: bool = False,
+        linewidth: int = 0
     ):
         await self.sp(
             ctx,
@@ -215,6 +251,8 @@ class CogSitelen(Cog):
             hide,
             # proxy,
             False,
+            linewrap,
+            linewidth
         )
 
     async def make_sp_reply(
@@ -227,6 +265,8 @@ class CogSitelen(Cog):
         bgstyle: str = "",
         spoiler: bool = False,
         convert: bool = False,
+        linewrap: bool = False,
+        linewidth: int = 0
     ) -> tuple[File, list[str]]:
         user_id = str(ctx.author.id)
 
@@ -237,6 +277,8 @@ class CogSitelen(Cog):
         fontsize = await utils.handle_pref_error(ctx, user_id, "fontsize", fontsize)
         color = await utils.handle_pref_error(ctx, user_id, "color", color)
         bgstyle = await utils.handle_pref_error(ctx, user_id, "bgstyle", bgstyle)
+        linewrap = await utils.handle_pref_error(ctx, user_id, "linewrap", linewrap)
+        linewidth = await utils.handle_pref_error(ctx, user_id, "linewidth", linewidth)
         # TODO: get channel name or user display name?
         # we can't stop them from getting smooshed in the render process...
         text, refs = rm_refs(text)
@@ -250,7 +292,7 @@ class CogSitelen(Cog):
         text = unescape_newline(text)
         # desktop alt text has no newlines
         image = io.BytesIO(
-            sitelen.display(text, font, fontsize, utils.rgb_tuple(color), bgstyle)
+            sitelen.display(text, font, fontsize, utils.rgb_tuple(color), bgstyle, linewrap, linewidth)
         )
         filename = text_to_filename(text) + ".png"
         file = File(
@@ -275,6 +317,8 @@ class CogSitelen(Cog):
         spoiler: bool = False,
         hide: bool = False,
         convert: bool = False,
+        linewrap: bool = False,
+        linewidth: int = 0
     ):
         user_id = str(ctx.author.id)
         proxy = await utils.handle_pref_error(ctx, user_id, "proxy", False)
@@ -290,6 +334,8 @@ class CogSitelen(Cog):
             bgstyle,
             spoiler,
             convert,
+            linewrap,
+            linewidth
         )
 
         kwargs["file"] = file
