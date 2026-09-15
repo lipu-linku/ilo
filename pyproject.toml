@@ -42,8 +42,12 @@ extend-ignore = ["E203", "E501", "F722", "E402"]
 # E402 conflicts with isort
 
 [tool.pyright]
-include = ["public"]
-exclude = ["**/__pycache__", "__pypackages__", ".venv"]
+include = ["src"]
 venvPath = "."
 venv = ".venv"
 executionEnvironments = [{ root = "." }]
+
+[tool.mypy]
+files = ["./src"]
+[tool.ty.src]
+include = ["src"]
