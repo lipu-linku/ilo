@@ -1,6 +1,7 @@
 FROM python:3.13-slim-trixie AS builder
 
-COPY --exclude=ijo --exclude=kemeka . /project
+COPY src /project/src
+COPY pyproject.toml uv.lock /project
 
 WORKDIR /project
 ENV UV_PYTHON_DOWNLOADS=0
