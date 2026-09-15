@@ -220,7 +220,7 @@ class NimiView(View):
             )
         )
 
-        link = word.resources["sona_pona"]
+        link = word.resources.sona_pona
         if link:
             self.add_item(
                 Button(

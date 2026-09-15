@@ -592,6 +592,7 @@ source = { editable = "." }
 dependencies = [
     { name = "audioop-lts" },
     { name = "cachetools" },
+    { name = "msgspec" },
     { name = "pillow" },
     { name = "py-cord", extra = ["speed"] },
     { name = "python-dotenv" },
@@ -612,6 +613,7 @@ dev = [
 requires-dist = [
     { name = "audioop-lts", specifier = ">=0.2.1" },
     { name = "cachetools", specifier = ">=7.0.5" },
+    { name = "msgspec", specifier = ">=0.21.1" },
     { name = "pillow", specifier = ">=9.3.0" },
     { name = "py-cord", extras = ["speed"], specifier = ">=2.3.0" },
     { name = "python-dotenv", specifier = ">=0.21.0" },

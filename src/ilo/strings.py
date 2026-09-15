@@ -72,7 +72,7 @@ def clip_for_embed(to_embed: str):
     return to_embed
 
 
-def format_ku_data(ku_data: Dict[str, int]):
+def format_ku_data(ku_data: dict[str, float]):
     """Take linku's ku data and format it like Sonja's ku data"""
     sorted_data = sorted(ku_data.items(), key=lambda x: x[1], reverse=True)
     to_format = []
