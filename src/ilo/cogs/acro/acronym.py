@@ -19,7 +19,7 @@ def respond(text: str, book_label):
     """
     return a dictionary mapping single letters to the list of words starting with that letter
     """
-    fetched = sorted(data.get_non_sandbox_words().values(), key=lambda word: books_order[word.book])
+    fetched = sorted(data.get_non_sandbox_words(), key=lambda word: books_order[word.book])
     responses = {}
     for entry in fetched:
         if entry.book in books_allowed[book_label]:

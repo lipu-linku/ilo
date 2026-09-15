@@ -100,7 +100,7 @@ DEFAULT_PROXY = False
 # - find all `jasima` and replace it with `data`
 
 # Don't reference these variables directly, instead use get_words() or get_word()
-_WORDS: dict[Word] = {}
+_WORDS: dict[str, Word] = {}
 _FETCHED_LANGS: list[str] = []
 
 async def fetch_lang_and_defer(lang: str, ctx: discord.Interaction, ephemeral = False):
@@ -124,30 +124,30 @@ def fetch_lang(lang: str) -> bool:
         _WORDS[key].add_lang(lang, value)
     return True
 
-def get_non_sandbox_word(word_str: str, lang: str = "en") -> Optional[Word]:
+def get_non_sandbox_word(word_str: str, lang: str = "en") -> Word | None:
     return word if (word := get_word(word_str, lang)) and word.usage_category != "sandbox" else None
 
-def get_sandbox_word(word_str: str, lang: str = "en") -> Optional[Word]:
+def get_sandbox_word(word_str: str, lang: str = "en") -> Word | None:
     return word if (word := get_word(word_str, lang)) and word.usage_category == "sandbox" else None
 
-def get_word(word_str: str, lang: str = "en") -> Optional[Word]:
+def get_word(word_str: str, lang: str = "en") -> Word | None:
     fetch_lang(lang)
     return _WORDS.get(word_str)
 
-def get_non_sandbox_words(lang: str = "en") -> dict[Word]:
+def get_non_sandbox_words(lang: str = "en") -> list[Word]:
     fetch_lang(lang)
-    return [word for word in _WORDS if word.usage_category != "sandbox"]
+    return [word for word in _WORDS.values() if word.usage_category != "sandbox"]
 
-def get_sandbox_words(lang: str = "en") -> dict[Word]:
+def get_sandbox_words(lang: str = "en") -> list[Word]:
     fetch_lang(lang)
-    return [word for word in _WORDS if word.usage_category == "sandbox"]
+    return [word for word in _WORDS.values() if word.usage_category == "sandbox"]
 
-def get_words(lang: str = "en") -> dict[Word]:
+def get_words(lang: str = "en") -> list[Word]:
     fetch_lang(lang)
-    return _WORDS
+    return list(_WORDS.values())
 
 
-def get_lukapona_data(word: str) -> Optional[Sign]:
+def get_lukapona_data(word: str) -> Sign | None:
     return SIGNS_DATA_BY_WORD.get(word)
 
 
@@ -163,9 +163,9 @@ def get_words_min_usage_filter(usage: str):
 
 def deep_get(obj: JSON, *keys: int | str) -> JSON:
     for key in keys:
-        if isinstance(obj, Dict) and isinstance(key, str):
+        if isinstance(obj, dict) and isinstance(key, str):
             obj = obj.get(key)
-        elif isinstance(obj, List) and isinstance(key, int):
+        elif isinstance(obj, list) and isinstance(key, int):
             obj = obj[key] if key < len(obj) else None
         else:
             # there is a key but no traversable obj
