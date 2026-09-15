@@ -50,7 +50,7 @@ To run locally:
 - [libraqm](https://github.com/HOST-Oman/libraqm)
 - Install your dependencies with pdm: `pdm install` or `make init`
 
-You likely already have the last two, but a symptom of not having them is that `/sp` will emit normal text instead of sitelen pona!
+You likely already have the last two. If not, `/sp` will fail!
 
 ### Setup
 

@@ -1,7 +1,7 @@
 import io
 import logging
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, features
 
 from ilo.cog_utils import BgStyle, Color, ColorAlpha
 
@@ -73,6 +73,8 @@ def passes_aa(color: Color, bg_color: Color, font_size: int) -> bool:
 
 # by jan Tepo
 def display(text: str, font_path: str, font_size: int, color: Color, bgstyle: BgStyle):
+    if not features.check_feature("raqm"):
+        raise ModuleNotFoundError("libraqm not available! sitelen pona rendering will not work.")
     STROKE_WIDTH = round((font_size / 133) * 5)
     LINE_SPACING = round((font_size / 2.5))
     PAD = round(font_size / 25)
