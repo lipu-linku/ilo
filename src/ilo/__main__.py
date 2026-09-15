@@ -1,7 +1,7 @@
 import logging
 import os
 
-from discord import ApplicationContext, User
+from discord import ApplicationContext, IntegrationType, User
 from discord.ext import bridge, commands
 from discord.member import Member
 from discord.permissions import Permissions
@@ -36,6 +36,10 @@ if DEBUG_GUILDS:
 bot = bridge.Bot(
     command_prefix=commands.when_mentioned_or("/"),
     debug_guilds=DEBUG_GUILDS,
+    default_command_integration_types={
+        IntegrationType.guild_install,
+        IntegrationType.user_install,
+    }
     # intents=Intents.all(),
 )
 webhooks = WebhookManager(bot)

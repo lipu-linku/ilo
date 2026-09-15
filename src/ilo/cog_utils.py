@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Literal
 
-from discord import ApplicationContext, AutocompleteContext, IntegrationType
+from discord import ApplicationContext, AutocompleteContext
 from discord.ext.bridge import bridge_command, bridge_option
 
 from ilo import data
@@ -124,12 +124,6 @@ class Locale:
         return bridge_command(
             name=name,
             description=self.locale[name],
-            integration_types=set(
-                (
-                    IntegrationType.guild_install,
-                    IntegrationType.user_install,
-                )
-            ),
             **kwargs,
         )
 
