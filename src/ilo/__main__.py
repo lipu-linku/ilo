@@ -43,6 +43,7 @@ webhooks = WebhookManager(bot)
 
 @bot.event
 async def on_ready():
+    LOG.info("Ready!")
     for index, guild in enumerate(bot.guilds):
         print("{}) {}".format(index + 1, guild.name))
 
