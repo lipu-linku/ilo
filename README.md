@@ -24,33 +24,29 @@ You can also join the Discord and talk to the maintainers!
   </a>
 </div>
 
+To run locally:
+
+- Install [uv](https://docs.astral.sh/uv/)
+- Install [fribidi](https://github.com/fribidi/fribidi) and [libraqm](https://github.com/HOST-Oman/libraqm). On Linux you likely already have these. If not, `/sp` will fail!
+- Follow the instructions in [Setup](#setup) to create a bot account.
+
+Then:
+- Run the bot: `uv run -m ilo`
+- Run tests: `uv run pytest`
+
 ## Self-hosting
 
 ### Prerequisites
 
 To run in a Podman environment (default):
 
-- Python 3.8+
-- [pdm](https://github.com/pdm-project/pdm)
 - [Podman](https://podman.io/)
 - [Podman Compose](https://github.com/containers/podman-compose)
 
-To run in Docker environment (see `Makefile`):
+To run in Docker environment:
 
-- Python 3.8+
-- [pdm](https://github.com/pdm-project/pdm)
-- [Docker](https://www.docker.com/)
+- [Docker](https://docs.docker.com/engine/)
 - [Docker Compose](https://docs.docker.com/compose/)
-
-To run locally:
-
-- Python 3.8+
-- [pdm](https://github.com/pdm-project/pdm)
-- [fribidi](https://github.com/fribidi/fribidi)
-- [libraqm](https://github.com/HOST-Oman/libraqm)
-- Install your dependencies with pdm: `pdm install` or `make init`
-
-You likely already have the last two. If not, `/sp` will fail!
 
 ### Setup
 
@@ -66,7 +62,7 @@ You likely already have the last two. If not, `/sp` will fail!
     - Attach Files
     - Use Slash Commands
 - Save your bot token to a `.env` file as `DISCORD_TOKEN=longstringofcharactersyougotfromtheportal`.
-- Run the bot: `make build up` or `make local`, if you want the containerized or local bot respectively.
+- Run the bot: `podman compose up` or `docker compose up`.
 
 ## License
 

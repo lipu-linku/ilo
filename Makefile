@@ -4,11 +4,10 @@ SUB=podman-compose
 # SUB=docker compose
 
 init:
-	pdm install
-	# pdm run pre-commit install
+	uv sync
 
 test:
-	pdm run pytest -vvrP ./tests
+	uv run pytest
 
 build:
 	${SUB} build
@@ -17,7 +16,7 @@ up:
 	${SUB} up -d
 
 local:
-	pdm run python -m ilo
+	uv run -m ilo
 
 stop:
 	${SUB} stop
