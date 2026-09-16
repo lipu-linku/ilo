@@ -151,7 +151,7 @@ def embed_response(
     embed.colour = colours[word.usage_category]
     embed.add_field(
         name="usage",
-        value=f"{word.usage_category} ({word.book.replace('none', 'no book')})",
+        value=f"{word.usage_category}",
     )
 
     embed.set_thumbnail(url=word.image)
