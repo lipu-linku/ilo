@@ -34,6 +34,7 @@ To run locally:
 Then:
 - Run the bot: `uv run -m ilo`
 - Run tests: `uv run pytest`
+- Regenerate code from JSON schemas: `uv run datamodel-codegen --all-jobs`
 
 ## Self-hosting
 

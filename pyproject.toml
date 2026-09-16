@@ -7,12 +7,12 @@ dependencies = [
     "py-cord[speed]>=2.3.0",
     "Pillow>=9.3.0",
     "python-dotenv>=0.21.0",
-    "jsonschema-gentypes>=2.4.0",
     # a 3.13 migration issue. required by pycord but not given in requirements.
     # used to be a standard library but removed in 3.13, i think?
     "audioop-lts>=0.2.1",
     "cachetools>=7.0.5",
     "sonatoki>=0.11.4",
+    "msgspec>=0.21.1",
 ]
 requires-python = ">=3.13"
 license = { text = "GPL-3.0" }
@@ -24,6 +24,7 @@ dev = [
     "pre-commit>=2.20.0",
     "isort>=5.10.1",
     "flake9>=3.8.3.post2",
+    "datamodel-code-generator>=0.81.0",
 ]
 
 [build-system]
@@ -42,8 +43,76 @@ extend-ignore = ["E203", "E501", "F722", "E402"]
 # E402 conflicts with isort
 
 [tool.pyright]
-include = ["public"]
-exclude = ["**/__pycache__", "__pypackages__", ".venv"]
+include = ["src"]
 venvPath = "."
 venv = ".venv"
-executionEnvironments = [{ root = "." }]
+
+[tool.mypy]
+files = ["./src"]
+[tool.ty.src]
+include = ["src"]
+
+[tool.datamodel-codegen]
+formatters = ["black", "isort"]
+input-file-type = "jsonschema"
+output-model-type = "typing.TypedDict"
+preset = "practical-py313-20260826"
+
+[tool.datamodel-codegen.jobs.word]
+input = "sona/api/generated/v2/word.json"
+output = "src/sona/word.py"
+class-name = "Word"
+[tool.datamodel-codegen.jobs.word-dataclass]
+input = "sona/api/generated/v2/word.json"
+output = "src/sona/word_dataclass.py"
+output-model-type = "dataclasses.dataclass"
+class-name = "Word"
+[tool.datamodel-codegen.jobs.words]
+input = "sona/api/generated/v2/words.json"
+output = "src/sona/words.py"
+class-name = "Words"
+
+[tool.datamodel-codegen.jobs.glyph]
+input = "sona/api/generated/v2/glyph.json"
+output = "src/sona/glyph.py"
+class-name = "Glyph"
+[tool.datamodel-codegen.jobs.glyphs]
+input = "sona/api/generated/v2/glyphs.json"
+output = "src/sona/glyphs.py"
+class-name = "Glyphs"
+
+[tool.datamodel-codegen.jobs.sign]
+input = "sona/api/generated/v2/sign.json"
+output = "src/sona/sign.py"
+class-name = "Sign"
+[tool.datamodel-codegen.jobs.signs]
+input = "sona/api/generated/v2/signs.json"
+output = "src/sona/signs.py"
+class-name = "Signs"
+
+[tool.datamodel-codegen.jobs.fingerspelling]
+input = "sona/api/generated/v2/fingerspelling.json"
+output = "src/sona/fingerspelling.py"
+class-name = "Fingerspelling"
+[tool.datamodel-codegen.jobs.fingerspellings]
+input = "sona/api/generated/v2/fingerspellings.json"
+output = "src/sona/fingerspellings.py"
+class-name = "Fingerspellings"
+
+[tool.datamodel-codegen.jobs.font]
+input = "sona/api/generated/v2/font.json"
+output = "src/sona/font.py"
+class-name = "Font"
+[tool.datamodel-codegen.jobs.fonts]
+input = "sona/api/generated/v2/fonts.json"
+output = "src/sona/fonts.py"
+class-name = "Fonts"
+
+[tool.datamodel-codegen.jobs.language]
+input = "sona/api/generated/v2/language.json"
+output = "src/sona/language.py"
+class-name = "Language"
+[tool.datamodel-codegen.jobs.languages]
+input = "sona/api/generated/v2/languages.json"
+output = "src/sona/languages.py"
+class-name = "Languages"

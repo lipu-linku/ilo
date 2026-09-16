@@ -3,10 +3,11 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from enum import StrEnum
-from typing import NotRequired
 
-from typing_extensions import TypedDict
+type FieldSchema1 = str
+"""A unique identifier for an object in Linku. Generally named after the object."""
 
 
 class FieldSchema7(StrEnum):
@@ -30,6 +31,18 @@ class FieldSchema8(StrEnum):
     post_ku = 'post-ku'
 
 
+type FieldSchema11 = str
+
+
+type FieldSchema14 = float
+
+
+type FieldSchema28 = str
+
+
+type FieldSchema30Item = str
+
+
 class FieldSchema35(StrEnum):
     """
     The word's usage category, derived from the data of the annual Linku word survey.
@@ -42,7 +55,11 @@ class FieldSchema35(StrEnum):
     sandbox = 'sandbox'
 
 
-class FieldSchema50(TypedDict, closed=True):
+type FieldSchema44 = str
+
+
+@dataclass
+class FieldSchema50:
     commentary: str
     """Localized commentary on this word, such as history, clarifications, or trivia."""
     etymology: str
@@ -51,7 +68,8 @@ class FieldSchema50(TypedDict, closed=True):
     """Localized definition of this word."""
 
 
-class FieldSchema37Item(TypedDict, closed=True):
+@dataclass
+class FieldSchema37Item:
     """Audio files of the words pronounced out loud"""
 
     author: str
@@ -60,7 +78,8 @@ class FieldSchema37Item(TypedDict, closed=True):
     """A link to the audio file for the word, pronounced by `author`."""
 
 
-class FieldSchema41(TypedDict, closed=True):
+@dataclass
+class FieldSchema41:
     en: str
     """The word's definition in the English edition of Toki Pona: The Language of Good"""
     fr: str
@@ -71,12 +90,13 @@ class FieldSchema41(TypedDict, closed=True):
     """The word's definition in the Esperanto edition of Toki Pona: The Language of Good"""
 
 
-class FieldSchema19(TypedDict, closed=True):
+@dataclass
+class FieldSchema19:
     """Non-Linku resources related to the specific word, such as wiki links."""
 
-    sona_pona: NotRequired[str]
+    sona_pona: str | None = None
     """A link to the word's page on sona.pona.la, a Toki Pona wiki. May redirect for words with references but no dedicated page."""
-    lipamanka_semantic: NotRequired[str]
+    lipamanka_semantic: str | None = None
     """A link to lipamanka's description of the word's semantic space."""
 
 
@@ -84,43 +104,37 @@ type FieldSchema40 = FieldSchema41
 """The definition of the word in specific language editions of Toki Pona: The Language of Good"""
 
 
-class FieldSchema23(TypedDict, closed=True):
+@dataclass
+class FieldSchema23:
     """Ways of representing this word via text/computers"""
 
-    sitelen_emosi: NotRequired[str]
+    sitelen_emosi: str | None = None
     """The sitelen emosi representation of this word, a script for writing Toki Pona using emoji"""
-    sitelen_jelo: NotRequired[list[str]]
+    sitelen_jelo: list[FieldSchema28] | None = None
     """One or more example emojis for how the word can be written in sitelen jelo"""
-    ligatures: NotRequired[list[str]]
+    ligatures: list[FieldSchema30Item] | None = None
     """A list of sitelen Lasina representations of the word, used by ligature fonts to visually convert latin characters into sitelen pona"""
-    sitelen_sitelen: NotRequired[str]
+    sitelen_sitelen: str | None = None
     """A URL pointing to an image of this word's sitelen sitelen hieroglyphic block"""
-    ucsur: NotRequired[str]
+    ucsur: str | None = None
     """The UCSUR codepoint for this word."""
 
 
-class Word(TypedDict, closed=True):
+@dataclass
+class Word:
     """General info on a Toki Pona word"""
 
     id: str
     """A unique identifier for the word. May have an integer to distinguish words with the same spelling but distinct coinings."""
     word: str
     """The latin alphabet representation of the word."""
-    author_verbatim: NotRequired[str]
-    """The author's original definition, taken verbatim in their words"""
-    author_source: NotRequired[str]
-    """The source or origin of this glyph, often a URL."""
     book: FieldSchema7
     coined_era: FieldSchema8
     creation_date: str
     """When this word was coined, to precision known."""
-    author: list[str]
+    author: list[FieldSchema11]
     """The name or names of those involved in creating this word."""
-    ku_data: NotRequired[dict[str, float]]
-    """The usage data of this word, as described in the Toki Pona Dictionary."""
-    parent_id: NotRequired[str]
-    """The most widely used word which is considered to be an exact synonym for this word."""
-    see_also: list[str]
+    see_also: list[FieldSchema1]
     """The IDs of words related to this one."""
     resources: FieldSchema19
     representations: FieldSchema23
@@ -130,15 +144,23 @@ class Word(TypedDict, closed=True):
     deprecated: bool
     """Whether this word is considered deprecated by its author(s)."""
     audio: list[FieldSchema37Item]
-    pu_verbatim: NotRequired[FieldSchema40]
-    usage: dict[str, float]
+    usage: dict[FieldSchema44, FieldSchema14]
     """The percentage of respondents to the annual Linku word survey who report to use this word, by the date of the survey."""
-    glyph_ids: list[str]
+    glyph_ids: list[FieldSchema1]
     """The IDs of all sitelen pona glyphs which represent the word. The usage category of each fetched glyph may be used to show or hide glyphs."""
-    primary_glyph_id: NotRequired[str]
-    """The ID of the glyph most commonly used to represent this word in sitelen pona."""
-    image: NotRequired[str]
-    """Link to a PNG of the primary sitelen pona glyph for this word."""
-    svg: NotRequired[str]
-    """Link to an SVG of the primary sitelen pona glyph for this word."""
     translations: FieldSchema50
+    author_verbatim: str | None = None
+    """The author's original definition, taken verbatim in their words"""
+    author_source: str | None = None
+    """The source or origin of this glyph, often a URL."""
+    ku_data: dict[str, FieldSchema14] | None = None
+    """The usage data of this word, as described in the Toki Pona Dictionary."""
+    parent_id: str | None = None
+    """The most widely used word which is considered to be an exact synonym for this word."""
+    pu_verbatim: FieldSchema40 | None = None
+    primary_glyph_id: str | None = None
+    """The ID of the glyph most commonly used to represent this word in sitelen pona."""
+    image: str | None = None
+    """Link to a PNG of the primary sitelen pona glyph for this word."""
+    svg: str | None = None
+    """Link to an SVG of the primary sitelen pona glyph for this word."""
