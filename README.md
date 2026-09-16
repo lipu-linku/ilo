@@ -26,6 +26,7 @@ You can also join the Discord and talk to the maintainers!
 
 To run locally:
 
+- `git submodule update --init`
 - Install [uv](https://docs.astral.sh/uv/)
 - Install [fribidi](https://github.com/fribidi/fribidi) and [libraqm](https://github.com/HOST-Oman/libraqm). On Linux you likely already have these. If not, `/sp` will fail!
 - Follow the instructions in [Setup](#setup) to create a bot account.
@@ -37,6 +38,8 @@ Then:
 ## Self-hosting
 
 ### Prerequisites
+
+- `git submodule update --init`
 
 To run in a Podman environment (default):
 
