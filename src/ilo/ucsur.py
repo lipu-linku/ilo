@@ -31,6 +31,6 @@ def ucsur_replace(string: str):
 
 
 def clean_string(string: str):
-    clean_string = re.findall(r"([ -~]|[　-〿]|[︀-️]|[󱤀-󱧿]|[←-↙])", string)
+    clean_string = re.findall(r"([ -~]|[　-〿]|[︀-️]|[󱤀-󱧿]|[←-↙]|\r\n|\r|\n)", string)
     clean_string = "".join(clean_string)
     return clean_string
