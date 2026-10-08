@@ -1,4 +1,4 @@
-FROM python:3.13-slim-trixie AS builder
+FROM python:3.14-slim-trixie AS builder
 
 COPY src /project/src
 COPY pyproject.toml uv.lock /project
@@ -12,7 +12,7 @@ RUN --mount=from=ghcr.io/astral-sh/uv:0.12,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-editable
 
-FROM python:3.13-slim-trixie
+FROM python:3.14-slim-trixie
 RUN apt-get update -y && \
   apt-get install -y --no-install-recommends \
   libfribidi0 \
